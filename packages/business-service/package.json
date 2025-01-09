@@ -1,0 +1,22 @@
+{
+  "name": "business-service",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/business-service.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\""
+  }
+}
