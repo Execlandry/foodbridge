@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Uber Eats</title>
+        <title>Foodbri</title>
       </Head>
     <h1>It works</h1>
     </div>
