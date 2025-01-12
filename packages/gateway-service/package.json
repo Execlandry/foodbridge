@@ -19,7 +19,6 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\""
   },
-
   "dependencies": {
     "dd": "^0.26.0"
   }
