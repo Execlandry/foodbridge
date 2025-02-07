@@ -11,7 +11,26 @@ async function bootstrap() {
     next();
   });
 
+  /*
+  app.use(
+    `/api/v1/auth-service/*`,
+    createProxyMiddleware({
+      target: 'http://localhost:3000/api/v1/',
+      pathRewrite: {
+        '/api/v1/auth-service': '/',
+      },
+      secure: false,
+      onProxyReq: (proxyReq, req, res) => {
+        console.log(proxyReq);
+        console.log(
+          `[NestMiddleware]: Proxying ${req.method} request originally made to '${req.originalUrl}'...`,
+        );
+      },
+    }),
+  );
+*/
   await app.listen(3001, () => {
+    //console.log('Listening at http://localhost:' + 3001 + '/' + globalPrefix);
   });
 }
 bootstrap();

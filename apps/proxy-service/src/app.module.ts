@@ -6,8 +6,7 @@ import {
 } from '@nestjs/common';
 
 import { AppService } from './app.service';
-import { ReverseProxyAuthMiddleware } from './middleware/proxy.auth.middleware';
-
+import { ReverseProxyAuthMiddleware } from './proxy.auth.middleware';
 
 @Module({
   imports: [],
