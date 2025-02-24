@@ -17,6 +17,16 @@ import {
 import { Type as validateType } from "class-transformer";
 import { UserRoles } from "@fbe/types";
 
+export class fetchBusinessByIdDto{
+  @ApiProperty({
+    description: "uuid",
+    example: "uuid",
+    required: true,
+  })
+  @IsUUID()
+  public id!: string;
+
+}
 export class AddressDto {
   @ApiProperty({
     description: "city",
@@ -93,25 +103,36 @@ export class SearchQueryDto {
   public longitude!: string;
 
   @ApiProperty({
+    description: "search_text",
+    example:"",
+    required:true,
+  })
+  @IsDefined()
+  @IsString()
+  public search_text!:string;
+
+  @ApiProperty({
     description: "page count",
-    example: "page number",
+    example: "1",
     required: false,
   })
+  @Transform(({value})=>parseInt(value))
   @IsOptional()
   @IsNumber()
   public page!: number;
 
   @ApiProperty({
     description: "limit per page",
-    example: "limit per page",
+    example: "10",
     required: false,
   })
+  @Transform(({value})=>parseInt(value))
   @IsOptional()
   @IsNumber()
   public limit!: number;
 }
 
-export class createBusinessBodyDto {
+export class CreateBusinessBodyDto {
   @ApiProperty({
     description: "name of business",
     example: "alchemy org",
@@ -220,3 +241,5 @@ export class createBusinessBodyDto {
   @ValidateType(() => AddressDto)
   public address!: AddressDto;
 }
+
+export class UpdateBusinessBodyDto extends PartialType(CreateBusinessBodyDto){}

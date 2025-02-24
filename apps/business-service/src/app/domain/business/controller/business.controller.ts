@@ -8,7 +8,9 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
   Query,
   UseGuards,
   UsePipes,
@@ -36,7 +38,7 @@ import {
 } from "src/app/app.constants";
 import { BusinessService } from "../services/business.service";
 import { Type } from "class-transformer";
-import { createBusinessBodyDto, SearchQueryDto } from "../dto/business.dto";
+import { CreateBusinessBodyDto, fetchBusinessByIdDto, SearchQueryDto, UpdateBusinessBodyDto } from "../dto/business.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
@@ -64,7 +66,7 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "search businesses based on lat/lon or search text",
   })
   @ApiOkResponse({
     description: "return search businesses successfully",
@@ -74,6 +76,23 @@ export class BusinessController {
     return await this.service.search(query);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @ApiOperation({
+    description: "search businesses based on specific id",
+  })
+  @ApiOkResponse({
+    description: "return search businesses successfull by id",
+  })
+  @Get("/:id")
+  public async fetchBusinessById(@Param() param: fetchBusinessByIdDto) {
+    return await this.service.fetchBusinessById(param);
+  }
+
   @HttpCode(HttpStatus.CREATED)
   @ApiConsumes("application/json")
   @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
@@ -81,18 +100,62 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "create a business",
   })
   @ApiOkResponse({
-    description: "return search businesses successfully",
+    description: "return create business successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Post("/")
   public async createBusiness(
     @User() user: UserMetaData,
-    @Body() payload: createBusinessBodyDto
+    @Body() payload: CreateBusinessBodyDto
   ) {
     return await this.service.createBusiness(user, payload);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @ApiOperation({
+    description: "update a specific business detail",
+  })
+  @ApiOkResponse({
+    description: "return updated a business detail successfull",
+  })
+  @RoleAllowed(UserRoles["business-admin"])
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Put("/:id")
+  public async updateBusiness(
+    @User() user: UserMetaData,
+    @Param() param: fetchBusinessByIdDto,
+    @Body() payload: UpdateBusinessBodyDto
+  ) {
+    return await this.service.updateBusiness(user, payload,param);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @ApiOperation({
+    description: "return all admin businesses",
+  })
+  @ApiOkResponse({
+    description: "return all admin businesses successfull",
+  })
+  @RoleAllowed(UserRoles["business-admin"])
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Get("/")
+  public async fetchAllMyBusinesses(
+    @User() user: UserMetaData
+  ) {
+    return await this.service.fetchAllMyBusinesses(user);
   }
 }

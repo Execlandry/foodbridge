@@ -16,4 +16,8 @@ export const DEFAULT_CONFIG: ConfigData = {
     password: "",
   },
   logLevel: "",
+  elastic: {
+    url: "",
+  },
+  
 };

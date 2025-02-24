@@ -13,7 +13,7 @@ import { NotFoundException } from "@nestjs/common";
 import { BusinessEntity } from "../entity/business.entity";
 import {
   AddressDto,
-  createBusinessBodyDto,
+  CreateBusinessBodyDto,
   SearchQueryDto,
 } from "../dto/business.dto";
 import { BusinessAddressEntity } from "../entity/business.address.entity";
@@ -25,11 +25,13 @@ import {
   UpdateDishItemParamDto,
   UpdateBusinessDishBodyDto,
 } from "../dto/business.dish.dto";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 @Injectable()
 export class BusinessDishService {
   constructor(
     private readonly logger: Logger,
+    private eventEmitter:EventEmitter2,
     @InjectRepository(BusinessEntity)
     private businessRepo: Repository<BusinessEntity>,
     @InjectRepository(BusinessDishEntity)
@@ -83,6 +85,11 @@ export class BusinessDishService {
         business,
         queryRunner
       );
+      const menus = await this.businessDishRepo.find({where:{business:{id:business.id}}})
+      if(menus && menus.length>0){
+        const menuItems = menus.map(i=>i.name).join(',')
+        this.eventEmitter.emit("index.dish.business",{business,menuItems});
+      }
       await queryRunner.commitTransaction();
       return dish;
     } catch (err) {

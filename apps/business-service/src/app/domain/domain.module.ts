@@ -12,10 +12,16 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthModule } from "./auth/auth.module";
 import { BusinessDishService } from "./business/services/business.dish.service";
 import { BusinessDishController } from "./business/controller/business.dish.controller";
+import { EventEmitterModule } from "@nestjs/event-emitter";
+import { SearchService } from './search/search.service';
+import { SearchModule } from "./search/search.module";
+
 
 @Module({
   imports: [
+    SearchModule,
     AuthModule,
+    EventEmitterModule.forRoot(),
     TypeOrmModule.forFeature([BusinessEntity, BusinessDishEntity]),
     DBModule.forRoot({
       entities: [
@@ -30,6 +36,6 @@ import { BusinessDishController } from "./business/controller/business.dish.cont
   ],
 
   controllers: [BusinessController, BusinessDishController],
-  providers: [BusinessService, BusinessDishService],
+  providers: [BusinessService, BusinessDishService, SearchService],
 })
 export class DomainModule {}

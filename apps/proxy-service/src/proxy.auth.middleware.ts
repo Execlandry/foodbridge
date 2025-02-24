@@ -4,21 +4,21 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 export class ReverseProxyAuthMiddleware implements NestMiddleware {
   private proxy = createProxyMiddleware({
-    target: 'http://localhost:3000/api/v1/',
+    target: 'http://localhost:3001/api/v1/',
     pathRewrite: {
-      '/api/v1/auth-service': '/',
+      '/api/v1/user-service': '/',
     },
     secure: false,
     onProxyReq: (proxyReq, req, res) => {
       console.log(proxyReq);
-      // console.log(
-      //   `[NestMiddleware]: Proxying ${req.method} request originally made to '${req.originalUrl}'...`,
-      // );
+      console.log(
+        `[NestMiddleware]: Proxying ${req.method} request originally made to '${req.originalUrl}'...`,
+      );
     },
   });
 
   use(req: Request, res: Response, next: () => void) {
-    //console.log(res);
+    // console.log(res);
     this.proxy(req, res, next);
   }
 }

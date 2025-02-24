@@ -17,7 +17,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ReverseProxyAuthMiddleware)
-      .forRoutes({ path: 'v1/auth-service/*', method: RequestMethod.ALL });
+      .forRoutes({ path: 'v1/user-service/*', method: RequestMethod.ALL });
 
     /*
   consumer

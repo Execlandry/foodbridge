@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ConfigService } from "@fbe/config";
 import { Logger } from "@fbe/logger";
@@ -9,11 +9,15 @@ import { NotFoundException } from "@nestjs/common";
 import { BusinessEntity } from "../entity/business.entity";
 import {
   AddressDto,
-  createBusinessBodyDto,
+  CreateBusinessBodyDto,
+  fetchBusinessByIdDto,
   SearchQueryDto,
+  UpdateBusinessBodyDto,
 } from "../dto/business.dto";
 import { BusinessAddressEntity } from "../entity/business.address.entity";
 import { UserMetaData } from "../../auth/guards/user";
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { SearchService } from "../../search/search.service";
 
 @Injectable()
 export class BusinessService {
@@ -22,12 +26,27 @@ export class BusinessService {
     @InjectRepository(BusinessEntity)
     private businessRepo: Repository<BusinessEntity>,
     private readonly connection: Connection,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private readonly searchService: SearchService,
+    private eventEmitter:EventEmitter2
   ) {}
 
-  async search(query: SearchQueryDto) {}
+  public async search(searchParam: SearchQueryDto) {
+    return await this.searchService.search(searchParam);
+  }
 
-  async createBusiness(user: UserMetaData, payload: createBusinessBodyDto) {
+  public async fetchAllMyBusinesses(user:UserMetaData){
+    const {userId}=user;
+    return await this.businessRepo.find({where:{owner_id:userId},relations:['dishes']})
+
+  }
+  public async fetchBusinessById(param:fetchBusinessByIdDto){
+    const{id}=param;
+    return await this.businessRepo.find({where:{id},relations:['dishes']})
+
+  }
+
+  async createBusiness(user: UserMetaData, payload: CreateBusinessBodyDto) {
     let createdBusiness = null;
     console.log(payload);
     const queryRunner = this.connection.createQueryRunner();
@@ -40,7 +59,12 @@ export class BusinessService {
         user,
         queryRunner
       );
-      await this.createAddress(payload.address, createdBusiness, queryRunner);
+     const address= await this.createAddress(payload.address, createdBusiness, queryRunner);
+      this.eventEmitter.emit("index.business",{
+        business:createdBusiness,
+        address
+
+      })
 
       await queryRunner.commitTransaction();
       return createdBusiness;
@@ -49,6 +73,33 @@ export class BusinessService {
       throw err;
     } finally {
       await queryRunner.release();
+    }
+  }
+
+  async validateAuthorization(user:UserMetaData,param:fetchBusinessByIdDto){
+    const { id } = param;
+        const business = await this.businessRepo.findOne({
+          where: { id },
+        });
+        if (!business) {
+          throw new NotFoundException(`business with this Id not found ${id}`);
+        }
+        if (user.userId !== business.owner_id) {
+          throw new ForbiddenException();
+        }
+        return business;
+
+  }
+
+  async updateBusiness(user: UserMetaData, payload: UpdateBusinessBodyDto,param:fetchBusinessByIdDto) {
+    const business = await this.validateAuthorization(user,param);    
+    try {
+      await this.businessRepo.save({...business,payload})
+
+      
+      
+    } catch (err) {
+      throw err;
     }
   }
   async createdUserBusiness(
@@ -61,7 +112,7 @@ export class BusinessService {
       ...payload,
     });
   }
-  async createAddress(address: AddressDto, business, queryRunner) {
+  async createAddress(address: AddressDto, business, queryRunner):Promise<BusinessAddressEntity> {
     return await queryRunner.manager.save(BusinessAddressEntity, {
       ...address,
       business: business,

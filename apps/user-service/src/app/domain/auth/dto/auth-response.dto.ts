@@ -9,7 +9,7 @@ export class UserSignInResponseDto {
   public userId: string;
 
   @ApiResponseProperty({
-    example: "user@gmail.com",
+    example: "hello@gmail.com",
   })
   public email: string;
 

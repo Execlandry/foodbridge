@@ -33,7 +33,7 @@ import {
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
 import { AuthService } from "./auth.service";
-import { UserSigInDto } from "./dto/auth-request.dto";
+import { UserSignInDto } from "./dto/auth-request.dto";
 import { UserSignInResponseDto } from "./dto/auth-response.dto";
 import { RefreshTokenGuard } from "./guards/refresh_token.guard";
 import { AccessTokenGuard } from "./guards/access_token.guard";
@@ -68,7 +68,7 @@ export class AuthController {
   @ApiBadRequestResponse({ description: "bad request" })
   @ApiConsumes("application/json")
   @Post("/login")
-  public async CreateUser(@Body() body: UserSigInDto) {
+  public async CreateUser(@Body() body: UserSignInDto) {
     this.logger.info(JSON.stringify(body));
     return this.service.validateUserByPassword(body);
   }

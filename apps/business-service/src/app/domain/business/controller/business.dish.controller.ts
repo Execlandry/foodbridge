@@ -5,6 +5,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -38,7 +39,7 @@ import {
 } from "src/app/app.constants";
 import { BusinessService } from "../services/business.service";
 import { Type } from "class-transformer";
-import { createBusinessBodyDto, SearchQueryDto } from "../dto/business.dto";
+import { CreateBusinessBodyDto, SearchQueryDto } from "../dto/business.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
@@ -73,7 +74,7 @@ export class BusinessDishController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "create a DISH for business",
   })
   @ApiCreatedResponse({
     description: "dish for business created successfully",
@@ -96,10 +97,10 @@ export class BusinessDishController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "update a Dish for business",
   })
   @ApiCreatedResponse({
-    description: "dish for business created successfully",
+    description: "dish for business updated successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -141,7 +142,7 @@ export class BusinessDishController {
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @Get("/:id/dish/:dish_id")
+  @Delete("/:id/dish/:dish_id")
   public async deleteDishes(
     @User() user: UserMetaData,
     @Param() param: UpdateDishItemParamDto

@@ -41,7 +41,7 @@ export class UpdateDishItemParamDto extends BusinessParamParamDto {
 export class createBusinessDishBodyDto {
   @ApiProperty({
     description: "name",
-    example: "name",
+    example: "Tulum",
     required: true,
   })
   @IsDefined()
@@ -98,7 +98,8 @@ export class createBusinessDishBodyDto {
     required: true,
   })
   @IsOptional()
-  @IsArray({ each: true })
+  @IsArray()
+  @IsString({each:true})
   public thumbnails!: string[];
 }
 
