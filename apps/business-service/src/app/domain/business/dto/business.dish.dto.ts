@@ -1,6 +1,7 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { Transform, Type as ValidateType } from "class-transformer";
 import {
+  ArrayMinSize,
   IsArray,
   IsDateString,
   IsDefined,
@@ -18,6 +19,23 @@ import {
 import { Type as validateType } from "class-transformer";
 import { UserRoles } from "@fbe/types";
 
+export enum mealType {
+  "breakfast" = "breakfast",
+  "lunch" = "lunch",
+  "dinner" = "dinner",
+}
+export enum cuisineType {
+  "indian" = "indian",
+  "north_indian" = "north_indian",
+  "italian" = "italian",
+  "chinese" = "chinese",
+}
+
+export enum foodType {
+  "veg" = "veg",
+  "non_veg" = "non_veg",
+  "vegan" = "vegan",
+}
 export class BusinessParamParamDto {
   @ApiProperty({
     description: "[business id ] as uuid",
@@ -41,7 +59,7 @@ export class UpdateDishItemParamDto extends BusinessParamParamDto {
 export class createBusinessDishBodyDto {
   @ApiProperty({
     description: "name",
-    example: "Tulum",
+    example: "Paneer tikka",
     required: true,
   })
   @IsDefined()
@@ -50,12 +68,31 @@ export class createBusinessDishBodyDto {
 
   @ApiProperty({
     description: "description",
-    example: "desc",
+    example: "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
     required: true,
   })
   @IsOptional()
   @IsString()
   public description!: string;
+
+  @ApiProperty({
+    description: "cuisine_type",
+    required: true,
+    enum: cuisineType,
+    example: cuisineType.indian,
+  })
+  @IsEnum(cuisineType)
+  public cuisine_type!: string;
+
+  @ApiProperty({
+    description: "meal_type",
+    required: true,
+    enum: mealType,
+    example: mealType.breakfast,
+  })
+  @IsEnum(mealType)
+  public meal_type!: string;
+
 
   @ApiProperty({
     description: "category",
@@ -77,11 +114,12 @@ export class createBusinessDishBodyDto {
 
   @ApiProperty({
     description: "food_type",
-    example: "food_type",
+    example: foodType.vegan,
+    enum:foodType,
+    
     required: true,
   })
-  @IsOptional()
-  @IsString()
+  @IsEnum(foodType)
   public food_type!: string;
 
   @ApiProperty({
@@ -100,6 +138,7 @@ export class createBusinessDishBodyDto {
   @IsOptional()
   @IsArray()
   @IsString({each:true})
+  @ArrayMinSize(1)
   public thumbnails!: string[];
 }
 

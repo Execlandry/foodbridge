@@ -87,7 +87,7 @@ export class SearchQueryDto {
   @ApiProperty({
     description: "latitude",
     example: "11",
-    required: true,
+    required: false,
   })
   @IsDefined()
   @IsString()
@@ -96,8 +96,9 @@ export class SearchQueryDto {
   @ApiProperty({
     description: "longitude",
     example: "11",
-    required: true,
+    required: false,
   })
+  @IsOptional()
   @IsDefined()
   @IsString()
   public longitude!: string;
@@ -151,6 +152,14 @@ export class CreateBusinessBodyDto {
   public description!: string;
 
   @ApiProperty({
+    description: "average_price",
+    example: "1200",
+    required: true,
+  })
+  @IsOptional()
+  public average_price!: string;
+
+  @ApiProperty({
     description: "latitude",
     example: "11",
     required: true,
@@ -189,7 +198,7 @@ export class CreateBusinessBodyDto {
 
   @ApiProperty({
     description: "delivery_options",
-    example: "delivery_options",
+    example: "all",
     required: true,
   })
   @IsOptional()
@@ -198,7 +207,7 @@ export class CreateBusinessBodyDto {
 
   @ApiProperty({
     description: "pickup_options",
-    example: "pickup_options",
+    example: "all",
     required: true,
   })
   @IsOptional()
@@ -226,10 +235,10 @@ export class CreateBusinessBodyDto {
   @ApiProperty({
     description: "address payload",
     example: {
-      name: "alchemy org Eats",
-      city: "jaipur",
-      state: "Raj",
-      street: "Raj",
+      name: "Goan restuarant",
+      city: "panjim",
+      state: "Goa",
+      street: "North Goa",
       pincode: "345254",
       country: "India",
     },

@@ -47,17 +47,15 @@ export class SearchService {
    
     console.log("inside [index.business] handler");
     try {
-      // const payload = {
-      //   // id: business.id,
-      //   menu: menuItems
-      // };
+      const payload = {
+        menu: menuItems,
+        ...business,
+      };
       return await this.esService.update({
         index: this.configService.get().elastic.index,
         id: business.id,
         body: {
-          doc:{
-            menu:menuItems
-          }
+          doc: payload,
         },
       });
     } catch (err) {
@@ -118,10 +116,10 @@ export class SearchService {
       });
       const totalCount = body.hits.total.value;
       const hits = body.hits.hits;
-      const profiles = hits.map((item: any) => item._source);
+      const businesses = hits.map((item: any) => item._source);
       return {
         totalCount,
-        profiles,
+        businesses,
       };
     } catch (err) {
       throw err;

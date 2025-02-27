@@ -42,7 +42,7 @@ export class UserService {
       }
     }
     const fieldToUpdate: any = {};
-    if (fields.password_update.new_password) {
+    if (fields.password_update && fields.password_update.new_password) {
       // check if old password passed here is correct with email
       // we can check that with auth service
       // user wants to update password

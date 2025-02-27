@@ -39,6 +39,7 @@ import { AccessTokenGuard } from "../auth/guards/access_token.guard";
 import { RoleAllowed } from "../auth/guards/role-decorator";
 import { RolesGuard } from "../auth/guards/role-guard";
 import {
+  fieldsToUpdateDto,
   FindUserDto,
   UpdateUserByIdDto,
   UpdateUserPermissionBodyDto,
@@ -86,11 +87,25 @@ export class UserController {
   })
   @ApiOkResponse({ type: UserSignupResponseDto, description: "" })
   @ApiOperation({ description: "user create api " })
-  @ApiConsumes("APPLICATION/JSON")
+  @ApiConsumes("application/json")
   @Post("")
   public async CreateUser(@Body() body: UserSignupDto) {
     this.logger.info(JSON.stringify(body));
     return this.service.create(body);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
+    type: UserSignupResponseDto,
+    description: "user updated successfully",
+  })
+  @ApiOkResponse({ type: UserSignupResponseDto, description: "" })
+  @ApiOperation({ description: "user update api " })
+  @ApiConsumes("application/json")
+  @Put("/:id")
+  public async UpdateUser(@Body() body: fieldsToUpdateDto) {
+    return this.service.update(body.email, body);
   }
 
   @UseGuards(AccessTokenGuard, RolesGuard)

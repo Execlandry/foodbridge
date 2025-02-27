@@ -24,6 +24,12 @@ export class BusinessDishEntity extends BaseEntity {
 
   @Column({ type: "varchar", default: null })
   public category!: string;
+  
+  @Column({ type: "varchar", default: null })
+  public meal_type!: string;
+
+  @Column({ type: "varchar", default: null })
+  public cuisine_type!: string;
 
   @Column({ type: "varchar", default: null })
   public food_type!: string;
