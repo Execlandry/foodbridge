@@ -66,34 +66,100 @@ const Nav = ({ sidebarOutsideClick }) => {
         </div>
 
         <NavItem
-          hrefLink="/category"
+          hrefLink="/dashboard"
           sidebarStatus={sidebarStatus}
-          menuTitle="Category"
+          menuTitle="Dashboard"
           subMenu={false}
           subMenuArray={null}
         >
-          <CollectionIcon className="h-10" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
+            />
+          </svg>
         </NavItem>
 
         <NavItem
-          hrefLink="/sub-category"
+          hrefLink="/newlisting"
           sidebarStatus={sidebarStatus}
-          menuTitle="Sub-Category"
+          menuTitle="Add New"
           subMenu={false}
           subMenuArray={null}
         >
-          <DuplicateIcon className="h-10" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="h-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
         </NavItem>
 
-        {/* this menu has child Menu     */}
         <NavItem
-          hrefLink="#"
+          hrefLink="/pasthistory"
           sidebarStatus={sidebarStatus}
-          menuTitle="Chiled Menu"
-          subMenu={true}
-          subMenuArray={childMenu}
+          menuTitle="History"
+          subMenu={false}
+          subMenuArray={null}
         >
-          <FilmIcon className="h-10" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="h-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </NavItem>
+
+        <NavItem
+          hrefLink="/livetracking"
+          sidebarStatus={sidebarStatus}
+          menuTitle="Live Tracking"
+          subMenu={false}
+          subMenuArray={null}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="h-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+            />
+          </svg>
         </NavItem>
       </nav>
     </>
