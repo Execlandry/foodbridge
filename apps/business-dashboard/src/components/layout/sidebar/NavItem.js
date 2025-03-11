@@ -26,7 +26,7 @@ const NavItem = ({
     <>
       <Link href={hrefLink}>
         <span
-          className="inline-flex items-center justify-between py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-3 cursor-pointer relative group"
+          className="inline-flex items-center justify-between py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-3 cursor-pointer relative group hover:w-full"
           onClick={subMenuToggle}
         >
           {children}
