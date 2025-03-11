@@ -39,10 +39,10 @@
     "db:sync": "npm run typeorm:cli schema:sync"
   },
   "dependencies": {
-    "@eats/config": "1.0.3",
-    "@eats/database": "*",
-    "@eats/logger": "1.0.0",
-    "@eats/types": "*",
+    "@fbe/config": "1.0.3",
+    "@fbe/database": "*",
+    "@fbe/logger": "1.0.0",
+    "@fbe/types": "*",
     "@nestjs/elasticsearch": "^7.1.0",
     "@elastic/elasticsearch": "^7.12.0", 
     "@nanogiants/nestjs-swagger-api-exception-decorator": "1.5.0",

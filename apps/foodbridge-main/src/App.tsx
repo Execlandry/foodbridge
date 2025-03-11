@@ -6,6 +6,8 @@ import SignUp from './routes/signup';
 
 import './styles/index.css';
 import './styles/tailwind.css';
+import { UserContext } from './hooks/user-context';
+import FetchUser from './hooks/fetch-user';
 
 function Layout() {
   return (
@@ -17,8 +19,15 @@ function Layout() {
 }
 
 const App = () => {
+  const {user,
+  setUser,
+  isLoading} = FetchUser();
   return (
     <BrowserRouter>
+    <UserContext.Provider value={{user,
+      setUser,
+      isLoading}}>
+
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -27,7 +36,9 @@ const App = () => {
 
         </Route>
       </Routes>
+    </UserContext.Provider>
     </BrowserRouter>
+
   )
 }
 
