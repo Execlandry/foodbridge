@@ -4,8 +4,8 @@ import React from "react";
 
 const SettingButton = () => {
   return (
-    <div className="inline-flex items-center justify-center h-20 w-30 border-t border-gray-700">
-      <a href="/usersettings" className="p-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
+    <div className="inline-flex items-center justify-center h-20 w-20 border-t border-gray-700">
+      <button className="p-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
         <span className="sr-only">Settings</span>
         <svg
           aria-hidden="true"
@@ -27,7 +27,7 @@ const SettingButton = () => {
             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
           />
         </svg>
-      </a>
+      </button>
     </div>
   );
 };

@@ -25,7 +25,14 @@ export interface ElasticConfig {
   index?: string;
 }
 
-export interface GoogleConfig{
+export interface AWSConfig {
+  accessKeyId: string;
+  secretAccessKey: string;
+  region: string;
+  bucket?: string;
+}
+
+export interface GoogleConfig {
   oauth_google_id: string;
   oauth_google_callback: string;
   oauth_google_secret: string;
@@ -49,7 +56,10 @@ export interface ConfigData {
 
   auth: AuthConfig;
 
+  aws: AWSConfig;
+
   google: GoogleConfig;
 
-  elastic:ElasticConfig;
+  elastic: ElasticConfig;
 }
+

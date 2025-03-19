@@ -26,5 +26,5 @@ export class UserSignInResponseDto {
   @ApiResponseProperty({
     example: "euuuuuuuwscdswcscfdes.fwdesfwdwfcews.qwdewefdwefw",
   })
-  public accesns_toke: string;
+  public access_token: string;
 }

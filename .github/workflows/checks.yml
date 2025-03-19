@@ -1,38 +1,32 @@
-name: Checks
+name: CI
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
-    types: [opened, synchronize]
+    branches:
+      - main
 
 jobs:
-  checks:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
+          node-version: 18
+          cache: 'pnpm'
 
-      - name: "Setup Node.js"
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
-          cache: "pnpm"
-          registry-url: "https://npm.pkg.github.com/"
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: "Setup pnpm"
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
-      - name: "Authenticate GitHub Package Registry"
-        run: |
-          echo "@execlandry:registry=https://npm.pkg.github.com/" >> ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
-
-      - name: "Install dependencies"
+      - name: Install Dependencies
         run: pnpm install
 
-      - name: "Run affected tests"
-        run: pnpx nx affected --target=test --base=origin/main --head=HEAD
+      - name: Run Nx Affected Commands
+        run: npx nx affected --target=build --parallel=3

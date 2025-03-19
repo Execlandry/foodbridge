@@ -20,9 +20,14 @@ export const DEFAULT_CONFIG: ConfigData = {
     username: "",
     password: "",
   },
+  aws: {
+    accessKeyId: "",
+    secretAccessKey: "",
+    region: "",
+    bucket: "",
+  },
   logLevel: "",
   elastic: {
     url: "",
   },
-  
 };

@@ -31,7 +31,18 @@ services:
       - ./docker-utils:/docker-entrypoint-initdb.d
       - delivery_api_data:/data/postgres
     ports:
-      - 5439:5432  
+      - 5439:5432 
+
+  postgres-files:
+    environment:
+      - POSTGRES_USER=api
+      - POSTGRES_PASSWORD=development_pass
+      - POSTGRES_MULTIPLE_DATABASES="files-api","files-api-testing"
+    volumes:
+      - ./docker-utils:/docker-entrypoint-initdb.d
+      - delivery_api_data:/data/postgres
+    ports:
+      - 5421:5432  
 
   postgres-order:
     environment:
@@ -42,7 +53,7 @@ services:
       - ./docker-utils:/docker-entrypoint-initdb.d
       - order_api_data:/data/postgres
     ports:
-      - 5433:5432 
+      - 5433:5432                
 
   postgres-business:
     environment:
@@ -51,27 +62,9 @@ services:
       - POSTGRES_MULTIPLE_DATABASES="business-api","business-api-testing"
     volumes:
       - ./docker-utils:/docker-entrypoint-initdb.d
-      - business_api_data:/data/postgres
+      - restaurant_api_data:/data/postgres
     ports:
       - 5435:5432
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@example.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-    ports:
-      - 5050:80
-    depends_on:
-      - postgres-user
-      - postgres-cart
-      - postgres-delivery
-      - postgres-order
-      - postgres-business
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-
   es01:
     container_name: es01
     environment:
@@ -88,8 +81,7 @@ services:
     volumes:
       - es_data:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-  
+      - 9200:9200  
   kibana:
     container_name: kb-container
     environment:
@@ -97,13 +89,11 @@ services:
     depends_on:
       - es01
     ports:
-      - 5601:5601
-
+      - 5601:5601               
 volumes:
   auth_api_data: {}
-  business_api_data: {}
+  restaurant_api_data: {}
   cart_api_data: {}
+  es_data: {}
   delivery_api_data: {}
   order_api_data: {}
-  es_data: {}
-  pgadmin_data: {}
