@@ -149,8 +149,8 @@ export class UserService {
       ...userEntity,
       ...userInput,
       password: pass,
-      first_name: userInput?.first_name.toLowerCase(),
-      last_name: userInput?.last_name.toLowerCase(),
+      first_name: userInput?.first_name?.toLowerCase(),
+      last_name: userInput?.last_name?.toLowerCase(),
       email: userInput?.email.toLowerCase(),
     };
 

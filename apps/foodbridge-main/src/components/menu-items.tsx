@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes, Link, Outlet } from 'react-router-dom';
 import data from '../mock';
 
 function MainMenu() {

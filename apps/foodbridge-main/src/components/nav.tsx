@@ -8,6 +8,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+
 function Layout() {
   const navigate = useNavigate();
   const [scroll, setScroll] = useState(false);
