@@ -11,13 +11,23 @@ export const DEFAULT_CONFIG: ConfigData = {
     access_token_secret: "",
     refresh_token_secret: "",
   },
+  google: {
+    oauth_google_id: "",
+    oauth_google_callback: "",
+    oauth_google_secret: "",
+  },
   swagger: {
     username: "",
     password: "",
+  },
+  aws: {
+    accessKeyId: "",
+    secretAccessKey: "",
+    region: "",
+    bucket: "",
   },
   logLevel: "",
   elastic: {
     url: "",
   },
-  
 };

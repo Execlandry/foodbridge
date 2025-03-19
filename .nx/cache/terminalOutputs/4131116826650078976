@@ -1,0 +1,28 @@
+
+> @fbe/proxy@0.0.1 start /home/xatsu/languages/fyproject/foodbridge/apps/proxy-service
+> nest start
+
+[32m[Nest] 34423  - [39m03/16/2025, 1:29:25 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 34423  - [39m03/16/2025, 1:29:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +22ms[39m
+[HPM] Proxy created: /  -> http://localhost:3002/api/v1/
+[HPM] Proxy rewrite rule created: "/api/v1/user-service" ~> "/"
+[HPM] Proxy created: /  -> http://localhost:3003/api/v1/
+[HPM] Proxy rewrite rule created: "/api/v1/business-service" ~> "/"
+[HPM] Proxy created: /  -> http://localhost:3004/api/v1/
+[HPM] Proxy rewrite rule created: "/api/v1/cart-service" ~> "/"
+[HPM] Proxy created: /  -> http://localhost:3005/api/v1/
+[HPM] Proxy rewrite rule created: "/api/v1/delivery-service" ~> "/"
+[HPM] Proxy created: /  -> http://localhost:3006/api/v1/
+[HPM] Proxy rewrite rule created: "/api/v1/order-service" ~> "/"
+[32m[Nest] 34423  - [39m03/16/2025, 1:29:25 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +23ms[39m
+[31m[Nest] 34423  - [39m03/16/2025, 1:29:25 PM [31m  ERROR[39m [38;5;3m[NestApplication] [39m[31mError: listen EADDRINUSE: address already in use :::3001[39m[38;5;3m +7ms[39m
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at ExpressAdapter.listen (/home/xatsu/languages/fyproject/foodbridge/node_modules/.pnpm/@nestjs+platform-express@8.4.7_@nestjs+common@8.4.7_@nestjs+core@8.4.7/node_modules/@nestjs/platform-express/adapters/express-adapter.js:63:32)
+    at /home/xatsu/languages/fyproject/foodbridge/node_modules/.pnpm/@nestjs+core@8.4.7_@nestjs+common@8.4.7_@nestjs+platform-express@8.4.7_reflect-metadata@0.1.14_rxjs@7.8.1/node_modules/@nestjs/core/nest-application.js:170:30
+    at new Promise (<anonymous>)
+    at NestApplication.listen (/home/xatsu/languages/fyproject/foodbridge/node_modules/.pnpm/@nestjs+core@8.4.7_@nestjs+common@8.4.7_@nestjs+platform-express@8.4.7_reflect-metadata@0.1.14_rxjs@7.8.1/node_modules/@nestjs/core/nest-application.js:159:16)
+    at bootstrap (/home/xatsu/languages/fyproject/foodbridge/apps/proxy-service/src/main.ts:32:3)
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m

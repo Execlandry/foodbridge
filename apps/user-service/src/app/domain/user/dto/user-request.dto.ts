@@ -116,7 +116,7 @@ export class UserSignupDto {
 
   @ApiProperty({
     description: "password",
-    example: "34535SDF353@#22342",
+    example: "useme",
     required: true,
   })
   @IsDefined()

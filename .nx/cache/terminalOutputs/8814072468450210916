@@ -1,0 +1,5 @@
+[43m[30m WARN [39m[49m Unsupported engine: wanted: {"node":"12.x || 14.x"} (current: {"node":"v22.13.0","pnpm":"8.15.6"})
+
+> @fbe/order@0.0.1 build /home/xatsu/languages/fyproject/foodbridge/apps/order-service
+> tsc -p tsconfig.build.json
+
