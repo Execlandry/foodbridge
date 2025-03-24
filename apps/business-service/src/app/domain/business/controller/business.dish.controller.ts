@@ -5,7 +5,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -45,7 +44,7 @@ import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
 import { RoleAllowed } from "../../auth/guards/role-decorator";
 import {
-  createBusinessDishBodyDto,
+  CreateBusinessDishBodyDto,
   BusinessParamParamDto,
   UpdateDishItemParamDto,
   UpdateBusinessDishBodyDto,
@@ -74,7 +73,7 @@ export class BusinessDishController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "create a DISH for business",
+    description: "search businesses based on lat/lon",
   })
   @ApiCreatedResponse({
     description: "dish for business created successfully",
@@ -85,7 +84,7 @@ export class BusinessDishController {
   public async createDish(
     @User() user: UserMetaData,
     @Param() param: BusinessParamParamDto,
-    @Body() payload: createBusinessDishBodyDto
+    @Body() payload: CreateBusinessDishBodyDto
   ) {
     return await this.service.createDish(user, param, payload);
   }
@@ -97,10 +96,10 @@ export class BusinessDishController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "update a Dish for business",
+    description: "search businesses based on lat/lon",
   })
   @ApiCreatedResponse({
-    description: "dish for business updated successfully",
+    description: "dish for business created successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -142,7 +141,7 @@ export class BusinessDishController {
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @Delete("/:id/dish/:dish_id")
+  @Get("/:id/dish/:dish_id")
   public async deleteDishes(
     @User() user: UserMetaData,
     @Param() param: UpdateDishItemParamDto

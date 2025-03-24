@@ -3,14 +3,12 @@ import { TerminusModule } from "@nestjs/terminus";
 import { ConfigModule } from "@fbe/config";
 import { AppLoggerModule } from "@fbe/logger";
 import { DBModule } from "@fbe/database";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { AuthModule } from "./auth/auth.module";
 import { EventEmitterModule } from "@nestjs/event-emitter";
+import { AuthModule } from "./auth/auth.module";
 import { CartEntity } from "./cart/entity/cart.entity";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { CartController } from "./cart/controller/cart.controller";
 import { CartService } from "./cart/services/cart.service";
-
-
 
 @Module({
   imports: [
@@ -18,9 +16,7 @@ import { CartService } from "./cart/services/cart.service";
     EventEmitterModule.forRoot(),
     TypeOrmModule.forFeature([CartEntity]),
     DBModule.forRoot({
-      entities: [
-        CartEntity
-      ],
+      entities: [CartEntity],
     }),
     TerminusModule,
     AppLoggerModule,

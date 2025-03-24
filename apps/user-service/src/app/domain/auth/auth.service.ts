@@ -7,12 +7,12 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@fbe/config";
 import { UserService } from "../user/user.service";
-import { UserSignInDto } from "./dto/auth-request.dto";
+import { UserSigInDto } from "./dto/auth-request.dto";
 import * as bcrypt from "bcrypt";
 import { JwtPayload } from "jsonwebtoken";
 import { JwtService } from "@nestjs/jwt";
 import { UserEntity } from "../user/entity/user.entity";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { UserSignupDto } from "../user/dto/user-request.dto";
 
 @Injectable()
@@ -24,7 +24,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUserByPassword(payload: UserSignInDto) {
+  async validateUserByPassword(payload: UserSigInDto) {
     const { email, password } = payload;
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {
@@ -48,7 +48,9 @@ export class AuthService {
     await this.usersService.updateRefreshTokenByEmail(email, refToken);
   }
   public async validateJwtPayload(payload: JwtPayload) {
-    return await this.usersService.findOneByEmail(payload.email);
+    const data = await this.usersService.findOneByEmail(payload.email);
+    delete data.password;
+    return data;
   }
 
   public async logout(user: UserEntity) {

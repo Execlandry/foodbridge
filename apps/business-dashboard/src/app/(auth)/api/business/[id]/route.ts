@@ -13,7 +13,7 @@ export async function GET(
   try {
     // fetch data from business apis from proxy
     // GET SERVER SIDE SESSION AND PASS TOKEN TO NESTJS APIS
-    // ITS GET BUSINESS BY ID
+    // ITS GET Business BY ID
     // SIMILARLY WE CAN HAVE PUT/DELETE
     const response = await axios.get(
       `http://localhost:3001/api/v1/business-service/businesses/${slug}`,
@@ -44,7 +44,7 @@ export async function PUT(
   try {
     // fetch data from business apis from proxy
     // GET SERVER SIDE SESSION AND PASS TOKEN TO NESTJS APIS
-    // ITS GET BUSINESS BY ID
+    // ITS GET Business BY ID
     // SIMILARLY WE CAN HAVE PUT/DELETE
     const response = await axios.put(
       `http://localhost:3001/api/v1/business-service/businesses/${slug}`,
@@ -73,7 +73,7 @@ export async function DELETE(
   try {
     // fetch data from business apis from proxy
     // GET SERVER SIDE SESSION AND PASS TOKEN TO NESTJS APIS
-    // ITS GET BUSINESS BY ID
+    // ITS GET Business BY ID
     // SIMILARLY WE CAN HAVE PUT/DELETE
     const response = await axios.delete(
       `http://localhost:3001/api/v1/business-service/businesses/${slug}`,

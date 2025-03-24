@@ -1,4 +1,5 @@
 // Native.
+import { Request, Response } from "@nestjs/common";
 
 // Package.
 import {
@@ -18,9 +19,6 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Request,
-  Response
-  
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
@@ -36,7 +34,7 @@ import {
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
 import { AuthService } from "./auth.service";
-import { UserSignInDto } from "./dto/auth-request.dto";
+import { UserSigInDto } from "./dto/auth-request.dto";
 import { UserSignInResponseDto } from "./dto/auth-response.dto";
 import { RefreshTokenGuard } from "./guards/refresh_token.guard";
 import { AccessTokenGuard } from "./guards/access_token.guard";
@@ -72,7 +70,7 @@ export class AuthController {
   @ApiConsumes("application/json")
   @Post("/login")
   public async CreateUser(
-    @Body() body: UserSignInDto,
+    @Body() body: UserSigInDto,
     @Request() req,
     @Response() res
   ) {
@@ -91,13 +89,19 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")
-  @Post("/logout")
-  public async logout(@Req() req: any) {
-    const user = req.user;
-    await this.service.logout(user);
-    return null;
+  @Get("/logout")
+  public async logout(@Request() req, @Response() res) {
+    res.cookie("access_token", "", {
+      httpOnly: true,
+      sameSite: "lax",
+    });
+    res.cookie("refresh_token", "", {
+      httpOnly: true,
+      sameSite: "lax",
+    });
+    //await this.service.logout(req.user)
+    return res.send();
   }
-
   @UseGuards(RefreshTokenGuard)
   @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")

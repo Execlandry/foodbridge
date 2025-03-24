@@ -1,3 +1,4 @@
+import { MenuItem } from "@fbe/types";
 import {
   BaseEntity,
   Column,
@@ -14,7 +15,7 @@ export class CartEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
-  @Column({ type: "uuid", select: true })
+  @Column({ type: "varchar", select: true })
   public user_id!: string;
 
   @Column({ type: "uuid", select: true })

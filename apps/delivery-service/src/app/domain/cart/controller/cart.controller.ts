@@ -5,7 +5,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -39,11 +38,16 @@ import {
 } from "src/app/app.constants";
 import { CartService } from "../services/cart.service";
 import { Type } from "class-transformer";
+import {
+  CreateBusinessBodyDto,
+  SearchQueryDto,
+  UpdateBusinessBodyDto,
+  fetchBusinessByIdDto,
+} from "../dto/cart.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
 import { RoleAllowed } from "../../auth/guards/role-decorator";
-import { CreateCartMenuItemBodyDto, UpdateCartMenuItemBodyDto } from "../dto/cart.dto";
 
 @ApiBearerAuth("authorization")
 @Controller("cart")
@@ -66,66 +70,19 @@ export class CartController {
   @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
+  @ApiOperation({
+    description: "search delivery based on lat/lon",
+  })
+  @ApiOkResponse({
+    description: "return search delivery successfully",
+  })
+  @RoleAllowed(UserRoles["business-admin"])
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @Post("/")
-  public async addMenuItemToCart(
+  public async createBusiness(
     @User() user: UserMetaData,
-    @Body() payload: CreateCartMenuItemBodyDto
+    @Body() payload: CreateBusinessBodyDto
   ) {
-    return await this.service.createCartMenuItem(user, payload);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Get("/")
-  public async listUserCart(@User() user: UserMetaData) {
-    return await this.service.listUserCart(user);
-  }
-
-  @HttpCode(HttpStatus.CREATED)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Put("/")
-  public async updateUserCart(
-    @User() user: UserMetaData,
-    @Body() payload: UpdateCartMenuItemBodyDto
-  ) {
-    return await this.service.updateCartMenuItem(user, payload);
-  }
-
-  @HttpCode(HttpStatus.CREATED)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Delete("/")
-  public async deleteUserMenuItemCart(
-    @User() user: UserMetaData,
-    @Body() payload: UpdateCartMenuItemBodyDto
-  ) {
-    return await this.service.deleteCartMenuItem(user, payload);
-  }
-
-  @HttpCode(HttpStatus.CREATED)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Delete("/clear")
-  public async clearUserCart(@User() user: UserMetaData) {
-    return await this.service.clearCartMenuItem(user);
+    return await this.service.createBusiness(user, payload);
   }
 }

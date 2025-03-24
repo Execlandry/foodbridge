@@ -109,11 +109,10 @@ export class UserService {
     const { email, first_name, last_name, name } = data;
     const users = await this.userRepo.find({
       where: [
-        // OR query
-        { name: Like(`%${name}`) },
-        { email: Like(`%${email}`) },
-        { first_name: Like(`%${first_name}`) },
-        { last_name: Like(`%${last_name}`) },
+        { name: Like(`%${name}%`) },
+        { email: Like(`%${email}%`) },
+        { first_name: Like(`%${first_name}%`) },
+        { last_name: Like(`%${last_name}%`) },
       ],
     });
     return users;

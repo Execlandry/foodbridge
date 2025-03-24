@@ -1,4 +1,3 @@
-import { MenuItem } from "@fbe/types";
 import {
   BaseEntity,
   Column,
@@ -8,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
 } from "typeorm";
-import { MenuItemBodyDto } from "../dto/cart.dto";
 
 @Entity("cart")
 export class CartEntity extends BaseEntity {
@@ -19,10 +17,13 @@ export class CartEntity extends BaseEntity {
   public user_id!: string;
 
   @Column({ type: "uuid", select: true })
+  public menu_item_id!: string;
+
+  @Column({ type: "uuid", select: true })
   public business_id!: string;
 
   @Column({ type: "jsonb", default: null })
-  public menu_items!: MenuItemBodyDto[];
+  public menu_item!: any;
 
   @Column({ type: "int", default: null })
   public count!: number;

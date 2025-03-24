@@ -31,14 +31,13 @@ export class ConfigService {
         access_token_secret: env.JWT_ACCESS_TOKEN_SECRET!,
         refresh_token_secret: env.JWT_REFRESH_TOKEN_SECRET!,
       },
-
       google: {
         oauth_google_id: env.OAUTH_GOOGLE_ID!,
         oauth_google_callback: env.OAUTH_GOOGLE_REDIRECT_URL!,
         oauth_google_secret: env.OAUTH_GOOGLE_SECRET!,
       },
       elastic: {
-        url: env.ELASTIC_SEARCH_URL!,
+        url: env.ELASTIC_SEARCH_NODE!,
         username: env.ELASTIC_SEARCH_USERNAME!,
         password: env.ELASTIC_SEARCH_PASSWORD!,
         index: env.ELASTIC_SEARCH_INDEX,

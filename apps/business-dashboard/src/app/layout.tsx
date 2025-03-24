@@ -1,6 +1,6 @@
 "use client"
 import { NextAuthProvider} from "./providers";
-import "../app/globals.css";
+import "./globals.css";
 
 export default function RootLayout({ children }: any) {
 

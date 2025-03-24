@@ -11,16 +11,16 @@ export default function Index() {
   const router = useRouter();
 
 
-  const [businesses, setBusinesses] = useState([])
+  const [businesses, setBusiness] = useState([])
 
-  const fetchRestaurants = async () =>  {
+  const fetchBusiness = async () =>  {
     const res = await fetch("/api/business");
     const data = await res.json();
-    setBusinesses(data)
+    setBusiness(data)
   }
 
   useEffect(() => {
-    fetchRestaurants();
+    fetchBusiness();
   }, [])
 
   const openBusiness = (data: any ) => {

@@ -10,7 +10,7 @@ import { UserAddressEntity } from "./user/entity/user.address.entity";
 @Module({
   imports: [
     DBModule.forRoot({
-      entities: [UserEntity,UserAddressEntity],
+      entities: [UserEntity, UserAddressEntity],
     }),
     UserModule,
     AuthModule,

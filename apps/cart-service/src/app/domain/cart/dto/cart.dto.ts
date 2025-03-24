@@ -17,8 +17,7 @@ import {
   ValidateNested,
 } from "class-validator";
 import { Type as validateType } from "class-transformer";
-import { cuisineType, foodType, mealType } from '@fbe/types';
-
+import { mealType, cuisineType, foodType } from "@fbe/types";
 
 export class MenuItemBodyDto {
   @ApiProperty({
@@ -103,15 +102,22 @@ export class MenuItemBodyDto {
   public price!: number;
 
   @ApiProperty({
-    description: "thumbnails",
-    example: ["https://google.com/banner.png"],
+    description: "number of items",
+    example: 2,
     required: true,
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @ArrayMinSize(1)
-  public thumbnails!: string[];
+  @IsNumber()
+  public count!: number;
+
+  @ApiProperty({
+    description: "thumbnails",
+    example: "https://google.com/banner.png",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public thumbnails!: string;
 }
 
 export class CreateCartMenuItemBodyDto {
@@ -136,8 +142,9 @@ export class CreateCartMenuItemBodyDto {
       category: "category",
       ingredients: "ingredients",
       food_type: "vegan",
+      count: 1,
       price: 500,
-      thumbnails: ["https://google.com/banner.png"],
+      thumbnails: "https://google.com/banner.png",
     },
     required: true,
   })

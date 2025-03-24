@@ -43,7 +43,7 @@ const NavItem = ({
         </span>
       </Link>
 
-      {/* Child Menu */}
+      {/* Chile Menu */}
       {subMenu && (
         <ul
           className={`${

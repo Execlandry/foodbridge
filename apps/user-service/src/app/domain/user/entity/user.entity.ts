@@ -38,15 +38,11 @@ export class UserEntity extends BaseEntity {
   @Column({ type: "varchar", nullable: true })
   public permissions!: string;
 
-  // root-user, admin-user
-  // business-admin, business-user
-  // read-user
-
   @Column({ type: "jsonb", default: null })
   public passwordReset!: any;
 
-  @OneToMany(()=>UserAddressEntity,(event)=>event.user)
-  public addresses!:UserAddressEntity[];
+  @OneToMany(() => UserAddressEntity, (event) => event.user)
+  public addresses!: UserAddressEntity[];
 
   @CreateDateColumn({
     type: "timestamptz",

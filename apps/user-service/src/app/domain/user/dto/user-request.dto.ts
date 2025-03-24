@@ -12,6 +12,7 @@ import {
 } from "class-validator";
 import { Type as validateType } from "class-transformer";
 import { UserRoles } from "@fbe/types";
+
 export class CreateAddressDto {
   @ApiProperty({
     description: "city",
@@ -85,10 +86,11 @@ export class CreateAddressDto {
   @IsString()
   public name!: string;
 }
+
 export class UserSignupDto {
   @ApiProperty({
     description: "email",
-    example: "hello@gmail.com",
+    example: "user@gmail.com",
     required: true,
   })
   @IsDefined()
@@ -116,7 +118,7 @@ export class UserSignupDto {
 
   @ApiProperty({
     description: "password",
-    example: "useme",
+    example: "letmeinplease",
     required: true,
   })
   @IsDefined()

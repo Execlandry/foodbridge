@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fbe/types":"*",
+    "@fbe/types": "*",
     "@heroicons/react": "^1.0.6",
     "@next/font": "13.1.5",
     "axios": "^1.4.0",

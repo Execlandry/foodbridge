@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { ConfigService } from "@fbe/config";
 import { Logger } from "@fbe/logger";
-import { Like, Repository, Connection, QueryRunner } from "typeorm";
+import { Like, Repository, Connection, QueryRunner, Brackets } from "typeorm";
 import * as bcrypt from "bcrypt";
 
 import { NotFoundException } from "@nestjs/common";
@@ -20,10 +20,13 @@ import { BusinessAddressEntity } from "../entity/business.address.entity";
 import { UserMetaData } from "../../auth/guards/user";
 import { BusinessDishEntity } from "../entity/business.dish.entity";
 import {
-  createBusinessDishBodyDto,
+  CreateBusinessDishBodyDto,
+  OrderBy,
   BusinessParamParamDto,
+  SearchDishQueryDto,
   UpdateDishItemParamDto,
   UpdateBusinessDishBodyDto,
+  filterType,
 } from "../dto/business.dish.dto";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 
@@ -31,7 +34,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 export class BusinessDishService {
   constructor(
     private readonly logger: Logger,
-    private eventEmitter:EventEmitter2,
+    private eventEmitter: EventEmitter2,
     @InjectRepository(BusinessEntity)
     private businessRepo: Repository<BusinessEntity>,
     @InjectRepository(BusinessDishEntity)
@@ -56,6 +59,54 @@ export class BusinessDishService {
     }
     return business;
   }
+  async listBusinessDish(param: SearchDishQueryDto) {
+    const { search_text, page, limit, filter_type, order_by, food_type } =
+      param;
+    const offset = limit * (page - 1);
+    const query = this.connection
+      .getRepository(BusinessDishEntity)
+      .createQueryBuilder("business_dishes")
+      .leftJoinAndSelect("business_dishes.business", "business");
+
+    if (search_text) {
+      query.andWhere(
+        new Brackets((qb) => {
+          qb.where("business_dishes.name like :name", {
+            name: `%${search_text}%`,
+          })
+            .orWhere("business_dishes.description like :description", {
+              description: `%${search_text}%`,
+            })
+            .orWhere("business_dishes.name like :ingredients", {
+              ingredients: `%${search_text}%`,
+            });
+        })
+      );
+    }
+    if (food_type) {
+      query.andWhere("business_dishes.food_type = :food_type", {
+        food_type: `${food_type}`,
+      });
+    }
+    if (filter_type === filterType.price) {
+      query.orderBy(
+        "business_dishes.price",
+        order_by ? (order_by as OrderBy) : "ASC"
+      );
+    } else if (filter_type === filterType.delivery_time) {
+      query.orderBy(
+        "business_dishes.delivery_time",
+        order_by ? (order_by as OrderBy) : "ASC"
+      );
+    } else if (filter_type === filterType.rating) {
+      query.orderBy(
+        "business_dishes.rating",
+        order_by ? (order_by as OrderBy) : "ASC"
+      );
+    }
+    const data = await query.skip(offset).limit(limit).getMany();
+    return data;
+  }
   async findDishById(id: string) {
     const dish = await this.businessDishRepo.findOne({
       where: { id },
@@ -71,7 +122,7 @@ export class BusinessDishService {
   async createDish(
     user: UserMetaData,
     param: BusinessParamParamDto,
-    payload: createBusinessDishBodyDto
+    payload: CreateBusinessDishBodyDto
   ) {
     const business = await this.validateAuthorization(user, param);
     const queryRunner = this.connection.createQueryRunner();
@@ -85,10 +136,15 @@ export class BusinessDishService {
         business,
         queryRunner
       );
-      const menus = await this.businessDishRepo.find({where:{business:{id:business.id}}})
-      if(menus && menus.length>0){
-        const menuItems = menus.map(i=>i.name).join(',')
-        this.eventEmitter.emit("index.dish.business",{business,menuItems});
+      const menus = await this.businessDishRepo.find({
+        where: { business: { id: business.id } },
+      });
+      if (menus && menus.length > 0) {
+        const menuItems = menus.map((i) => i.name).join(",");
+        this.eventEmitter.emit("index.dish.business", {
+          business,
+          menuItems,
+        });
       }
       await queryRunner.commitTransaction();
       return dish;
