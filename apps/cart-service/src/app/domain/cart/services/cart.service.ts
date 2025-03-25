@@ -66,6 +66,7 @@ export class CartService {
         user_id: user.userId,
         business_id: business_id,
         menu_items: existingItems,
+        business: payload.business,
       });
     }
   }

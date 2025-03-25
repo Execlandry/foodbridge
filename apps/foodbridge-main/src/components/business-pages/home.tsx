@@ -5,12 +5,16 @@ import {
 } from "@heroicons/react/outline";
 import React, { useEffect, useState } from "react";
 import { images } from "../../assets";
-import  Rating  from "./rating";
+import Rating from "./rating";
 import { dummyData } from "../utils";
-import delivery_bike_icon from "../../assets/banner/2.png"
-import banner_image_spags from "../../assets/banner/1.jpeg"
+import delivery_bike_icon from "../../assets/banner/2.png";
+import banner_image_spags from "../../assets/banner/1.jpeg";
 import { useDispatch, useSelector } from "react-redux";
-import { changeFoodCategorySelection, fetchDishesForLandingPage, listDishesForLandingPage } from "../../redux/dishes/dishes.slice";
+import {
+  changeFoodCategorySelection,
+  fetchDishesForLandingPage,
+  listDishesForLandingPage,
+} from "../../redux/dishes/dishes.slice";
 import { addCartItems, removeCartItems } from "../../redux/cart/cart.slice";
 import { MinusCircleIcon } from "@heroicons/react/solid";
 
@@ -20,34 +24,38 @@ function Home() {
 
   async function addToCart(dish: any) {
     console.log(dish);
-    dispatch(addCartItems(
-      {
-        "business_id": dish.business_id,
-        "menu_item": {
+    dispatch(
+      addCartItems({
+        business_id: dish.business_id,
+        business: dish.business,
+        menu_item: {
           ...dish,
-          "id": dish.dish_id,
-        }
-      }
-    ))
-}
+          id: dish.dish_id,
+        },
+      })
+    );
+  }
 
-async function removeFromCart(dish: any) {
-  dispatch(removeCartItems({
-    "business_id": dish.business_id,
-    "menu_item": {
-      ...dish,
-      "id": dish.dish_id,
-    }
-  }))
-}
+  async function removeFromCart(dish: any) {
+    dispatch(
+      removeCartItems({
+        business: dish.business,
+        business_id: dish.business_id,
+        menu_item: {
+          ...dish,
+          id: dish.dish_id,
+        },
+      })
+    );
+  }
 
   useEffect(() => {
-    dispatch(fetchDishesForLandingPage())
+    dispatch(fetchDishesForLandingPage());
   }, []);
 
   const changeCategorySelection = (menu: any) => {
-    dispatch(changeFoodCategorySelection(menu))
-  }
+    dispatch(changeFoodCategorySelection(menu));
+  };
 
   /**top section UI */
   function TopSection() {
@@ -232,24 +240,23 @@ async function removeFromCart(dish: any) {
                 </div>
 
                 <div className="flex justify-end">
-                <button
-                  onClick={() => addToCart(food_item)}
-                  className=" h-8 w-8 justify-center items-center rounded-full flex 
+                  <button
+                    onClick={() => addToCart(food_item)}
+                    className=" h-8 w-8 justify-center items-center rounded-full flex 
                   bg-gradient-to-r bg-transparent from-orange-500 to-orange-500 
                   shadow-2xl"
-                >
-                  <PlusIcon className="h-4 w-4 text-white" />
-                </button>
-                <button
-                  onClick={() => removeFromCart(food_item)}
-                  className=" h-8 w-8 justify-center items-center rounded-full flex 
+                  >
+                    <PlusIcon className="h-4 w-4 text-white" />
+                  </button>
+                  <button
+                    onClick={() => removeFromCart(food_item)}
+                    className=" h-8 w-8 justify-center items-center rounded-full flex 
                   bg-gradient-to-r bg-transparent from-orange-500 to-orange-500 
                   shadow-2xl"
-                >
-                  <MinusCircleIcon className="h-4 w-4 text-white" />
-                </button>
+                  >
+                    <MinusCircleIcon className="h-4 w-4 text-white" />
+                  </button>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -288,7 +295,7 @@ async function removeFromCart(dish: any) {
   function filterFood(event: any) {
     const text = event.target.value;
 
-    const newData = data?.foodHolder?.filter( (item: any) => {
+    const newData = data?.foodHolder?.filter((item: any) => {
       const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;

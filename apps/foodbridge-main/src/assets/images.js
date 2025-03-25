@@ -11,19 +11,19 @@ export const drink_icon = require("./menu/drink.png");
 export const noodle_icon = require("./menu/noodle.png");
 
 export const baked_fries = require("./food/baked-fries.jpg");
-export const burger_1 = require("./food/burger-restaurant-2.jpg");
-export const burger_2 = require("./food/burger-restaurant.jpg");
+export const burger_1 = require("./food/burger-business-2.jpg");
+export const burger_2 = require("./food/burger-business.jpg");
 export const chicago_hot_dog = require("./food/chicago-hot-dog.jpg");
 export const crispy_chicken_burger = require("./food/crispy-chicken-burger.jpg");
-export const fries = require("./food/fries-restaurant.jpg");
+export const fries = require("./food/fries-business.jpg");
 export const hawaiian_pizza = require("./food/hawaiian-pizza.jpg");
 export const chicken_burger = require("./food/honey-mustard-chicken-burger.jpg");
-export const hotdog_2 = require("./food/hot-dog-restaurant.jpg");
+export const hotdog_2 = require("./food/hot-dog-business.jpg");
 export const ice_kacang = require("./food/ice-kacang.jpg");
-export const japanese_restaurant = require("./food/japanese-restaurant.jpg");
+export const japanese_business = require("./food/japanese-business.jpg");
 export const biriyani = require("./food/nasi-briyani-mutton.jpg");
 export const noodle_soup = require("./food/noodle-shop.jpg");
-export const pizza_1 = require("./food/pizza-restaurant.jpg");
+export const pizza_1 = require("./food/pizza-business.jpg");
 export const pizza_2 = require("./food/pizza.jpg");
 export const salad = require("./food/salad.jpg");
 export const sushi = require("./food/sushi.jpg");
@@ -54,7 +54,7 @@ const images = {
   chicken_burger,
   hotdog_2,
   ice_kacang,
-  japanese_restaurant,
+  japanese_business,
   biriyani,
   noodle_soup,
   pizza_1,

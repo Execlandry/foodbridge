@@ -1,4 +1,3 @@
-import { MenuItem } from "@fbe/types";
 import {
   BaseEntity,
   Column,
@@ -21,11 +20,11 @@ export class CartEntity extends BaseEntity {
   @Column({ type: "uuid", select: true })
   public business_id!: string;
 
+  @Column({ type: "jsonb", select: true })
+  public business!: any;
+
   @Column({ type: "jsonb", default: null })
   public menu_items!: MenuItemBodyDto[];
-
-  @Column({ type: "int", default: null })
-  public count!: number;
 
   @CreateDateColumn({
     type: "timestamptz",

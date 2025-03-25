@@ -1,5 +1,13 @@
 version: '3'
 services:
+  rmq-listerner:
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
   postgres-user:
     environment:
       - POSTGRES_USER=api
@@ -20,7 +28,7 @@ services:
       - ./docker-utils:/docker-entrypoint-initdb.d
       - cart_api_data:/data/postgres
     ports:
-      - 5438:5432
+      - 5438:5432  
 
   postgres-delivery:
     environment:
@@ -31,7 +39,7 @@ services:
       - ./docker-utils:/docker-entrypoint-initdb.d
       - delivery_api_data:/data/postgres
     ports:
-      - 5439:5432
+      - 5439:5432 
 
   postgres-files:
     environment:
@@ -42,7 +50,7 @@ services:
       - ./docker-utils:/docker-entrypoint-initdb.d
       - delivery_api_data:/data/postgres
     ports:
-      - 5421:5432
+      - 5421:5432  
 
   postgres-order:
     environment:
@@ -53,7 +61,7 @@ services:
       - ./docker-utils:/docker-entrypoint-initdb.d
       - order_api_data:/data/postgres
     ports:
-      - 5433:5432
+      - 5433:5432                
 
   postgres-business:
     environment:
@@ -96,8 +104,7 @@ services:
     volumes:
       - es_data:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-
+      - 9200:9200  
   kibana:
     container_name: kb-container
     environment:
@@ -105,8 +112,7 @@ services:
     depends_on:
       - es01
     ports:
-      - 5601:5601
-
+      - 5601:5601               
 volumes:
   auth_api_data: {}
   business_api_data: {}

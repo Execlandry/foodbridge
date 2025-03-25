@@ -1,17 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  AiOutlineMenu,
-  AiOutlineSearch,
-  AiOutlineClose,
-  AiFillTag,
-} from "react-icons/ai";
-import { BsFillCartFill, BsFillSaveFill, BsPerson } from "react-icons/bs";
-import { TbTruckDelivery } from "react-icons/tb";
-import { FaSignOutAlt, FaUserFriends, FaWallet } from "react-icons/fa";
-import { MdFavorite, MdHelp, MdLogin } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
-import { UserContext, UserContextType } from "../../hooks/user-context";
-import useAuth from "../../hooks/use-auth";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { AiOutlineMenu, AiOutlineSearch, AiOutlineClose, AiFillTag } from 'react-icons/ai';
+import { BsFillCartFill, BsFillSaveFill, BsPerson } from 'react-icons/bs';
+import { TbTruckDelivery } from 'react-icons/tb';
+import { FaSignOutAlt, FaUserFriends, FaWallet } from 'react-icons/fa';
+import { MdFavorite, MdHelp, MdLogin } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+import { UserContext, UserContextType } from '../../hooks/user-context';
+import useAuth from '../../hooks/use-auth';
 
 function Navbar() {
   const [nav, setNav] = useState(false);
@@ -30,7 +25,7 @@ function Navbar() {
   const handleLogout = () => {
     setNav(false);
     logoutUser();
-    navigate("/signin");
+    navigate('/signin');
   };
 
   useEffect(() => {
@@ -39,9 +34,9 @@ function Navbar() {
         setNav(false);
       }
     };
-    document.addEventListener("click", handleClickOutside, true);
+    document.addEventListener('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener("click", handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
   }, []);
 
@@ -52,7 +47,7 @@ function Navbar() {
     >
       <div className="flex items-center ">
         <img
-          onClick={() => navigate("/")}
+          onClick={() => navigate('/')}
           className="w-36 ml-10 cursor-pointer"
           src="https://d3i4yxtzktqr9n.cloudfront.net/web-fbe-v2/f8f0721f871b3704cce92eb96bc6e504.svg"
           alt="logo"
@@ -109,16 +104,12 @@ function Navbar() {
               <img
                 className="w-8 h-8 rounded-full"
                 src=""
-                alt="avatar logo"
+                alt="avatar"
               />
             </div>
             <div className="ml-3 flex-col flex">
-              <label className="text-md font-semibold">
-                {user?.name?.substring(0, 6)}
-              </label>
-              <label className="text-sm text-gray-400">
-                {user?.email?.substring(0, 6)}
-              </label>
+              <label className="text-md font-semibold">{user?.name?.substring(0,6)}</label>
+              <label className="text-sm text-gray-400">{user?.email?.substring(0,6)}</label>
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -129,11 +120,7 @@ function Navbar() {
               aria-hidden="true"
               className="h-4 w-4 ml-3"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M19 9l-7 7-7-7"
-              ></path>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
         )}
@@ -147,7 +134,7 @@ function Navbar() {
                top-10 left-0"
         />
       ) : (
-        ""
+        ''
       )}
     </div>
   );

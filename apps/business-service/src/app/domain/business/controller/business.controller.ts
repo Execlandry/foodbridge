@@ -71,10 +71,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return search businesses successfully",
+    description: "return search business successfully",
   })
   @Get("/search")
   public async searchBusiness(@Query() query: SearchQueryDto) {
@@ -88,10 +88,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return search businesses successfully",
+    description: "return search business successfully",
   })
   @Get("/:id")
   public async fetchBusinessById(@Param() param: fetchBusinessByIdDto) {
@@ -105,10 +105,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return search businesses successfully",
+    description: "return search business successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -127,10 +127,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return search businesses successfully",
+    description: "return search business successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -150,10 +150,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "return all admin businesses",
+    description: "return all admin business",
   })
   @ApiOkResponse({
-    description: "return search businesses successfully",
+    description: "return search business successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)

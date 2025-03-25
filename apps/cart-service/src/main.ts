@@ -2,7 +2,7 @@ require("dotenv").config();
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { createDocument } from "./docs/swagger";
-import * as cookieParser from 'cookie-parser';
+import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

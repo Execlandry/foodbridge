@@ -29,6 +29,7 @@ export const fetchDishesForLandingPage = createAsyncThunk(
         price: item.price,
         menu_id: item.category,
         business_id: item.business.id,
+        business: item.business,
         status: true,
       };
     });

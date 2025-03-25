@@ -1,6 +1,8 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { Transform, Type as ValidateType } from "class-transformer";
 import {
+  ArrayMinSize,
+  IsArray,
   IsDateString,
   IsDefined,
   IsEmail,
@@ -15,243 +17,193 @@ import {
   ValidateNested,
 } from "class-validator";
 import { Type as validateType } from "class-transformer";
-import { UserRoles } from "@fbe/types";
+import { mealType, cuisineType, foodType } from "@fbe/types";
 
-export class fetchBusinessByIdDto {
+export class MenuItemBodyDto {
   @ApiProperty({
-    description: "uuid",
-    example: "uuid",
+    description: "id",
+    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+    required: true,
+  })
+  @IsDefined()
+  @IsString()
+  public id!: string;
+
+  @ApiProperty({
+    description: "name",
+    example: "paneer tikka masala",
+    required: true,
+  })
+  @IsDefined()
+  @IsString()
+  public name!: string;
+
+  @ApiProperty({
+    description: "descriotion",
+    example:
+      "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public description!: string;
+
+  @ApiProperty({
+    description: "cuisine_type",
+    required: true,
+    enum: cuisineType,
+    example: cuisineType.indian,
+  })
+  @IsEnum(cuisineType)
+  public cuisine_type!: string;
+
+  @ApiProperty({
+    description: "meal_type",
+    required: true,
+    enum: mealType,
+    example: mealType.breakfast,
+  })
+  @IsEnum(mealType)
+  public meal_type!: string;
+
+  @ApiProperty({
+    description: "category",
+    example: "category",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public category!: string;
+
+  @ApiProperty({
+    description: "ingredients",
+    example: "ingredients",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public ingredients!: string;
+
+  @ApiProperty({
+    description: "food_type",
+    required: true,
+    enum: foodType,
+    example: foodType.vegan,
+  })
+  @IsEnum(foodType)
+  public food_type!: string;
+
+  @ApiProperty({
+    description: "price",
+    example: 500,
+    required: true,
+  })
+  @IsNumber()
+  public price!: number;
+
+  @ApiProperty({
+    description: "number of items",
+    example: 2,
+    required: true,
+  })
+  @IsOptional()
+  @IsNumber()
+  public count!: number;
+
+  @ApiProperty({
+    description: "thumbnails",
+    example: "https://google.com/banner.png",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public thumbnails!: string;
+}
+
+export class CreatePaymentBodyDto {
+  @ApiProperty({
+    description: "business_id",
+    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+    required: true,
+  })
+  @IsUUID()
+  public business_id!: string;
+
+  @ApiProperty({
+    description: "business",
+    example: {},
+    required: true,
+  })
+  @IsObject()
+  public business!: any;
+
+  @ApiProperty({
+    description: "address obj",
+    example: {},
+    required: true,
+  })
+  @IsObject()
+  public address!: any;
+
+  @ApiProperty({
+    description: "address_id",
+    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+    required: true,
+  })
+  @IsUUID()
+  public address_id!: string;
+
+  @ApiProperty({
+    description: "menu_item object",
+    example: [
+      {
+        id: "5272ec36-d9db-11ed-afa1-0242ac120009",
+        name: "paneer tikka masala",
+        description:
+          "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
+        cuisine_type: "indian",
+        meal_type: "breakfast",
+        category: "category",
+        ingredients: "ingredients",
+        food_type: "vegan",
+        count: 1,
+        price: 500,
+        thumbnails: "https://google.com/banner.png",
+      },
+    ],
+    required: true,
+  })
+  @IsArray()
+  @ValidateNested()
+  @ValidateType(() => MenuItemBodyDto)
+  public menu_items!: MenuItemBodyDto[];
+}
+
+export class UpdateByIdDto {
+  @ApiProperty({
+    description: "order_id",
+    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
     required: true,
   })
   @IsUUID()
   public id!: string;
 }
 
-export class AddressDto {
-  @ApiProperty({
-    description: "city",
-    example: "delhi",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public city!: string;
-
-  @ApiProperty({
-    description: "state",
-    example: "delhi",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public state!: string;
-
-  @ApiProperty({
-    description: "country",
-    example: "INDIA",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public country!: string;
-
-  @ApiProperty({
-    description: "pin_code",
-    example: "6789876",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public pincode!: string;
-
-  @ApiProperty({
-    description: "street",
-    example: "street",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public street!: string;
-
-  @ApiProperty({
-    description: "name",
-    example: "name",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public name!: string;
+export enum Status {
+  "success" = "success",
+  "failure" = "failure",
 }
 
-export class SearchQueryDto {
+export class UpdateByIdQueryDto {
   @ApiProperty({
-    description: "latitude",
-    example: "",
-    required: false,
-  })
-  @IsOptional()
-  @IsDefined()
-  @IsString()
-  public latitude!: string;
-
-  @ApiProperty({
-    description: "longitude",
-    example: "",
-    required: false,
-  })
-  @IsOptional()
-  @IsDefined()
-  @IsString()
-  public longitude!: string;
-
-  @ApiProperty({
-    description: "search_text",
-    example: "",
+    description: "success/failure",
+    example: Status.success,
+    enum: Status,
     required: true,
   })
-  @IsDefined()
+  @IsEnum(Status)
   @IsString()
-  public search_text!: string;
-
-  @ApiProperty({
-    description: "page count",
-    example: "1",
-    required: false,
-  })
-  @Transform(({ value }) => parseInt(value))
-  @IsOptional()
-  @IsNumber()
-  public page!: number;
-
-  @ApiProperty({
-    description: "limit per page",
-    example: "10",
-    required: false,
-  })
-  @Transform(({ value }) => parseInt(value))
-  @IsOptional()
-  @IsNumber()
-  public limit!: number;
+  public status!: string;
 }
 
-export class CreateBusinessBodyDto {
-  @ApiProperty({
-    description: "name",
-    example: "Kanha Veg Business",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public name!: string;
-
-  @ApiProperty({
-    description: "desc of business",
-    example: "Veg Business in North Goa",
-    required: true,
-  })
-  @IsOptional()
-  public description!: string;
-
-  @ApiProperty({
-    description: "average_price",
-    example: "1200",
-    required: true,
-  })
-  @IsOptional()
-  public average_price!: string;
-
-  @ApiProperty({
-    description: "latitude",
-    example: "11",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public latitude!: string;
-
-  @ApiProperty({
-    description: "longitude",
-    example: "11",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public longitude!: string;
-
-  @ApiProperty({
-    description: "contact_no",
-    example: "8998978987",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public contact_no!: string;
-
-  @ApiProperty({
-    description: "banner",
-    example: "https://gogole.com/banner.png",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  @IsUrl()
-  public banner!: string;
-
-  @ApiProperty({
-    description: "delivery_options",
-    example: "all",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public delivery_options!: string;
-
-  @ApiProperty({
-    description: "pickup_options",
-    example: "all",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public pickup_options!: string;
-
-  @ApiProperty({
-    description: "opens_at",
-    example: "2023-10-05T14:48:00.000Z",
-    required: true,
-  })
-  @IsDateString()
-  @IsString()
-  public opens_at!: string;
-
-  @ApiProperty({
-    description: "closes_at",
-    example: "2023-10-05T14:48:00.000Z",
-    required: true,
-  })
-  @IsDateString()
-  @IsString()
-  public closes_at!: string;
-
-  @ApiProperty({
-    description: "address payload",
-    example: {
-      name: "Goan Business",
-      city: "Punjim",
-      state: "Goa",
-      street: "North Goa",
-      pincode: "12001",
-      country: "India",
-    },
-    required: true,
-  })
-  @IsObject()
-  @IsDefined()
-  @ValidateNested()
-  @ValidateType(() => AddressDto)
-  public address!: AddressDto;
-}
-
-export class UpdateBusinessBodyDto extends PartialType(
-  CreateBusinessBodyDto
-) {}
+export class UpdatePaymentBodyDto extends PartialType(CreatePaymentBodyDto) {}

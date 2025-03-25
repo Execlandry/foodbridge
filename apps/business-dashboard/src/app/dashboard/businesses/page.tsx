@@ -11,12 +11,12 @@ export default function Index() {
   const router = useRouter();
 
 
-  const [businesses, setBusiness] = useState([])
+  const [businesses, setBusinesses] = useState([])
 
   const fetchBusiness = async () =>  {
     const res = await fetch("/api/business");
     const data = await res.json();
-    setBusiness(data)
+    setBusinesses(data)
   }
 
   useEffect(() => {
