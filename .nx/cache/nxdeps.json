@@ -1,0 +1,4870 @@
+{
+  "version": "5.1",
+  "nxVersion": "15.9.7",
+  "deps": {
+    "eslint-config-next": "13.1.5",
+    "eslint-config-prettier": "^8.5.0",
+    "@commitlint/cli": "^16.0.1",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "commitizen": "^4.2.4",
+    "conventional-changelog-cli": "^2.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.28.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-svelte3": "^4.0.0",
+    "fbjs-scripts": "^3.0.1",
+    "husky": "^7.0.4",
+    "jest": "^27.4.7",
+    "nx": "^20.6.0",
+    "prettier": "^2.8.6",
+    "prettier-plugin-svelte": "^2.9.0",
+    "ts-jest": "^27.1.2",
+    "typescript": "^4.5.4"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": false
+    }
+  },
+  "nodes": {
+    "@fbe/app-infra": {
+      "name": "@fbe/app-infra",
+      "type": "lib",
+      "data": {
+        "root": "infra/foodbridge-main-infra",
+        "sourceRoot": "infra/foodbridge-main-infra",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "watch"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "cdk-bootstrap": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "cdk-bootstrap"
+            }
+          },
+          "cdk-synth": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "cdk-synth"
+            }
+          },
+          "cdk-deploy": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "cdk-deploy"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "infra/foodbridge-main-infra/.gitignore",
+            "hash": "9316388032179459092"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/.npmignore",
+            "hash": "18043273588612545309"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/bin/demo-app.ts",
+            "hash": "5520934184775082567"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/cdk.json",
+            "hash": "13075221389853937987"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/jest.config.js",
+            "hash": "14586160169972495869"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/lib/demo-app-stack.ts",
+            "hash": "2379189881880293525"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/package.json",
+            "hash": "14245708885895608390",
+            "dependencies": [
+              {
+                "target": "npm:jest",
+                "source": "@fbe/app-infra",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/app-infra",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/app-infra",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "infra/foodbridge-main-infra/README.md",
+            "hash": "14651172722882615344"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/test/demo-app.test.ts",
+            "hash": "11001503637218043475"
+          },
+          {
+            "file": "infra/foodbridge-main-infra/tsconfig.json",
+            "hash": "5258088171669105235"
+          }
+        ]
+      }
+    },
+    "notification-service": {
+      "name": "notification-service",
+      "type": "lib",
+      "data": {
+        "root": "apps/notification-service",
+        "sourceRoot": "apps/notification-service",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "format": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "format"
+            }
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "start:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:prod"
+            }
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/notification-service/.eslintrc.js",
+            "hash": "7461846271827386206"
+          },
+          {
+            "file": "apps/notification-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/notification-service/.prettierrc",
+            "hash": "4808572120966128913"
+          },
+          {
+            "file": "apps/notification-service/nest-cli.json",
+            "hash": "789240945379598733"
+          },
+          {
+            "file": "apps/notification-service/package.json",
+            "hash": "17679333544436995565",
+            "dependencies": [
+              {
+                "target": "npm:@typescript-eslint/eslint-plugin",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:@typescript-eslint/parser",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:eslint",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:eslint-config-prettier",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:eslint-plugin-prettier",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:jest",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:prettier",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "notification-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "notification-service",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/notification-service/README.md",
+            "hash": "8286378509751487236"
+          },
+          {
+            "file": "apps/notification-service/src/app.controller.spec.ts",
+            "hash": "2727664763654384995"
+          },
+          {
+            "file": "apps/notification-service/src/app.controller.ts",
+            "hash": "4552329938751326480"
+          },
+          {
+            "file": "apps/notification-service/src/app.module.ts",
+            "hash": "11673476679848632172"
+          },
+          {
+            "file": "apps/notification-service/src/app.service.ts",
+            "hash": "16892833931858030153"
+          },
+          {
+            "file": "apps/notification-service/src/main.ts",
+            "hash": "16836780892212170881"
+          },
+          {
+            "file": "apps/notification-service/test/app.e2e-spec.ts",
+            "hash": "15142680097789702029"
+          },
+          {
+            "file": "apps/notification-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/notification-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/notification-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "@fbe/user-infra": {
+      "name": "@fbe/user-infra",
+      "type": "lib",
+      "data": {
+        "root": "infra/user-service-infra",
+        "sourceRoot": "infra/user-service-infra",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "watch"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "cdk-bootstrap": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "cdk-bootstrap"
+            }
+          },
+          "cdk-synth": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "cdk-synth"
+            }
+          },
+          "cdk-deploy": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "cdk-deploy"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "infra/user-service-infra/.gitignore",
+            "hash": "9316388032179459092"
+          },
+          {
+            "file": "infra/user-service-infra/.npmignore",
+            "hash": "18043273588612545309"
+          },
+          {
+            "file": "infra/user-service-infra/bin/demo-app.ts",
+            "hash": "5520934184775082567"
+          },
+          {
+            "file": "infra/user-service-infra/cdk.json",
+            "hash": "13075221389853937987"
+          },
+          {
+            "file": "infra/user-service-infra/jest.config.js",
+            "hash": "14586160169972495869"
+          },
+          {
+            "file": "infra/user-service-infra/lib/demo-app-stack.ts",
+            "hash": "2379189881880293525"
+          },
+          {
+            "file": "infra/user-service-infra/package.json",
+            "hash": "612251367243722069",
+            "dependencies": [
+              {
+                "target": "npm:jest",
+                "source": "@fbe/user-infra",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/user-infra",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/user-infra",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "infra/user-service-infra/README.md",
+            "hash": "14651172722882615344"
+          },
+          {
+            "file": "infra/user-service-infra/test/demo-app.test.ts",
+            "hash": "11001503637218043475"
+          },
+          {
+            "file": "infra/user-service-infra/tsconfig.json",
+            "hash": "5258088171669105235"
+          }
+        ]
+      }
+    },
+    "@fbe/business-admin": {
+      "name": "@fbe/business-admin",
+      "type": "lib",
+      "data": {
+        "root": "apps/business-dashboard",
+        "sourceRoot": "apps/business-dashboard",
+        "projectType": "library",
+        "targets": {
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/business-dashboard/.gitignore",
+            "hash": "707631174470455558"
+          },
+          {
+            "file": "apps/business-dashboard/.vscode/settings.json",
+            "hash": "16515152146351468967"
+          },
+          {
+            "file": "apps/business-dashboard/next-env.d.ts",
+            "hash": "5909181270615354023"
+          },
+          {
+            "file": "apps/business-dashboard/next.config.js",
+            "hash": "9498929528247572698"
+          },
+          {
+            "file": "apps/business-dashboard/package.json",
+            "hash": "2548549417706143314",
+            "dependencies": [
+              {
+                "target": "@fbe/types",
+                "source": "@fbe/business-admin",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/business-admin",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/business-dashboard/postcss.config.js",
+            "hash": "8055263870272897227"
+          },
+          {
+            "file": "apps/business-dashboard/public/assets/bannerbackground.png",
+            "hash": "1699365436374993158"
+          },
+          {
+            "file": "apps/business-dashboard/public/assets/bg.png",
+            "hash": "9873934812574501105"
+          },
+          {
+            "file": "apps/business-dashboard/public/favicon.ico",
+            "hash": "9157999678830540297"
+          },
+          {
+            "file": "apps/business-dashboard/public/next.svg",
+            "hash": "8300767200008744458"
+          },
+          {
+            "file": "apps/business-dashboard/public/thirteen.svg",
+            "hash": "11871389082220331928"
+          },
+          {
+            "file": "apps/business-dashboard/public/vercel.svg",
+            "hash": "2376673330454856631"
+          },
+          {
+            "file": "apps/business-dashboard/README.md",
+            "hash": "6143910061704751366"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/auth/[...nextauth]/route.ts",
+            "hash": "12366293878255523198"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/business/[id]/route.ts",
+            "hash": "10359408583570482770"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/business/route.ts",
+            "hash": "1117009237181239953"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/files/[id]/route.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/files/route.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/hello/route.ts",
+            "hash": "6531577253474218665"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/order/[id]/route.ts",
+            "hash": "5491436010678778647"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/order/route.ts",
+            "hash": "14792884487930592383"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/payments/[id]/route.ts",
+            "hash": "5491436010678778647"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/payments/route.ts",
+            "hash": "14792884487930592383"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/api/session/route.ts",
+            "hash": "5021003709637429978"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/signin/layout.tsx",
+            "hash": "10426756666084253560"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/signin/page.tsx",
+            "hash": "2762043256375091645"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/signup/layout.tsx",
+            "hash": "5767125823762548507"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/(auth)/signup/page.tsx",
+            "hash": "18321252205148621815"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/businesses/[id]/add/page.tsx",
+            "hash": "15381908428011149616"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/businesses/[id]/page.tsx",
+            "hash": "5210812396321613978"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/businesses/add/page.tsx",
+            "hash": "11196511289100134365"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/businesses/layout.tsx",
+            "hash": "15010691364646836715"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/businesses/loading.tsx",
+            "hash": "1155525717436282676"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/businesses/page.tsx",
+            "hash": "17222752447218312250"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/head.tsx",
+            "hash": "8375409115323434078"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/layout.tsx",
+            "hash": "2835419477562922451"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/loading.tsx",
+            "hash": "11447926922443010697"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/orders/page.tsx",
+            "hash": "2253355923847097369"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/page.tsx",
+            "hash": "1254779207700228413"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/dashboard/payments/page.tsx",
+            "hash": "8121887412666000731"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/globals.css",
+            "hash": "14493532252067347798"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/head.tsx",
+            "hash": "8375409115323434078"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/interface.ts",
+            "hash": "16352037165203032988"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/layout.tsx",
+            "hash": "11152945020886464013"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/middlewares/withAuthorization.ts",
+            "hash": "1922506545278532960"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/page.tsx",
+            "hash": "4571215216636945264"
+          },
+          {
+            "file": "apps/business-dashboard/src/app/providers.tsx",
+            "hash": "15223184084150403930"
+          },
+          {
+            "file": "apps/business-dashboard/src/auth/FormAction.tsx",
+            "hash": "11219049788134144306"
+          },
+          {
+            "file": "apps/business-dashboard/src/auth/FormExtra.tsx",
+            "hash": "12686089263017993696"
+          },
+          {
+            "file": "apps/business-dashboard/src/auth/Header.tsx",
+            "hash": "1489833915839119510"
+          },
+          {
+            "file": "apps/business-dashboard/src/auth/Input.tsx",
+            "hash": "34331329464537044"
+          },
+          {
+            "file": "apps/business-dashboard/src/auth/login.tsx",
+            "hash": "1668398536742246696"
+          },
+          {
+            "file": "apps/business-dashboard/src/auth/Signup.tsx",
+            "hash": "3952100958468009131"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/common/FileSelector.tsx",
+            "hash": "4468291686304842921"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/common/ImagePreview.tsx",
+            "hash": "12532965425672628649"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/common/Modal.tsx",
+            "hash": "18376355677866591760"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/common/PageComponentTitle.tsx",
+            "hash": "15718716706673116529"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/dashboard/Dashboard.tsx",
+            "hash": "53071785063648327"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/Footer.js",
+            "hash": "8047101480594454841"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/Header.tsx",
+            "hash": "11927304795152694808"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/header/LogOutButton.js",
+            "hash": "12561723659601977715"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/header/Notifications.js",
+            "hash": "17624216435615879701"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/header/SearchBox.js",
+            "hash": "3237935288496256857"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/header/UserMenu.js",
+            "hash": "16193716541647843749"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/Layout.js",
+            "hash": "7082102504535848576"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/Sidebar.js",
+            "hash": "7976223343635595321"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/sidebar/Logo.js",
+            "hash": "9400843387726772052"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/sidebar/Nav.js",
+            "hash": "11542439268587203128"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/sidebar/NavItem.js",
+            "hash": "10768713820998816571"
+          },
+          {
+            "file": "apps/business-dashboard/src/components/layout/sidebar/SettingButton.js",
+            "hash": "7632441366152951541"
+          },
+          {
+            "file": "apps/business-dashboard/src/constants/formFields.js",
+            "hash": "8336852772531639848"
+          },
+          {
+            "file": "apps/business-dashboard/src/helpers/fetcher.ts",
+            "hash": "1581765740505196427"
+          },
+          {
+            "file": "apps/business-dashboard/src/middleware.ts",
+            "hash": "15750505075940677973"
+          },
+          {
+            "file": "apps/business-dashboard/src/utils/outsideClick.js",
+            "hash": "9514404430360263355"
+          },
+          {
+            "file": "apps/business-dashboard/tailwind.config.js",
+            "hash": "7119145590069922826"
+          },
+          {
+            "file": "apps/business-dashboard/tsconfig.json",
+            "hash": "6011318179398024696"
+          }
+        ]
+      }
+    },
+    "@fbe/aws-s3-dynamic": {
+      "name": "@fbe/aws-s3-dynamic",
+      "type": "lib",
+      "data": {
+        "root": "packages/aws-s3-dynamic",
+        "sourceRoot": "packages/aws-s3-dynamic",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "tsc-version": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "tsc-version"
+            }
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "prepublishOnly": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prepublishOnly"
+            }
+          },
+          "pretest": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "pretest"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "packages/aws-s3-dynamic/jest.config.js",
+            "hash": "1256365898827067825"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/package.json",
+            "hash": "5117183095501900501",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/aws-s3-dynamic",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/aws-s3-dynamic",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/aws-s3-dynamic",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/aws-s3.constants.ts",
+            "hash": "16748793142454673541"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/aws-s3.decorator.ts",
+            "hash": "1208321802787832514"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/aws-s3.interface.ts",
+            "hash": "4727074751891282107"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/aws-s3.module.ts",
+            "hash": "8612646537482636439"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/aws-s3.provider.ts",
+            "hash": "5398008962009874019"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/aws-s3.service.ts",
+            "hash": "11372741722830791819"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/index.ts",
+            "hash": "16311589947276598015"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/src/utils.ts",
+            "hash": "3461239525813002155"
+          },
+          {
+            "file": "packages/aws-s3-dynamic/tsconfig.json",
+            "hash": "17186042120899019715"
+          }
+        ]
+      }
+    },
+    "@fbe/businesses": {
+      "name": "@fbe/businesses",
+      "type": "lib",
+      "data": {
+        "root": "apps/business-service",
+        "sourceRoot": "apps/business-service",
+        "projectType": "library",
+        "targets": {
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "prestart": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prestart"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "build:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build:prod"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:unit": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:unit"
+            }
+          },
+          "test:migration": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:migration"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          },
+          "typeorm": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm"
+            }
+          },
+          "typeorm:cli": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm:cli"
+            }
+          },
+          "migration:generate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:generate"
+            }
+          },
+          "migration:run": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:run"
+            }
+          },
+          "migration:revert": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:revert"
+            }
+          },
+          "db:sync": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "db:sync"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/business-service/.dockerignore",
+            "hash": "4107239433558549794"
+          },
+          {
+            "file": "apps/business-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/business-service/env.example",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/business-service/jest.config-e2e.js",
+            "hash": "6787006172729649582"
+          },
+          {
+            "file": "apps/business-service/jest.config.js",
+            "hash": "9444005229835104957"
+          },
+          {
+            "file": "apps/business-service/nest-cli.json",
+            "hash": "789240945379598733"
+          },
+          {
+            "file": "apps/business-service/ormconfig.ts",
+            "hash": "15166768119036255159"
+          },
+          {
+            "file": "apps/business-service/package.json",
+            "hash": "5950305985789734041",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/businesses",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/database",
+                "source": "@fbe/businesses",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/businesses",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/types",
+                "source": "@fbe/businesses",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/businesses",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/businesses",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/business-service/README.md",
+            "hash": "88028313855074524"
+          },
+          {
+            "file": "apps/business-service/src/app.controller.spec.ts",
+            "hash": "7434114235028751174"
+          },
+          {
+            "file": "apps/business-service/src/app.controller.ts",
+            "hash": "12223604807085111960"
+          },
+          {
+            "file": "apps/business-service/src/app.module.ts",
+            "hash": "10824501908579804974"
+          },
+          {
+            "file": "apps/business-service/src/app.service.ts",
+            "hash": "12529688746242345769"
+          },
+          {
+            "file": "apps/business-service/src/app/app.constants.ts",
+            "hash": "10903503975830300094"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/auth.module.ts",
+            "hash": "11169703631216482461"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/dto/auth-request.dto.ts",
+            "hash": "4394074471620735600"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/dto/auth-response.dto.ts",
+            "hash": "4670672876035155071"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/guards/access_token.guard.ts",
+            "hash": "12971819134187776313"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/guards/role-decorator.ts",
+            "hash": "7473158391006570601"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/guards/role-guard.ts",
+            "hash": "15432590942182139706"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/guards/user.ts",
+            "hash": "6245010402020130072"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/auth/strategies/access_jwt-strategy.ts",
+            "hash": "2864411214249989716"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/controller/business.controller.ts",
+            "hash": "13647087761944772332"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/controller/business.dish.controller.ts",
+            "hash": "9697107378356748582"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/dto/business.dish.dto.ts",
+            "hash": "1800553904687210738"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/dto/business.dto.ts",
+            "hash": "10124742470054361997"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/entity/business.address.entity.ts",
+            "hash": "7910776774583103848"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/entity/business.dish.entity.ts",
+            "hash": "8802246053536179819"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/entity/business.entity.ts",
+            "hash": "8979703597788785374"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/services/business.dish.service.ts",
+            "hash": "12970142898475037095"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/business/services/business.service.ts",
+            "hash": "17207864149887696894"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/core/core.module.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/domain.module.ts",
+            "hash": "556164120649336849"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/search/mapping.ts",
+            "hash": "1099322727691075035"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/search/search.module.ts",
+            "hash": "13500606597118362005"
+          },
+          {
+            "file": "apps/business-service/src/app/domain/search/search.service.ts",
+            "hash": "5368997717931203845"
+          },
+          {
+            "file": "apps/business-service/src/docs/swagger.config.ts",
+            "hash": "13431186344529421351"
+          },
+          {
+            "file": "apps/business-service/src/docs/swagger.interface.ts",
+            "hash": "6319621730890137675"
+          },
+          {
+            "file": "apps/business-service/src/docs/swagger.ts",
+            "hash": "1944349382493844934"
+          },
+          {
+            "file": "apps/business-service/src/main.ts",
+            "hash": "7223672931156227564"
+          },
+          {
+            "file": "apps/business-service/test/app.e2e-spec.ts",
+            "hash": "2532427084885949069"
+          },
+          {
+            "file": "apps/business-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/business-service/test/setEnvVars.js",
+            "hash": "802539404276103456"
+          },
+          {
+            "file": "apps/business-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/business-service/tsconfig.e2e.json",
+            "hash": "10128003685370546432"
+          },
+          {
+            "file": "apps/business-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "@fbe/delivery": {
+      "name": "@fbe/delivery",
+      "type": "lib",
+      "data": {
+        "root": "apps/delivery-service",
+        "sourceRoot": "apps/delivery-service",
+        "projectType": "library",
+        "targets": {
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "prestart": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prestart"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "build:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build:prod"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:unit": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:unit"
+            }
+          },
+          "test:migration": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:migration"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          },
+          "typeorm": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm"
+            }
+          },
+          "typeorm:cli": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm:cli"
+            }
+          },
+          "migration:generate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:generate"
+            }
+          },
+          "migration:run": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:run"
+            }
+          },
+          "migration:revert": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:revert"
+            }
+          },
+          "db:sync": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "db:sync"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/delivery-service/.dockerignore",
+            "hash": "4107239433558549794"
+          },
+          {
+            "file": "apps/delivery-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/delivery-service/env.example",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/delivery-service/jest.config-e2e.js",
+            "hash": "6787006172729649582"
+          },
+          {
+            "file": "apps/delivery-service/jest.config.js",
+            "hash": "9444005229835104957"
+          },
+          {
+            "file": "apps/delivery-service/nest-cli.json",
+            "hash": "789240945379598733"
+          },
+          {
+            "file": "apps/delivery-service/ormconfig.ts",
+            "hash": "15166768119036255159"
+          },
+          {
+            "file": "apps/delivery-service/package.json",
+            "hash": "1416274739789121462",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/delivery",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/database",
+                "source": "@fbe/delivery",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/delivery",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/types",
+                "source": "@fbe/delivery",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/delivery",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/delivery",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/delivery-service/README.md",
+            "hash": "88028313855074524"
+          },
+          {
+            "file": "apps/delivery-service/src/app.controller.spec.ts",
+            "hash": "7434114235028751174"
+          },
+          {
+            "file": "apps/delivery-service/src/app.controller.ts",
+            "hash": "12223604807085111960"
+          },
+          {
+            "file": "apps/delivery-service/src/app.module.ts",
+            "hash": "10824501908579804974"
+          },
+          {
+            "file": "apps/delivery-service/src/app.service.ts",
+            "hash": "12529688746242345769"
+          },
+          {
+            "file": "apps/delivery-service/src/app/app.constants.ts",
+            "hash": "10903503975830300094"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/auth.module.ts",
+            "hash": "11169703631216482461"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/dto/auth-request.dto.ts",
+            "hash": "4394074471620735600"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/dto/auth-response.dto.ts",
+            "hash": "4670672876035155071"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/guards/access_token.guard.ts",
+            "hash": "12971819134187776313"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/guards/role-decorator.ts",
+            "hash": "7473158391006570601"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/guards/role-guard.ts",
+            "hash": "15432590942182139706"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/guards/user.ts",
+            "hash": "6245010402020130072"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/auth/strategies/access_jwt-strategy.ts",
+            "hash": "10157803273054071429"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/cart/controller/cart.controller.ts",
+            "hash": "4002895638634425721"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/cart/dto/cart.dto.ts",
+            "hash": "1052037038876132740"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/cart/entity/cart.entity.ts",
+            "hash": "7695571408331629441"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/cart/services/cart.service.ts",
+            "hash": "4593593836234013361"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/core/core.module.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/delivery-service/src/app/domain/domain.module.ts",
+            "hash": "602092232059138473"
+          },
+          {
+            "file": "apps/delivery-service/src/docs/swagger.config.ts",
+            "hash": "15845908384964324394"
+          },
+          {
+            "file": "apps/delivery-service/src/docs/swagger.interface.ts",
+            "hash": "6319621730890137675"
+          },
+          {
+            "file": "apps/delivery-service/src/docs/swagger.ts",
+            "hash": "1944349382493844934"
+          },
+          {
+            "file": "apps/delivery-service/src/main.ts",
+            "hash": "18315513100088875768"
+          },
+          {
+            "file": "apps/delivery-service/test/app.e2e-spec.ts",
+            "hash": "2532427084885949069"
+          },
+          {
+            "file": "apps/delivery-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/delivery-service/test/setEnvVars.js",
+            "hash": "802539404276103456"
+          },
+          {
+            "file": "apps/delivery-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/delivery-service/tsconfig.e2e.json",
+            "hash": "10128003685370546432"
+          },
+          {
+            "file": "apps/delivery-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "@fbe/admin": {
+      "name": "@fbe/admin",
+      "type": "lib",
+      "data": {
+        "root": "apps/foodbridge-admin",
+        "sourceRoot": "apps/foodbridge-admin",
+        "projectType": "library",
+        "targets": {
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "preview": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "preview"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "check": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check"
+            }
+          },
+          "check:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check:watch"
+            }
+          },
+          "test:unit": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:unit"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/foodbridge-admin/.eslintignore",
+            "hash": "12866345277008372755"
+          },
+          {
+            "file": "apps/foodbridge-admin/.gitignore",
+            "hash": "9815671046980959070"
+          },
+          {
+            "file": "apps/foodbridge-admin/.prettierignore",
+            "hash": "12866345277008372755"
+          },
+          {
+            "file": "apps/foodbridge-admin/package.json",
+            "hash": "12281377297474419824",
+            "dependencies": [
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/admin",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/foodbridge-admin/playwright.config.ts",
+            "hash": "17179192067656796659"
+          },
+          {
+            "file": "apps/foodbridge-admin/README.md",
+            "hash": "4698455699917367128"
+          },
+          {
+            "file": "apps/foodbridge-admin/src/app.d.ts",
+            "hash": "1283883096245253343"
+          },
+          {
+            "file": "apps/foodbridge-admin/src/app.html",
+            "hash": "3707440646324638764"
+          },
+          {
+            "file": "apps/foodbridge-admin/src/index.test.ts",
+            "hash": "15339241960658402235"
+          },
+          {
+            "file": "apps/foodbridge-admin/src/routes/+page.svelte",
+            "hash": "9238756176829553547"
+          },
+          {
+            "file": "apps/foodbridge-admin/src/routes/blog/[slug]/+page.svelte",
+            "hash": "17352403820703451846"
+          },
+          {
+            "file": "apps/foodbridge-admin/src/routes/blog/[slug]/+page.ts",
+            "hash": "18399385164752233557"
+          },
+          {
+            "file": "apps/foodbridge-admin/src/routes/login/+page.svelte",
+            "hash": "17789668284899430876"
+          },
+          {
+            "file": "apps/foodbridge-admin/static/favicon.png",
+            "hash": "11504680974745960892"
+          },
+          {
+            "file": "apps/foodbridge-admin/svelte.config.js",
+            "hash": "7345577000467441812"
+          },
+          {
+            "file": "apps/foodbridge-admin/tests/test.ts",
+            "hash": "15409397162456970571"
+          },
+          {
+            "file": "apps/foodbridge-admin/tsconfig.json",
+            "hash": "7370341274632808282"
+          },
+          {
+            "file": "apps/foodbridge-admin/vite.config.ts",
+            "hash": "12431643220002147964"
+          }
+        ]
+      }
+    },
+    "@fbe/app": {
+      "name": "@fbe/app",
+      "type": "lib",
+      "data": {
+        "root": "apps/foodbridge-main",
+        "sourceRoot": "apps/foodbridge-main",
+        "projectType": "library",
+        "targets": {
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "eject": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "eject"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/foodbridge-main/.gitignore",
+            "hash": "5403484524555424706"
+          },
+          {
+            "file": "apps/foodbridge-main/craco.config.js",
+            "hash": "14640519619335084509"
+          },
+          {
+            "file": "apps/foodbridge-main/package.json",
+            "hash": "6264870891806008029",
+            "dependencies": [
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/app",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/foodbridge-main/public/assets/bannerbackground.png",
+            "hash": "1699365436374993158"
+          },
+          {
+            "file": "apps/foodbridge-main/public/assets/bg.png",
+            "hash": "9873934812574501105"
+          },
+          {
+            "file": "apps/foodbridge-main/public/favicon.ico",
+            "hash": "2949791817221603359"
+          },
+          {
+            "file": "apps/foodbridge-main/public/foods.json",
+            "hash": "3965899408622440228"
+          },
+          {
+            "file": "apps/foodbridge-main/public/index.html",
+            "hash": "13308863839730475495"
+          },
+          {
+            "file": "apps/foodbridge-main/public/logo192.png",
+            "hash": "7585273181698778288"
+          },
+          {
+            "file": "apps/foodbridge-main/public/logo512.png",
+            "hash": "9339365414554387981"
+          },
+          {
+            "file": "apps/foodbridge-main/public/manifest.json",
+            "hash": "1447645250373428393"
+          },
+          {
+            "file": "apps/foodbridge-main/public/robots.txt",
+            "hash": "2790380794362165217"
+          },
+          {
+            "file": "apps/foodbridge-main/README.md",
+            "hash": "17911282315018038361"
+          },
+          {
+            "file": "apps/foodbridge-main/src/App.tsx",
+            "hash": "3393145588401725275"
+          },
+          {
+            "file": "apps/foodbridge-main/src/components/banner.tsx",
+            "hash": "1020603167045950619"
+          },
+          {
+            "file": "apps/foodbridge-main/src/components/dashboard.tsx",
+            "hash": "17188119027589878287"
+          },
+          {
+            "file": "apps/foodbridge-main/src/components/home.tsx",
+            "hash": "9883049839729821799"
+          },
+          {
+            "file": "apps/foodbridge-main/src/components/menu-items.tsx",
+            "hash": "16997581752852119771"
+          },
+          {
+            "file": "apps/foodbridge-main/src/components/nav.tsx",
+            "hash": "2358118913698923863"
+          },
+          {
+            "file": "apps/foodbridge-main/src/components/signin.tsx",
+            "hash": "15551241074514848011"
+          },
+          {
+            "file": "apps/foodbridge-main/src/components/signup.tsx",
+            "hash": "16679470357477785065"
+          },
+          {
+            "file": "apps/foodbridge-main/src/hooks/fetch-user.ts",
+            "hash": "12877061521375611776"
+          },
+          {
+            "file": "apps/foodbridge-main/src/hooks/use-auth.ts",
+            "hash": "16925180062781952434"
+          },
+          {
+            "file": "apps/foodbridge-main/src/hooks/user-context.ts",
+            "hash": "2852304995975033583"
+          },
+          {
+            "file": "apps/foodbridge-main/src/index.tsx",
+            "hash": "18238424080668203094"
+          },
+          {
+            "file": "apps/foodbridge-main/src/mock/index.ts",
+            "hash": "5508210699917593041"
+          },
+          {
+            "file": "apps/foodbridge-main/src/react-app-env.d.ts",
+            "hash": "3195158367843515590"
+          },
+          {
+            "file": "apps/foodbridge-main/src/reportWebVitals.ts",
+            "hash": "13179978946851081733"
+          },
+          {
+            "file": "apps/foodbridge-main/src/routes/home/index.tsx",
+            "hash": "7331951907629650477"
+          },
+          {
+            "file": "apps/foodbridge-main/src/routes/signin/index.tsx",
+            "hash": "29686297396771206"
+          },
+          {
+            "file": "apps/foodbridge-main/src/routes/signup/index.tsx",
+            "hash": "2061588513578439364"
+          },
+          {
+            "file": "apps/foodbridge-main/src/setupTests.ts",
+            "hash": "1287136586187282837"
+          },
+          {
+            "file": "apps/foodbridge-main/src/styles/index.css",
+            "hash": "8118989205246509541"
+          },
+          {
+            "file": "apps/foodbridge-main/src/styles/tailwind.css",
+            "hash": "8247319484624661597"
+          },
+          {
+            "file": "apps/foodbridge-main/tailwind.config.js",
+            "hash": "13080379868331336799"
+          },
+          {
+            "file": "apps/foodbridge-main/tsconfig.json",
+            "hash": "5830704406374355212"
+          }
+        ]
+      }
+    },
+    "@fbe/gateway": {
+      "name": "@fbe/gateway",
+      "type": "lib",
+      "data": {
+        "root": "apps/gateway-service",
+        "sourceRoot": "apps/gateway-service",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/gateway-service/__tests__/gateway-service.test.js",
+            "hash": "9385869249633948814"
+          },
+          {
+            "file": "apps/gateway-service/lib/gateway-service.js",
+            "hash": "13124164502055355311"
+          },
+          {
+            "file": "apps/gateway-service/package.json",
+            "hash": "4209398937717688980"
+          },
+          {
+            "file": "apps/gateway-service/README.md",
+            "hash": "14809030836568601573"
+          }
+        ]
+      }
+    },
+    "@fbe/order": {
+      "name": "@fbe/order",
+      "type": "lib",
+      "data": {
+        "root": "apps/order-service",
+        "sourceRoot": "apps/order-service",
+        "projectType": "library",
+        "targets": {
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "prestart": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prestart"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "build:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build:prod"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:unit": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:unit"
+            }
+          },
+          "test:migration": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:migration"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          },
+          "typeorm": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm"
+            }
+          },
+          "typeorm:cli": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm:cli"
+            }
+          },
+          "migration:generate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:generate"
+            }
+          },
+          "migration:run": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:run"
+            }
+          },
+          "migration:revert": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:revert"
+            }
+          },
+          "db:sync": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "db:sync"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/order-service/.dockerignore",
+            "hash": "4107239433558549794"
+          },
+          {
+            "file": "apps/order-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/order-service/env.example",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/order-service/jest.config-e2e.js",
+            "hash": "6787006172729649582"
+          },
+          {
+            "file": "apps/order-service/jest.config.js",
+            "hash": "9444005229835104957"
+          },
+          {
+            "file": "apps/order-service/nest-cli.json",
+            "hash": "789240945379598733"
+          },
+          {
+            "file": "apps/order-service/ormconfig.ts",
+            "hash": "15166768119036255159"
+          },
+          {
+            "file": "apps/order-service/package.json",
+            "hash": "9324936131219880266",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/order",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/database",
+                "source": "@fbe/order",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/order",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/types",
+                "source": "@fbe/order",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/order",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/order",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/order-service/README.md",
+            "hash": "88028313855074524"
+          },
+          {
+            "file": "apps/order-service/src/app.controller.spec.ts",
+            "hash": "7434114235028751174"
+          },
+          {
+            "file": "apps/order-service/src/app.controller.ts",
+            "hash": "12223604807085111960"
+          },
+          {
+            "file": "apps/order-service/src/app.module.ts",
+            "hash": "10824501908579804974"
+          },
+          {
+            "file": "apps/order-service/src/app.service.ts",
+            "hash": "12529688746242345769"
+          },
+          {
+            "file": "apps/order-service/src/app/app.constants.ts",
+            "hash": "10903503975830300094"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/auth.module.ts",
+            "hash": "11169703631216482461"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/dto/auth-request.dto.ts",
+            "hash": "4394074471620735600"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/dto/auth-response.dto.ts",
+            "hash": "4670672876035155071"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/guards/access_token.guard.ts",
+            "hash": "12971819134187776313"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/guards/role-decorator.ts",
+            "hash": "7473158391006570601"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/guards/role-guard.ts",
+            "hash": "15432590942182139706"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/guards/user.ts",
+            "hash": "6245010402020130072"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/auth/strategies/access_jwt-strategy.ts",
+            "hash": "10157803273054071429"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/core/core.module.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/domain.module.ts",
+            "hash": "11404298858275558295"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/order/controller/cart.controller.ts",
+            "hash": "4002895638634425721"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/order/dto/cart.dto.ts",
+            "hash": "3006191220199127502"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/order/entity/cart.entity.ts",
+            "hash": "7695571408331629441"
+          },
+          {
+            "file": "apps/order-service/src/app/domain/order/services/cart.service.ts",
+            "hash": "4593593836234013361"
+          },
+          {
+            "file": "apps/order-service/src/docs/swagger.config.ts",
+            "hash": "15845908384964324394"
+          },
+          {
+            "file": "apps/order-service/src/docs/swagger.interface.ts",
+            "hash": "6319621730890137675"
+          },
+          {
+            "file": "apps/order-service/src/docs/swagger.ts",
+            "hash": "1944349382493844934"
+          },
+          {
+            "file": "apps/order-service/src/main.ts",
+            "hash": "12702331568293696931"
+          },
+          {
+            "file": "apps/order-service/test/app.e2e-spec.ts",
+            "hash": "2532427084885949069"
+          },
+          {
+            "file": "apps/order-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/order-service/test/setEnvVars.js",
+            "hash": "802539404276103456"
+          },
+          {
+            "file": "apps/order-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/order-service/tsconfig.e2e.json",
+            "hash": "10128003685370546432"
+          },
+          {
+            "file": "apps/order-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "@fbe/proxy": {
+      "name": "@fbe/proxy",
+      "type": "lib",
+      "data": {
+        "root": "apps/proxy-service",
+        "sourceRoot": "apps/proxy-service",
+        "projectType": "library",
+        "targets": {
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "start:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:prod"
+            }
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/proxy-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/proxy-service/.prettierrc",
+            "hash": "4808572120966128913"
+          },
+          {
+            "file": "apps/proxy-service/nest-cli.json",
+            "hash": "5274966848722555650"
+          },
+          {
+            "file": "apps/proxy-service/package.json",
+            "hash": "7091582761657439116",
+            "dependencies": [
+              {
+                "target": "npm:jest",
+                "source": "@fbe/proxy",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/proxy",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/proxy",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/proxy-service/README.md",
+            "hash": "88028313855074524"
+          },
+          {
+            "file": "apps/proxy-service/src/app.controller.spec.ts",
+            "hash": "2727664763654384995"
+          },
+          {
+            "file": "apps/proxy-service/src/app.controller.ts",
+            "hash": "4552329938751326480"
+          },
+          {
+            "file": "apps/proxy-service/src/app.module.ts",
+            "hash": "13543541836107447944"
+          },
+          {
+            "file": "apps/proxy-service/src/app.service.ts",
+            "hash": "16892833931858030153"
+          },
+          {
+            "file": "apps/proxy-service/src/main.ts",
+            "hash": "2567237852858297365"
+          },
+          {
+            "file": "apps/proxy-service/src/proxy.auth.middleware.ts",
+            "hash": "16755318830118798543"
+          },
+          {
+            "file": "apps/proxy-service/src/proxy.business.middleware.ts",
+            "hash": "184924127442753052"
+          },
+          {
+            "file": "apps/proxy-service/src/proxy.cart.middleware.ts",
+            "hash": "5564988170326568063"
+          },
+          {
+            "file": "apps/proxy-service/src/proxy.delivery.middleware.ts",
+            "hash": "6240401642443530467"
+          },
+          {
+            "file": "apps/proxy-service/src/proxy.files.middleware.ts",
+            "hash": "16307669578529161809"
+          },
+          {
+            "file": "apps/proxy-service/src/proxy.order.middleware.ts",
+            "hash": "15787267348854093043"
+          },
+          {
+            "file": "apps/proxy-service/test/app.e2e-spec.ts",
+            "hash": "15142680097789702029"
+          },
+          {
+            "file": "apps/proxy-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/proxy-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/proxy-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "@fbe/cart": {
+      "name": "@fbe/cart",
+      "type": "lib",
+      "data": {
+        "root": "apps/cart-service",
+        "sourceRoot": "apps/cart-service",
+        "projectType": "library",
+        "targets": {
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "prestart": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prestart"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "build:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build:prod"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:unit": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:unit"
+            }
+          },
+          "test:migration": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:migration"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          },
+          "typeorm": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm"
+            }
+          },
+          "typeorm:cli": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm:cli"
+            }
+          },
+          "migration:generate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:generate"
+            }
+          },
+          "migration:run": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:run"
+            }
+          },
+          "migration:revert": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:revert"
+            }
+          },
+          "db:sync": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "db:sync"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/cart-service/.dockerignore",
+            "hash": "4107239433558549794"
+          },
+          {
+            "file": "apps/cart-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/cart-service/jest.config-e2e.js",
+            "hash": "6787006172729649582"
+          },
+          {
+            "file": "apps/cart-service/jest.config.js",
+            "hash": "9444005229835104957"
+          },
+          {
+            "file": "apps/cart-service/nest-cli.json",
+            "hash": "789240945379598733"
+          },
+          {
+            "file": "apps/cart-service/ormconfig.ts",
+            "hash": "15166768119036255159"
+          },
+          {
+            "file": "apps/cart-service/package.json",
+            "hash": "17864310791005370248",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/cart",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/database",
+                "source": "@fbe/cart",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/cart",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/types",
+                "source": "@fbe/cart",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/cart",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/cart",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/cart-service/README.md",
+            "hash": "88028313855074524"
+          },
+          {
+            "file": "apps/cart-service/src/app.controller.spec.ts",
+            "hash": "7434114235028751174"
+          },
+          {
+            "file": "apps/cart-service/src/app.controller.ts",
+            "hash": "12223604807085111960"
+          },
+          {
+            "file": "apps/cart-service/src/app.module.ts",
+            "hash": "10824501908579804974"
+          },
+          {
+            "file": "apps/cart-service/src/app.service.ts",
+            "hash": "12529688746242345769"
+          },
+          {
+            "file": "apps/cart-service/src/app/app.constants.ts",
+            "hash": "10903503975830300094"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/auth.module.ts",
+            "hash": "11169703631216482461"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/dto/auth-request.dto.ts",
+            "hash": "4394074471620735600"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/dto/auth-response.dto.ts",
+            "hash": "4670672876035155071"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/guards/access_token.guard.ts",
+            "hash": "12971819134187776313"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/guards/role-decorator.ts",
+            "hash": "7473158391006570601"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/guards/role-guard.ts",
+            "hash": "15432590942182139706"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/guards/user.ts",
+            "hash": "6245010402020130072"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/auth/strategies/access_jwt-strategy.ts",
+            "hash": "10157803273054071429"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/cart/controller/cart.controller.ts",
+            "hash": "4002895638634425721"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/cart/dto/cart.dto.ts",
+            "hash": "14555130521580525963"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/cart/entity/cart.entity.ts",
+            "hash": "5201120521578649613"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/cart/services/cart.service.ts",
+            "hash": "4593593836234013361"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/core/core.module.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/cart-service/src/app/domain/domain.module.ts",
+            "hash": "602092232059138473"
+          },
+          {
+            "file": "apps/cart-service/src/docs/swagger.config.ts",
+            "hash": "15845908384964324394"
+          },
+          {
+            "file": "apps/cart-service/src/docs/swagger.interface.ts",
+            "hash": "6319621730890137675"
+          },
+          {
+            "file": "apps/cart-service/src/docs/swagger.ts",
+            "hash": "1944349382493844934"
+          },
+          {
+            "file": "apps/cart-service/src/main.ts",
+            "hash": "145201096495543090"
+          },
+          {
+            "file": "apps/cart-service/test/app.e2e-spec.ts",
+            "hash": "2532427084885949069"
+          },
+          {
+            "file": "apps/cart-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/cart-service/test/setEnvVars.js",
+            "hash": "802539404276103456"
+          },
+          {
+            "file": "apps/cart-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/cart-service/tsconfig.e2e.json",
+            "hash": "10128003685370546432"
+          },
+          {
+            "file": "apps/cart-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "file-service": {
+      "name": "file-service",
+      "type": "lib",
+      "data": {
+        "root": "apps/file-service",
+        "sourceRoot": "apps/file-service",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "format": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "format"
+            }
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "start:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:prod"
+            }
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/file-service/.eslintrc.js",
+            "hash": "7461846271827386206"
+          },
+          {
+            "file": "apps/file-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/file-service/.prettierrc",
+            "hash": "4808572120966128913"
+          },
+          {
+            "file": "apps/file-service/env.example",
+            "hash": "7452822728681959156"
+          },
+          {
+            "file": "apps/file-service/nest-cli.json",
+            "hash": "789240945379598733"
+          },
+          {
+            "file": "apps/file-service/package.json",
+            "hash": "17539846821688052240",
+            "dependencies": [
+              {
+                "target": "@fbe/aws-s3",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/aws-s3-dynamic",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/config",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/types",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:@typescript-eslint/eslint-plugin",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:@typescript-eslint/parser",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:eslint",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:eslint-config-prettier",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:eslint-plugin-prettier",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:jest",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:prettier",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "file-service",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "file-service",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/file-service/prisma/migrations/20250319135448_file_service/migration.sql",
+            "hash": "10178934965747044802"
+          },
+          {
+            "file": "apps/file-service/prisma/migrations/migration_lock.toml",
+            "hash": "11493296588214560035"
+          },
+          {
+            "file": "apps/file-service/prisma/schema.prisma",
+            "hash": "966450454691460606"
+          },
+          {
+            "file": "apps/file-service/README.md",
+            "hash": "8286378509751487236"
+          },
+          {
+            "file": "apps/file-service/src/app.controller.spec.ts",
+            "hash": "2727664763654384995"
+          },
+          {
+            "file": "apps/file-service/src/app.controller.ts",
+            "hash": "4552329938751326480"
+          },
+          {
+            "file": "apps/file-service/src/app.module.ts",
+            "hash": "4500055741879612521"
+          },
+          {
+            "file": "apps/file-service/src/app.service.ts",
+            "hash": "16892833931858030153"
+          },
+          {
+            "file": "apps/file-service/src/docs/swagger.config.ts",
+            "hash": "10018173550362018536"
+          },
+          {
+            "file": "apps/file-service/src/docs/swagger.interface.ts",
+            "hash": "6319621730890137675"
+          },
+          {
+            "file": "apps/file-service/src/docs/swagger.ts",
+            "hash": "1040654188974207903"
+          },
+          {
+            "file": "apps/file-service/src/domain/app.constants.ts",
+            "hash": "16515571039191181386"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/auth.module.ts",
+            "hash": "16400707862470998552"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/dto/auth-request.dto.ts",
+            "hash": "6170156564527939342"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/dto/auth-response.dto.ts",
+            "hash": "8628541724674612361"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/guards/access_token.guard.ts",
+            "hash": "1725857868773656605"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/guards/role-decorator.ts",
+            "hash": "318218689929113301"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/guards/role-guard.ts",
+            "hash": "17978018758458973223"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/guards/user.ts",
+            "hash": "6597288706615230725"
+          },
+          {
+            "file": "apps/file-service/src/domain/auth/strategies/access_jwt-strategy.ts",
+            "hash": "8914691088738445748"
+          },
+          {
+            "file": "apps/file-service/src/domain/domain.module.ts",
+            "hash": "5154709175578723745"
+          },
+          {
+            "file": "apps/file-service/src/domain/files/file.controller.ts",
+            "hash": "5633333369817180788"
+          },
+          {
+            "file": "apps/file-service/src/domain/files/file.dao.service.ts",
+            "hash": "8903039186697556345"
+          },
+          {
+            "file": "apps/file-service/src/domain/files/file.decorator.ts",
+            "hash": "9062417880268379592"
+          },
+          {
+            "file": "apps/file-service/src/domain/files/file.dto.ts",
+            "hash": "14007843112991368994"
+          },
+          {
+            "file": "apps/file-service/src/domain/files/file.module.ts",
+            "hash": "3769066190603618375"
+          },
+          {
+            "file": "apps/file-service/src/domain/files/file.service.ts",
+            "hash": "15066250835286218539"
+          },
+          {
+            "file": "apps/file-service/src/domain/prisma/prisma.module.ts",
+            "hash": "5500542957483468079"
+          },
+          {
+            "file": "apps/file-service/src/domain/prisma/prisma.service.ts",
+            "hash": "12938063004010917406"
+          },
+          {
+            "file": "apps/file-service/src/main.ts",
+            "hash": "4232356838353309553"
+          },
+          {
+            "file": "apps/file-service/test/app.e2e-spec.ts",
+            "hash": "15142680097789702029"
+          },
+          {
+            "file": "apps/file-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/file-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/file-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "@fbe/user": {
+      "name": "@fbe/user",
+      "type": "lib",
+      "data": {
+        "root": "apps/user-service",
+        "sourceRoot": "apps/user-service",
+        "projectType": "library",
+        "targets": {
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            }
+          },
+          "prestart": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prestart"
+            }
+          },
+          "start:dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:dev"
+            }
+          },
+          "start:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start:debug"
+            }
+          },
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "build:prod": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build:prod"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:unit": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:unit"
+            }
+          },
+          "test:migration": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:migration"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          },
+          "test:watch": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:watch"
+            }
+          },
+          "test:cov": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:cov"
+            }
+          },
+          "test:debug": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:debug"
+            }
+          },
+          "test:e2e": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:e2e"
+            }
+          },
+          "typeorm": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm"
+            }
+          },
+          "typeorm:cli": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typeorm:cli"
+            }
+          },
+          "migration:generate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:generate"
+            }
+          },
+          "migration:run": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:run"
+            }
+          },
+          "migration:revert": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "migration:revert"
+            }
+          },
+          "db:sync": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "db:sync"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/user-service/.dockerignore",
+            "hash": "4107239433558549794"
+          },
+          {
+            "file": "apps/user-service/.gitignore",
+            "hash": "672911037926083482"
+          },
+          {
+            "file": "apps/user-service/Dockerfile",
+            "hash": "3607586531940079785"
+          },
+          {
+            "file": "apps/user-service/env.example",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/user-service/jest.config-e2e.js",
+            "hash": "6787006172729649582"
+          },
+          {
+            "file": "apps/user-service/jest.config.js",
+            "hash": "9444005229835104957"
+          },
+          {
+            "file": "apps/user-service/nest-cli.json",
+            "hash": "789240945379598733"
+          },
+          {
+            "file": "apps/user-service/ormconfig.ts",
+            "hash": "15166768119036255159"
+          },
+          {
+            "file": "apps/user-service/package.json",
+            "hash": "10403540573442591873",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/user",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/database",
+                "source": "@fbe/user",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/user",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/types",
+                "source": "@fbe/user",
+                "type": "static"
+              },
+              {
+                "target": "npm:ts-jest",
+                "source": "@fbe/user",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/user",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "apps/user-service/README.md",
+            "hash": "88028313855074524"
+          },
+          {
+            "file": "apps/user-service/src/app.controller.spec.ts",
+            "hash": "7434114235028751174"
+          },
+          {
+            "file": "apps/user-service/src/app.controller.ts",
+            "hash": "12223604807085111960"
+          },
+          {
+            "file": "apps/user-service/src/app.module.ts",
+            "hash": "17792185588458625458"
+          },
+          {
+            "file": "apps/user-service/src/app.service.ts",
+            "hash": "12529688746242345769"
+          },
+          {
+            "file": "apps/user-service/src/app/app.constants.ts",
+            "hash": "10903503975830300094"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/auth.controller.ts",
+            "hash": "14284412675716063295"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/auth.dao.service.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/auth.dto.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/auth.module.ts",
+            "hash": "11799731879066212460"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/auth.service.ts",
+            "hash": "9735458097572312146"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/dto/auth-request.dto.ts",
+            "hash": "1191165734285146980"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/dto/auth-response.dto.ts",
+            "hash": "12276424970214726674"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/google.controller.ts",
+            "hash": "7767328992483897607"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/guards/access_token.guard.ts",
+            "hash": "12971819134187776313"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/guards/google_auth.guard.ts",
+            "hash": "12124324556296827063"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/guards/refresh_token.guard.ts",
+            "hash": "5346223974134778004"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/guards/role-decorator.ts",
+            "hash": "7473158391006570601"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/guards/role-guard.ts",
+            "hash": "15432590942182139706"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/guards/user.ts",
+            "hash": "6245010402020130072"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/strategies/access_jwt-strategy.ts",
+            "hash": "8879255142078563348"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/strategies/google_jwt.strategy.ts",
+            "hash": "16859985812398220468"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/auth/strategies/refresh_jwt-strategy.ts",
+            "hash": "7474780814082605582"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/core/core.module.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/domain.module.ts",
+            "hash": "15605921744900701536"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/dto/user-request.dto.ts",
+            "hash": "7784614721879785309"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/dto/user-response.dto.ts",
+            "hash": "11554070864931472003"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/entity/user.address.entity.ts",
+            "hash": "7928567145441226690"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/entity/user.entity.ts",
+            "hash": "8302214347279819739"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/user.address.controller.ts",
+            "hash": "4294573755820162674"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/user.address.service.ts",
+            "hash": "3226055304421331608"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/user.controller.ts",
+            "hash": "2420694669863171969"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/user.exception.ts",
+            "hash": "3244421341483603138"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/user.module.ts",
+            "hash": "14716969203019890491"
+          },
+          {
+            "file": "apps/user-service/src/app/domain/user/user.service.ts",
+            "hash": "11965703011720268821"
+          },
+          {
+            "file": "apps/user-service/src/docs/swagger.config.ts",
+            "hash": "14353522972937755001"
+          },
+          {
+            "file": "apps/user-service/src/docs/swagger.interface.ts",
+            "hash": "6319621730890137675"
+          },
+          {
+            "file": "apps/user-service/src/docs/swagger.ts",
+            "hash": "1944349382493844934"
+          },
+          {
+            "file": "apps/user-service/src/main.ts",
+            "hash": "3172761451125611672"
+          },
+          {
+            "file": "apps/user-service/test/app.e2e-spec.ts",
+            "hash": "17016083655263013253"
+          },
+          {
+            "file": "apps/user-service/test/jest-e2e.json",
+            "hash": "7570273541430074424"
+          },
+          {
+            "file": "apps/user-service/test/setEnvVars.js",
+            "hash": "802539404276103456"
+          },
+          {
+            "file": "apps/user-service/tsconfig.build.json",
+            "hash": "276845246908739715"
+          },
+          {
+            "file": "apps/user-service/tsconfig.e2e.json",
+            "hash": "10128003685370546432"
+          },
+          {
+            "file": "apps/user-service/tsconfig.json",
+            "hash": "5073866550243764688"
+          }
+        ]
+      }
+    },
+    "@fbe/database": {
+      "name": "@fbe/database",
+      "type": "lib",
+      "data": {
+        "root": "packages/database",
+        "sourceRoot": "packages/database",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "tsc-version": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "tsc-version"
+            }
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "prepublishOnly": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prepublishOnly"
+            }
+          },
+          "pretest": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "pretest"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "packages/database/jest.config.js",
+            "hash": "1256365898827067825"
+          },
+          {
+            "file": "packages/database/package.json",
+            "hash": "16790089503137959022",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/database",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/database",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/database",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "packages/database/src/db.interface.ts",
+            "hash": "17640530516025994481"
+          },
+          {
+            "file": "packages/database/src/db.module.ts",
+            "hash": "3969303336918410743"
+          },
+          {
+            "file": "packages/database/src/index.ts",
+            "hash": "245869901356618225"
+          },
+          {
+            "file": "packages/database/tsconfig.json",
+            "hash": "17186042120899019715"
+          }
+        ]
+      }
+    },
+    "@fbe/aws-s3": {
+      "name": "@fbe/aws-s3",
+      "type": "lib",
+      "data": {
+        "root": "packages/aws-s3",
+        "sourceRoot": "packages/aws-s3",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "tsc-version": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "tsc-version"
+            }
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "prepublishOnly": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prepublishOnly"
+            }
+          },
+          "pretest": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "pretest"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "packages/aws-s3/jest.config.js",
+            "hash": "1256365898827067825"
+          },
+          {
+            "file": "packages/aws-s3/package.json",
+            "hash": "1073547754312950161",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/aws-s3",
+                "type": "static"
+              },
+              {
+                "target": "@fbe/logger",
+                "source": "@fbe/aws-s3",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/aws-s3",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "packages/aws-s3/src/aws-s3.module.ts",
+            "hash": "17452938044486360086"
+          },
+          {
+            "file": "packages/aws-s3/src/aws-s3.service.ts",
+            "hash": "3305214311863389514"
+          },
+          {
+            "file": "packages/aws-s3/src/index.ts",
+            "hash": "14383813151570842442"
+          },
+          {
+            "file": "packages/aws-s3/tsconfig.json",
+            "hash": "17186042120899019715"
+          }
+        ]
+      }
+    },
+    "@fbe/config": {
+      "name": "@fbe/config",
+      "type": "lib",
+      "data": {
+        "root": "packages/config",
+        "sourceRoot": "packages/config",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "prepublishOnly": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prepublishOnly"
+            }
+          },
+          "pretest": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "pretest"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "packages/config/jest.config.js",
+            "hash": "1256365898827067825"
+          },
+          {
+            "file": "packages/config/package.json",
+            "hash": "15842117609320238820",
+            "dependencies": [
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/config",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "packages/config/src/config.default.ts",
+            "hash": "14655562353645426966"
+          },
+          {
+            "file": "packages/config/src/config.interface.ts",
+            "hash": "11074805254562002531"
+          },
+          {
+            "file": "packages/config/src/config.module.ts",
+            "hash": "15345200133873279705"
+          },
+          {
+            "file": "packages/config/src/config.service_.ts",
+            "hash": "16516580119976514773"
+          },
+          {
+            "file": "packages/config/src/config.service.ts",
+            "hash": "10357626311142879763"
+          },
+          {
+            "file": "packages/config/src/index.ts",
+            "hash": "12011049850757298850"
+          },
+          {
+            "file": "packages/config/tsconfig.json",
+            "hash": "17186042120899019715"
+          }
+        ]
+      }
+    },
+    "@fbe/logger": {
+      "name": "@fbe/logger",
+      "type": "lib",
+      "data": {
+        "root": "packages/logger",
+        "sourceRoot": "packages/logger",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "prepublishOnly": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prepublishOnly"
+            }
+          },
+          "pretest": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "pretest"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "packages/logger/jest.config.js",
+            "hash": "1256365898827067825"
+          },
+          {
+            "file": "packages/logger/package.json",
+            "hash": "15474299670069935947",
+            "dependencies": [
+              {
+                "target": "@fbe/config",
+                "source": "@fbe/logger",
+                "type": "static"
+              },
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/logger",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "packages/logger/src/index.ts",
+            "hash": "15093128329159213708"
+          },
+          {
+            "file": "packages/logger/src/logger.middleware.ts",
+            "hash": "5052506996775113607"
+          },
+          {
+            "file": "packages/logger/src/logger.module.ts",
+            "hash": "11970447585609246797"
+          },
+          {
+            "file": "packages/logger/src/logger.ts",
+            "hash": "4108688856859126250"
+          },
+          {
+            "file": "packages/logger/src/loglevel.ts",
+            "hash": "16623088745629980232"
+          },
+          {
+            "file": "packages/logger/tsconfig.json",
+            "hash": "17186042120899019715"
+          }
+        ]
+      }
+    },
+    "@fbe/utilities": {
+      "name": "@fbe/utilities",
+      "type": "lib",
+      "data": {
+        "root": "apps/utilities",
+        "sourceRoot": "apps/utilities",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/utilities/__tests__/utilities.test.js",
+            "hash": "9285294725153773428"
+          },
+          {
+            "file": "apps/utilities/lib/utilities.js",
+            "hash": "7549010760317944012"
+          },
+          {
+            "file": "apps/utilities/package.json",
+            "hash": "2024172742916451476"
+          },
+          {
+            "file": "apps/utilities/README.md",
+            "hash": "2705558283051014432"
+          }
+        ]
+      }
+    },
+    "@fbe/types": {
+      "name": "@fbe/types",
+      "type": "lib",
+      "data": {
+        "root": "packages/types",
+        "sourceRoot": "packages/types",
+        "projectType": "library",
+        "targets": {
+          "build": {
+            "dependsOn": [
+              "^build"
+            ],
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "configurations": {}
+          },
+          "check-engines": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "check-engines"
+            }
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            }
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            }
+          },
+          "prepublishOnly": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prepublishOnly"
+            }
+          },
+          "pretest": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "pretest"
+            }
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          },
+          "test:ci": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test:ci"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "packages/types/jest.config.js",
+            "hash": "1256365898827067825"
+          },
+          {
+            "file": "packages/types/package.json",
+            "hash": "17666301390727639033",
+            "dependencies": [
+              {
+                "target": "npm:typescript",
+                "source": "@fbe/types",
+                "type": "static"
+              }
+            ]
+          },
+          {
+            "file": "packages/types/src/business/index.ts",
+            "hash": "5143948127876306103"
+          },
+          {
+            "file": "packages/types/src/index.ts",
+            "hash": "4340772400608946540"
+          },
+          {
+            "file": "packages/types/src/role.ts",
+            "hash": "15573240239217489625"
+          },
+          {
+            "file": "packages/types/tsconfig.json",
+            "hash": "17186042120899019715"
+          }
+        ]
+      }
+    },
+    "@fbe/drivers": {
+      "name": "@fbe/drivers",
+      "type": "lib",
+      "data": {
+        "root": "apps/drivers",
+        "sourceRoot": "apps/drivers",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            }
+          }
+        },
+        "implicitDependencies": [],
+        "tags": [],
+        "files": [
+          {
+            "file": "apps/drivers/__tests__/drivers.test.js",
+            "hash": "17584688671334737767"
+          },
+          {
+            "file": "apps/drivers/lib/drivers.js",
+            "hash": "15824478548004895836"
+          },
+          {
+            "file": "apps/drivers/package.json",
+            "hash": "6960572129530439407"
+          },
+          {
+            "file": "apps/drivers/README.md",
+            "hash": "15298181689890813452"
+          }
+        ]
+      }
+    }
+  },
+  "externalNodes": {
+    "npm:eslint-config-next": {
+      "type": "npm",
+      "name": "npm:eslint-config-next",
+      "data": {
+        "version": "13.1.5",
+        "packageName": "eslint-config-next",
+        "hash": "c15773b94f3824322a43f0249d6b2831a3be516eea7ebd8716adeca245e0474d"
+      }
+    },
+    "npm:eslint-config-prettier": {
+      "type": "npm",
+      "name": "npm:eslint-config-prettier",
+      "data": {
+        "version": "^8.5.0",
+        "packageName": "eslint-config-prettier",
+        "hash": "324866985f177a0d8d362f4a88480650980d048236d32c790ef9929706d367b0"
+      }
+    },
+    "npm:@commitlint/cli": {
+      "type": "npm",
+      "name": "npm:@commitlint/cli",
+      "data": {
+        "version": "^16.0.1",
+        "packageName": "@commitlint/cli",
+        "hash": "fe395fd849c0a741a9240908ee29ebeb2d974cde922acdc6fb6b0b3a9999eb24"
+      }
+    },
+    "npm:@commitlint/config-conventional": {
+      "type": "npm",
+      "name": "npm:@commitlint/config-conventional",
+      "data": {
+        "version": "^16.0.0",
+        "packageName": "@commitlint/config-conventional",
+        "hash": "06f1bae14fd6596c8cd5bdb6e017f424e257ac28307e6c1d9ab66c93da473574"
+      }
+    },
+    "npm:@typescript-eslint/eslint-plugin": {
+      "type": "npm",
+      "name": "npm:@typescript-eslint/eslint-plugin",
+      "data": {
+        "version": "^5.9.0",
+        "packageName": "@typescript-eslint/eslint-plugin",
+        "hash": "fcb11c30cecf5c976481eb46f1aede6410fb4ba3d04e985c123fb2eef4668b2e"
+      }
+    },
+    "npm:@typescript-eslint/parser": {
+      "type": "npm",
+      "name": "npm:@typescript-eslint/parser",
+      "data": {
+        "version": "^5.9.0",
+        "packageName": "@typescript-eslint/parser",
+        "hash": "9f8432cfb8855fdff72431bd7dc9bf936dda1b116607211c1e1c34ba531ed797"
+      }
+    },
+    "npm:commitizen": {
+      "type": "npm",
+      "name": "npm:commitizen",
+      "data": {
+        "version": "^4.2.4",
+        "packageName": "commitizen",
+        "hash": "9e830569543fb030dca3140f0c9ef63874ca567b170c9c0d1c2fe6075bd53c76"
+      }
+    },
+    "npm:conventional-changelog-cli": {
+      "type": "npm",
+      "name": "npm:conventional-changelog-cli",
+      "data": {
+        "version": "^2.2.2",
+        "packageName": "conventional-changelog-cli",
+        "hash": "f562fab33880079463847a0505b32d1870b1016b8898c08384a72ee459361a46"
+      }
+    },
+    "npm:cz-conventional-changelog": {
+      "type": "npm",
+      "name": "npm:cz-conventional-changelog",
+      "data": {
+        "version": "^3.3.0",
+        "packageName": "cz-conventional-changelog",
+        "hash": "ac702ee59321de9188b91d6090f845137a766c43778059c96e71ed154b7e380c"
+      }
+    },
+    "npm:eslint": {
+      "type": "npm",
+      "name": "npm:eslint",
+      "data": {
+        "version": "^8.28.0",
+        "packageName": "eslint",
+        "hash": "74d09eb08c12c4cd6d47ab6bd29ae0f16b9435b2f9856150a18bea71a5cf1719"
+      }
+    },
+    "npm:eslint-plugin-prettier": {
+      "type": "npm",
+      "name": "npm:eslint-plugin-prettier",
+      "data": {
+        "version": "^4.2.1",
+        "packageName": "eslint-plugin-prettier",
+        "hash": "f418727a146363e82c4802692cb967ca4ddaf6e48b5b6f41a68bc1827aa54d09"
+      }
+    },
+    "npm:eslint-plugin-svelte3": {
+      "type": "npm",
+      "name": "npm:eslint-plugin-svelte3",
+      "data": {
+        "version": "^4.0.0",
+        "packageName": "eslint-plugin-svelte3",
+        "hash": "3720aa9056ee38c96c54757e3d3dec4fe9578dc68c2b5d34c518b21d47e9890e"
+      }
+    },
+    "npm:fbjs-scripts": {
+      "type": "npm",
+      "name": "npm:fbjs-scripts",
+      "data": {
+        "version": "^3.0.1",
+        "packageName": "fbjs-scripts",
+        "hash": "f22a85e3d91f8bc78c09202a3ecc4320ccc386cee52f754a7623d0072ebd67ca"
+      }
+    },
+    "npm:husky": {
+      "type": "npm",
+      "name": "npm:husky",
+      "data": {
+        "version": "^7.0.4",
+        "packageName": "husky",
+        "hash": "0a8181c0d0836c8325c7e6ec6ee505226b01910d83b4a0eb7f2f3ade43ebbc64"
+      }
+    },
+    "npm:jest": {
+      "type": "npm",
+      "name": "npm:jest",
+      "data": {
+        "version": "^27.4.7",
+        "packageName": "jest",
+        "hash": "d7df3bc7f543c24fd76bb623aa93bae80f7c73af4e13b257b8075d01c2b16fc3"
+      }
+    },
+    "npm:nx": {
+      "type": "npm",
+      "name": "npm:nx",
+      "data": {
+        "version": "^20.6.0",
+        "packageName": "nx",
+        "hash": "923b41f54fe9fb62b25d3c33f9a7a5ef6fe9265cca266d0bba6c4167cee6ea6c"
+      }
+    },
+    "npm:prettier": {
+      "type": "npm",
+      "name": "npm:prettier",
+      "data": {
+        "version": "^2.8.6",
+        "packageName": "prettier",
+        "hash": "870fa83475e438f2858a8e5a382b1cfa6e7139aec4f9a25b99ccda7a124b2ea3"
+      }
+    },
+    "npm:prettier-plugin-svelte": {
+      "type": "npm",
+      "name": "npm:prettier-plugin-svelte",
+      "data": {
+        "version": "^2.9.0",
+        "packageName": "prettier-plugin-svelte",
+        "hash": "4b976275322398350b2f0865143266f2a1b76fc5da8b1e2151aae8023ff20c78"
+      }
+    },
+    "npm:ts-jest": {
+      "type": "npm",
+      "name": "npm:ts-jest",
+      "data": {
+        "version": "^27.1.2",
+        "packageName": "ts-jest",
+        "hash": "f0058e2bd9aef0ec1b63d3087063828e1fe71175a7ef7dbcbc6081010f51bd9f"
+      }
+    },
+    "npm:typescript": {
+      "type": "npm",
+      "name": "npm:typescript",
+      "data": {
+        "version": "^4.5.4",
+        "packageName": "typescript",
+        "hash": "cf14d6682f3cc51042b7c563df2a0b9a248cfa5e14957ea3ad625fefd5d6d137"
+      }
+    }
+  },
+  "dependencies": {
+    "@fbe/app-infra": [
+      {
+        "source": "@fbe/app-infra",
+        "target": "npm:jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/app-infra",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/app-infra",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "notification-service": [
+      {
+        "source": "notification-service",
+        "target": "npm:@typescript-eslint/eslint-plugin",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:@typescript-eslint/parser",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:eslint",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:eslint-config-prettier",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:jest",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:prettier",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "notification-service",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/user-infra": [
+      {
+        "source": "@fbe/user-infra",
+        "target": "npm:jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/user-infra",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/user-infra",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/business-admin": [
+      {
+        "source": "@fbe/business-admin",
+        "target": "@fbe/types",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/business-admin",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/aws-s3-dynamic": [
+      {
+        "source": "@fbe/aws-s3-dynamic",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/aws-s3-dynamic",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/aws-s3-dynamic",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/businesses": [
+      {
+        "source": "@fbe/businesses",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/businesses",
+        "target": "@fbe/database",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/businesses",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/businesses",
+        "target": "@fbe/types",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/businesses",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/businesses",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/delivery": [
+      {
+        "source": "@fbe/delivery",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/delivery",
+        "target": "@fbe/database",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/delivery",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/delivery",
+        "target": "@fbe/types",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/delivery",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/delivery",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/admin": [
+      {
+        "source": "@fbe/admin",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/app": [
+      {
+        "source": "@fbe/app",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/gateway": [],
+    "@fbe/order": [
+      {
+        "source": "@fbe/order",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/order",
+        "target": "@fbe/database",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/order",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/order",
+        "target": "@fbe/types",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/order",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/order",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/proxy": [
+      {
+        "source": "@fbe/proxy",
+        "target": "npm:jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/proxy",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/proxy",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/cart": [
+      {
+        "source": "@fbe/cart",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/cart",
+        "target": "@fbe/database",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/cart",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/cart",
+        "target": "@fbe/types",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/cart",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/cart",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "file-service": [
+      {
+        "source": "file-service",
+        "target": "@fbe/aws-s3",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "@fbe/aws-s3-dynamic",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "@fbe/types",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:@typescript-eslint/eslint-plugin",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:@typescript-eslint/parser",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:eslint",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:eslint-config-prettier",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:jest",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:prettier",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "file-service",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/user": [
+      {
+        "source": "@fbe/user",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/user",
+        "target": "@fbe/database",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/user",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/user",
+        "target": "@fbe/types",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/user",
+        "target": "npm:ts-jest",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/user",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/database": [
+      {
+        "source": "@fbe/database",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/database",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/database",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/aws-s3": [
+      {
+        "source": "@fbe/aws-s3",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/aws-s3",
+        "target": "@fbe/logger",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/aws-s3",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/config": [
+      {
+        "source": "@fbe/config",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/logger": [
+      {
+        "source": "@fbe/logger",
+        "target": "@fbe/config",
+        "type": "static"
+      },
+      {
+        "source": "@fbe/logger",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/utilities": [],
+    "@fbe/types": [
+      {
+        "source": "@fbe/types",
+        "target": "npm:typescript",
+        "type": "static"
+      }
+    ],
+    "@fbe/drivers": []
+  }
+}
