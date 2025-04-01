@@ -1,0 +1,27 @@
+
+> @fbe/business-admin@0.1.0 build C:\Users\siddesh\Desktop\siddesh\final year 1\foodbridge\apps\business-dashboard
+> next build
+
+ [33m[1m⚠[22m[39m Invalid next.config.js options detected: 
+ [33m[1m⚠[22m[39m     The value at .experimental has an unexpected property, appDir, which is not in the list of allowed properties (appDocumentPreloading, adjustFontFallbacks, adjustFontFallbacksWithSizeAdjust, allowedRevalidateHeaderKeys, amp, clientRouterFilter, clientRouterFilterRedirects, clientRouterFilterAllowedRate, cpus, memoryBasedWorkersCount, craCompat, caseSensitiveRoutes, useDeploymentId, useDeploymentIdServerActions, deploymentId, disableOptimizedLoading, disablePostcssPresetEnv, esmExternals, serverActions, serverActionsBodySizeLimit, extensionAlias, externalDir, externalMiddlewareRewritesResolve, fallbackNodePolyfills, fetchCacheKeyPrefix, forceSwcTransforms, fullySpecified, gzipSize, incrementalCacheHandlerPath, isrFlushToDisk, isrMemoryCacheSize, largePageDataBytes, manualClientBasePath, middlewarePrefetch, nextScriptWorkers, optimizeCss, optimisticClientCache, outputFileTracingRoot, outputFileTracingExcludes, outputFileTracingIgnores, outputFileTracingIncludes, ppr, proxyTimeout, serverComponentsExternalPackages, scrollRestoration, sri, strictNextHead, swcMinify, swcPlugins, swcTraceProfiling, urlImports, workerThreads, webVitalsAttribution, mdxRs, typedRoutes, webpackBuildWorker, turbo, optimizePackageImports, optimizeServerReact, instrumentationHook, turbotrace, logging, serverMinification, serverSourceMaps, bundlePagesExternals).
+ [33m[1m⚠[22m[39m See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ [33m[1m⚠[22m[39m App router is available by default now, `experimental.appDir` option can be safely removed.
+ [37m[1m [22m[39m Creating an optimized production build ...
+ [32m[1m✓[22m[39m Compiled successfully
+ [37m[1m [22m[39m Linting and checking validity of types ...
+[31mFailed to compile.
+[39m
+[36m.next/types/app/(auth)/api/business/route.ts[39m:[33m33[39m:[33m7[39m
+[31m[1mType error[22m[39m: Type '{ __tag__: "GET"; __param_position__: "first"; __param_type__: NextApiRequest; }' does not satisfy the constraint 'ParamCheck<NextRequest | Request>'.
+  Types of property '__param_type__' are incompatible.
+    Type 'NextApiRequest' is not assignable to type 'NextRequest | Request'.
+      Type 'NextApiRequest' is missing the following properties from type 'NextRequest': geo, ip, nextUrl, page, and 19 more.
+
+[0m [90m 31 | [39m    [33mDiff[39m[33m<[39m[0m
+[0m [90m 32 | [39m      [33mParamCheck[39m[33m<[39m[33mRequest[39m [33m|[39m [33mNextRequest[39m[33m>[39m[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 33 | [39m      {[0m
+[0m [90m    | [39m      [31m[1m^[22m[39m[0m
+[0m [90m 34 | [39m        __tag__[33m:[39m [32m'GET'[39m[0m
+[0m [90m 35 | [39m        __param_position__[33m:[39m [32m'first'[39m[0m
+[0m [90m 36 | [39m        __param_type__[33m:[39m [33mFirstArg[39m[33m<[39m[33mMaybeField[39m[33m<[39m[33mTEntry[39m[33m,[39m [32m'GET'[39m[33m>>[39m[0m
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m

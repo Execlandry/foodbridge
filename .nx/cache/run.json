@@ -1,0 +1,208 @@
+{
+  "run": {
+    "command": "nx run-many --target=build",
+    "startTime": "2025-03-31T11:01:12.782Z",
+    "endTime": "2025-03-31T11:04:36.264Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "@fbe/types:build",
+      "target": "build",
+      "projectName": "@fbe/types",
+      "hash": "788ce943f2af7655d2a317253df63696e4cfae52202f998cba5d19b4c94f8409",
+      "startTime": "2025-03-31T11:01:12.790Z",
+      "endTime": "2025-03-31T11:01:21.333Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/config:build",
+      "target": "build",
+      "projectName": "@fbe/config",
+      "hash": "53e39104795c7ffd8e6e4951a333231865892bdb9ad8864515df6aa607f92c47",
+      "startTime": "2025-03-31T11:01:12.790Z",
+      "endTime": "2025-03-31T11:01:21.800Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/logger:build",
+      "target": "build",
+      "projectName": "@fbe/logger",
+      "hash": "4a4a1617d96e1494de8e750bba506768feffa0c455684ae395c32bc4bf1f549f",
+      "startTime": "2025-03-31T11:01:21.812Z",
+      "endTime": "2025-03-31T11:01:29.439Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "notification-service:build",
+      "target": "build",
+      "projectName": "notification-service",
+      "hash": "1940a474f76e2d819953bf90cc9e674165ea7c361b706d10d08bbaa7ab697ab7",
+      "startTime": "2025-03-31T11:01:21.350Z",
+      "endTime": "2025-03-31T11:01:30.403Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/database:build",
+      "target": "build",
+      "projectName": "@fbe/database",
+      "hash": "24e0c2c87e00b2f0463003c15bd0941e2bd66923d6842f1d8f473ba925bdafac",
+      "startTime": "2025-03-31T11:01:29.444Z",
+      "endTime": "2025-03-31T11:01:43.731Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/app-infra:build",
+      "target": "build",
+      "projectName": "@fbe/app-infra",
+      "hash": "3603cd22ea5948e1a1cb61a14c7ef052ca6af8d0019165bea1b7253c71f6372c",
+      "startTime": "2025-03-31T11:01:12.790Z",
+      "endTime": "2025-03-31T11:01:51.607Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/aws-s3-dynamic:build",
+      "target": "build",
+      "projectName": "@fbe/aws-s3-dynamic",
+      "hash": "8b328c38adaeda9654bd9c69adeea0452a103ddb08e0a2b19f01de167fa43510",
+      "startTime": "2025-03-31T11:01:30.409Z",
+      "endTime": "2025-03-31T11:01:53.168Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/aws-s3:build",
+      "target": "build",
+      "projectName": "@fbe/aws-s3",
+      "hash": "065b03bbb9b5ddfb58085fd0d697914e4d3640ccdad5cfc24080c0a2c604663e",
+      "startTime": "2025-03-31T11:01:43.735Z",
+      "endTime": "2025-03-31T11:02:04.751Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/user-infra:build",
+      "target": "build",
+      "projectName": "@fbe/user-infra",
+      "hash": "6693a164ff40602c67b1e64a63264296812fc64d657cb119f95b3d235b4cad0a",
+      "startTime": "2025-03-31T11:01:51.612Z",
+      "endTime": "2025-03-31T11:02:07.527Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/proxy:build",
+      "target": "build",
+      "projectName": "@fbe/proxy",
+      "hash": "9bb9e539e3b32c658ba7b41b0ac7c37e0ea3b6d2ce5b173e6571a473a6f2d7b7",
+      "startTime": "2025-03-31T11:02:04.759Z",
+      "endTime": "2025-03-31T11:02:23.123Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/businesses:build",
+      "target": "build",
+      "projectName": "@fbe/businesses",
+      "hash": "36d8b50acfe4b7fb393c59b306d3930121197bd0b482b643bbf081caeb8f9165",
+      "startTime": "2025-03-31T11:02:23.128Z",
+      "endTime": "2025-03-31T11:02:35.928Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/business-admin:build",
+      "target": "build",
+      "projectName": "@fbe/business-admin",
+      "hash": "7dc2fc7e95c4bd3c19a4f2d3f33961590293ad9172c96300c157265b15fdc2aa",
+      "startTime": "2025-03-31T11:02:07.533Z",
+      "endTime": "2025-03-31T11:02:43.730Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "@fbe/delivery:build",
+      "target": "build",
+      "projectName": "@fbe/delivery",
+      "hash": "e6948371ab17f1a7c1e70ba70e054df969676251c21a8e72d09899dd72fef768",
+      "startTime": "2025-03-31T11:02:35.935Z",
+      "endTime": "2025-03-31T11:02:46.480Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/order:build",
+      "target": "build",
+      "projectName": "@fbe/order",
+      "hash": "9c4aac848050572d158f355019ec57be60f32a7e29df6e4ef2a190553a1f272a",
+      "startTime": "2025-03-31T11:02:43.741Z",
+      "endTime": "2025-03-31T11:02:51.894Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/user:build",
+      "target": "build",
+      "projectName": "@fbe/user",
+      "hash": "5ee57ed1a0db0f352fc07559d1a380daa9cf6690f5c28d4280d6bcbb46de05b2",
+      "startTime": "2025-03-31T11:02:51.899Z",
+      "endTime": "2025-03-31T11:02:59.618Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/cart:build",
+      "target": "build",
+      "projectName": "@fbe/cart",
+      "hash": "9af38714ac960c809ae50f05df8578036f4473778cc009135781ad1ed9d1a7e6",
+      "startTime": "2025-03-31T11:02:46.485Z",
+      "endTime": "2025-03-31T11:03:00.050Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "file-service:build",
+      "target": "build",
+      "projectName": "file-service",
+      "hash": "d8f5051fced03137aceb45aabd7fdc80d94e936756df67b8c0fed443513ae078",
+      "startTime": "2025-03-31T11:02:59.625Z",
+      "endTime": "2025-03-31T11:03:14.601Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@fbe/app:build",
+      "target": "build",
+      "projectName": "@fbe/app",
+      "hash": "a510242f0c93833f4bfd91dd2c534b61dcb6c99159823b82b4f8cde192c5594b",
+      "startTime": "2025-03-31T11:01:53.176Z",
+      "endTime": "2025-03-31T11:04:36.261Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    }
+  ]
+}

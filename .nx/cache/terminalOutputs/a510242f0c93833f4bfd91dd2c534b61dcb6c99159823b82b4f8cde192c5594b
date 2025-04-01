@@ -1,0 +1,201 @@
+
+> @fbe/app@0.1.0 build C:\Users\siddesh\Desktop\siddesh\final year 1\foodbridge\apps\foodbridge-main
+> craco build
+
+Creating an optimized production build...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+
+[1m[33mwarn[39m[22m - The `darkMode` option in your Tailwind CSS configuration is set to `false`, which now behaves the same as `media`.
+[1m[33mwarn[39m[22m - Change `darkMode` to `media` or remove it entirely.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#remove-dark-mode-configuration
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33mCompiled with warnings.[39m
+[33m[39m
+[eslint] 
+src\api\index.ts
+  [1mLine 19:38:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 24:41:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 35:39:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 41:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 46:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 54:53:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 62:52:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 70:34:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\business-pages\home.tsx
+  [1mLine 25:34:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 39:39:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 56:42:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 192:37:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 271:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 280:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 295:30:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 298:53:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\business-pages\right-side-bar.tsx
+  [1mLine 116:53:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 213:23:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 213:33:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\checkout\checkout-credit.tsx
+  [1mLine 11:59:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 26:34:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 44:19:[22m  Forbidden non-null assertion              [33m[4m@typescript-eslint/no-non-null-assertion[24m[39m
+  [1mLine 46:33:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 54:26:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\checkout\homeComp.tsx
+  [1mLine 22:34:[22m   Forbidden non-null assertion              [33m[4m@typescript-eslint/no-non-null-assertion[24m[39m
+  [1mLine 95:28:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 102:39:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 182:41:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\landing-page\foods.tsx
+  [1mLine 20:33:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 20:48:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 116:33:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\landing-page\headline-cards.tsx
+  [1mLine 28:34:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\landing-page\navbar.tsx
+  [1mLine 23:31:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 32:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\search\Images\Display.tsx
+  [1mLine 7:28:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\search\search.tsx
+  [1mLine 17:23:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 23:21:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 32:30:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 36:37:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 37:19:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 233:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\signin.tsx
+  [1mLine 27:22:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 45:52:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 46:55:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\components\track-order\map.tsx
+  [1mLine 6:32:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\hooks\fetch-user.ts
+  [1mLine 12:21:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\hooks\use-auth.ts
+  [1mLine 11:37:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 23:20:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 30:19:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 34:20:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 56:20:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\hooks\user-context.ts
+  [1mLine 4:9:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 5:19:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\redux\auth\auth.slice.ts
+  [1mLine 4:9:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 16:27:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 16:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 24:27:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 24:40:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 37:37:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\redux\business\business.slice.ts
+  [1mLine 5:13:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 6:12:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 7:20:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 8:22:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 87:68:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 96:15:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 104:69:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 111:67:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 118:69:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 125:68:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 134:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 144:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 154:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 164:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 174:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 184:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 195:37:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 196:38:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 197:39:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 198:34:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\redux\cart\cart.slice.ts
+  [1mLine 7:9:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 8:10:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 21:19:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 28:19:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 46:63:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 53:65:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 60:64:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 68:63:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 75:66:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 85:42:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\redux\dishes\dishes.slice.ts
+  [1mLine 5:12:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 18:38:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 38:40:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 45:27:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 75:65:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 79:41:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 94:15:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 104:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 114:15:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 125:34:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 128:63:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 132:49:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\redux\order\order.slice.ts
+  [1mLine 7:9:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 8:10:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 35:65:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 42:67:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 49:66:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 59:43:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+src\redux\user\user.slice.ts
+  [1mLine 6:9:[22m    Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 7:10:[22m   Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 25:16:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 48:28:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 48:41:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 56:63:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 63:64:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 70:44:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 71:52:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+  [1mLine 73:43:[22m  Unexpected any. Specify a different type  [33m[4m@typescript-eslint/no-explicit-any[24m[39m
+
+Search for the [4m[33mkeywords[39m[24m to learn more about each warning.
+To ignore, add [36m// eslint-disable-next-line[39m to the line before.
+
+File sizes after gzip:
+
+  478.09 kB ([33m+101 B[39m)  [2mbuild\static\js\[22m[36mmain.884970a1.js[39m
+  9.94 kB             [2mbuild\static\css\[22m[36mmain.ea467bc6.css[39m
+
+The project was built assuming it is hosted at [32m/[39m.
+You can control this with the [32mhomepage[39m field in your [36mpackage.json[39m.
+
+The [36mbuild[39m folder is ready to be deployed.
+You may serve it with a static server:
+
+  [36mserve[39m -s build
+
+Find out more about deployment here:
+
+  [33mhttps://cra.link/deployment[39m
+

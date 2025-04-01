@@ -1,0 +1,5 @@
+[43m[30m WARN [39m[49m Unsupported engine: wanted: {"node":"12.x || 14.x"} (current: {"node":"v20.18.2","pnpm":"8.15.6"})
+
+> @fbe/cart@0.0.1 build C:\Users\siddesh\Desktop\siddesh\final year 1\foodbridge\apps\cart-service
+> tsc -p tsconfig.build.json
+
