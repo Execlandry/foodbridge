@@ -1,44 +1,97 @@
-import React from 'react';
-import { categories } from '../../data/data.js';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTwitter,
+  FaLinkedinIn,
+} from "react-icons/fa";
 
-const Category = () => {
+const Footer = () => {
   return (
-    <section className="max-w-[1640px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h1 className="text-4xl md:text-5xl font-extrabold text-orange-600 text-center mb-12 tracking-tight">
-        Top Rated Menu Items
-      </h1>
+    <footer className="bg-gray-900 text-white py-10 mt-16">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Logo & Description */}
+        <div>
+          <h2 className="text-3xl font-bold text-green-400">FoodBridge</h2>
+          <p className="text-gray-400 mt-2 text-sm">
+            Connecting businesses with surplus food to those in need.
+          </p>
+        </div>
 
-      {/* Categories */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-8">
-        {categories.map((item, index) => (
-          <div
-            key={index}
-            className="group bg-white rounded-xl shadow-md hover:shadow-xl p-5 flex flex-col sm:flex-row justify-between items-center transition-all duration-300 ease-in-out transform hover:-translate-y-2 cursor-pointer border border-gray-100"
-          >
-            <h2 className="font-bold text-lg sm:text-xl text-gray-800 group-hover:text-orange-600 transition-colors duration-300 mb-3 sm:mb-0">
-              {item.name}
-            </h2>
-            <div className="relative">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-full transition-transform duration-300 group-hover:scale-110"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 rounded-full bg-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
+        {/* Quick Links */}
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold text-green-400">Quick Links</h3>
+          <ul className="text-gray-300 text-sm space-y-1">
+            <li>
+              <Link to="/about" className="hover:text-green-300">
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-green-300">
+                Contact
+              </Link>
+            </li>
+            <li>
+              <Link to="/privacy" className="hover:text-green-300">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link to="/terms" className="hover:text-green-300">
+                Terms & Conditions
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Social Media Links */}
+        <div>
+          <h3 className="text-lg font-semibold text-green-400">Follow Us</h3>
+          <div className="flex space-x-4 mt-2">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 p-2 rounded-full hover:bg-green-500 transition"
+            >
+              <FaFacebookF className="text-white w-5 h-5" />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 p-2 rounded-full hover:bg-green-500 transition"
+            >
+              <FaInstagram className="text-white w-5 h-5" />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 p-2 rounded-full hover:bg-green-500 transition"
+            >
+              <FaTwitter className="text-white w-5 h-5" />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 p-2 rounded-full hover:bg-green-500 transition"
+            >
+              <FaLinkedinIn className="text-white w-5 h-5" />
+            </a>
           </div>
-        ))}
+        </div>
       </div>
 
-      {/* Optional Call-to-Action */}
-      <div className="mt-12 text-center">
-        <button className="px-8 py-3 bg-orange-500 text-white rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 transition-all duration-300 transform hover:-translate-y-1">
-          Explore All Categories
-        </button>
+      {/* Copyright */}
+      <div className="text-center text-gray-500 text-sm mt-8 border-t border-gray-700 pt-4">
+        &copy; {new Date().getFullYear()} FoodBridge. All rights reserved.
       </div>
-    </section>
+    </footer>
   );
 };
 
-export default Category;
+export default Footer;

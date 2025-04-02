@@ -1,33 +1,34 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// use ExternalApis -- refactor code
+
 export interface BusinessState {
   business: any;
   dishes?: any;
   filteredDishes?: any;
   selectedBusiness?: any;
 }
-// we will add types in @fbe/types package
+
+const axiosConfig = {
+  headers: {
+    Accept: "*/*",
+    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MjFmODRmYi0zZTU5LTRmZDMtOGU4NS02YzhkYjJhMjA5NWMiLCJlbWFpbCI6InBlZG5la2FycHJhc2hhbnQzOTlAZ21haWwuY29tIiwiaWF0IjoxNzQzNjA0ODIxLCJleHAiOjE3NDM2OTEyMjF9.wp3zv-DrJ4T_AL8LI2SAIDZDJ36Tcm5_MeoX0Vpgtzw"
+  }
+};
 
 export const fetchBusinesses = createAsyncThunk(
   "api/fetchBusinessesData",
-  // make these apis in external service
-  // we are hitting proxy
   async () => {
-    const { data } = await axios.get(
-      "http://localhost:3000/api/v1/business-service/business/search?page=1&limit=3"
-    );
+    const { data } = await axios.get("http://localhost:3000/api/v1/business-service/businesses", axiosConfig);
     return data;
   }
 );
 
 export const fetchBusinessById = createAsyncThunk(
   "api/fetchBusinessById",
-  // make these apis in external service
-  // we are hitting proxy
   async (id: string) => {
     const { data } = await axios.get(
-      `http://localhost:3000/api/v1/business-service/business/${id}`
+      `http://localhost:3000/api/v1/business-service/business/${id}`,
+      axiosConfig
     );
     return data;
   }
@@ -35,11 +36,10 @@ export const fetchBusinessById = createAsyncThunk(
 
 export const filteredBusinesses = createAsyncThunk(
   "api/fetchBusinesses",
-  // make these apis in external service
-  // we are hitting proxy
   async (filters: string) => {
     const { data } = await axios.get(
-      `http://localhost:3000/api/v1/business-service/dishes?${filters}&page=1&limit=20`
+      `http://localhost:3000/api/v1/business-service/dishes?${filters}&page=1&limit=20`,
+      axiosConfig
     );
     return data;
   }
@@ -47,11 +47,10 @@ export const filteredBusinesses = createAsyncThunk(
 
 export const fetchTopDishes = createAsyncThunk(
   "api/fetchDishes",
-  // make these apis in external service
-  // we are hitting proxy
   async (filters: string) => {
     const { data } = await axios.get(
-      `http://localhost:3000/api/v1/business-service/dishes?${filters}&page=1&limit=10`
+      `http://localhost:3000/api/v1/business-service/dishes?${filters}&page=1&limit=10`,
+      axiosConfig
     );
     return data;
   }
@@ -79,36 +78,34 @@ const initialState: BusinessState = {
     error: null,
   },
 };
+
 export const BusinessSlice = createSlice({
   name: "auth",
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    [fetchBusinesses.pending.type]: (state: BusinessState, action: any) => {
+    [fetchBusinesses.pending.type]: (state: BusinessState) => {
       state.business = {
         status: "pending",
         data: [],
         error: null,
       };
     },
-    [fetchBusinesses.fulfilled.type]: (
-      state: BusinessState,
-      action: any
-    ) => {
+    [fetchBusinesses.fulfilled.type]: (state: BusinessState, action: any) => {
       state.business = {
         status: "resolved",
         data: action.payload,
         error: null,
       };
     },
-    [fetchBusinesses.rejected.type]: (state: BusinessState, action: any) => {
+    [fetchBusinesses.rejected.type]: (state: BusinessState) => {
       state.business = {
         status: "rejected",
         data: [],
         error: null,
       };
     },
-    [fetchTopDishes.pending.type]: (state: BusinessState, action: any) => {
+    [fetchTopDishes.pending.type]: (state: BusinessState) => {
       state.dishes = {
         status: "pending",
         data: [],
@@ -122,67 +119,49 @@ export const BusinessSlice = createSlice({
         error: null,
       };
     },
-    [fetchTopDishes.rejected.type]: (state: BusinessState, action: any) => {
+    [fetchTopDishes.rejected.type]: (state: BusinessState) => {
       state.dishes = {
         status: "rejected",
         data: [],
         error: null,
       };
     },
-    [filteredBusinesses.pending.type]: (
-      state: BusinessState,
-      action: any
-    ) => {
+    [filteredBusinesses.pending.type]: (state: BusinessState) => {
       state.filteredDishes = {
         status: "pending",
         data: [],
         error: null,
       };
     },
-    [filteredBusinesses.fulfilled.type]: (
-      state: BusinessState,
-      action: any
-    ) => {
+    [filteredBusinesses.fulfilled.type]: (state: BusinessState, action: any) => {
       state.filteredDishes = {
         status: "resolved",
         data: action.payload,
         error: null,
       };
     },
-    [filteredBusinesses.rejected.type]: (
-      state: BusinessState,
-      action: any
-    ) => {
+    [filteredBusinesses.rejected.type]: (state: BusinessState) => {
       state.filteredDishes = {
         status: "rejected",
         data: [],
         error: null,
       };
     },
-    [fetchBusinessById.pending.type]: (
-      state: BusinessState,
-      action: any
-    ) => {
+    [fetchBusinessById.pending.type]: (state: BusinessState) => {
       state.selectedBusiness = {
         status: "pending",
         data: [],
         error: null,
       };
     },
-    [fetchBusinessById.fulfilled.type]: (
-      state: BusinessState,
-      action: any
-    ) => {
+    [fetchBusinessById.fulfilled.type]: (state: BusinessState, action: any) => {
       state.selectedBusiness = {
         status: "resolved",
         data: action.payload,
         error: null,
       };
     },
-    [fetchBusinessById.rejected.type]: (
-      state: BusinessState,
-      action: any
-    ) => {
+    [fetchBusinessById.rejected.type]: (state: BusinessState) => {
       state.selectedBusiness = {
         status: "rejected",
         data: [],

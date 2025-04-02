@@ -1,211 +1,239 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ChevronRightIcon,
   PlusIcon,
   SearchIcon,
   MinusCircleIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/outline";
 import {
-  changeFoodCategorySelection,
   fetchDishesForLandingPage,
   listDishesForLandingPage,
 } from "../../redux/dishes/dishes.slice";
 import { addCartItems, removeCartItems } from "../../redux/cart/cart.slice";
+import { fetchBusinesses, topBusinesses } from "../../redux/business/business.slice";
 import Rating from "./rating";
 import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
+import { UserContext, UserContextType } from '../../hooks/user-context';
+import useAuth from "../../hooks/use-auth";
+
+interface Business {
+  id: string | number;
+  name: string;
+  thumbnails?: string;
+  category?: string;
+  avg_price?: number;
+}
+
+interface Dish {
+  id: string | number;
+  dish_id?: string | number;
+  name: string;
+  food_image?: string;
+  thumbnails?: string;
+  price: number;
+  business: Business;
+  business_id?: string | number;
+}
+
+interface GroupedDishes {
+  [key: string]: {
+    business: Business;
+    dishes: Dish[];
+  };
+}
 
 function Home() {
   const dispatch = useDispatch();
   const { data } = useSelector(listDishesForLandingPage);
+  const { data: businessesData } = useSelector(topBusinesses);
+  const { user } = useContext(UserContext) as UserContextType;
+  const { logoutUser } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     dispatch(fetchDishesForLandingPage());
+    dispatch(fetchBusinesses());
   }, [dispatch]);
 
-  const addToCart = (dish: any) => {
+  const groupDishesByBusiness = (): GroupedDishes => {
+    const grouped: GroupedDishes = {};
+    data?.foodHolder?.forEach((dish: Dish) => {
+      const businessId = dish?.business_id || "unknown";
+      if (!grouped[businessId] && dish?.business) {
+        grouped[businessId] = { business: dish.business, dishes: [] };
+      }
+      if (dish?.business) grouped[businessId].dishes.push(dish);
+    });
+    return grouped;
+  };
+
+  const groupedDishes = groupDishesByBusiness();
+  const filteredBusinesses = businessesData?.filter((business: Business) =>
+    business.name.toUpperCase().includes(searchTerm.toUpperCase())
+  );
+
+  const addToCart = (dish: Dish) => {
     dispatch(
       addCartItems({
         business_id: dish.business_id,
         business: dish.business,
-        menu_item: { ...dish, id: dish.dish_id },
+        menu_item: { ...dish, id: dish.dish_id || dish.id },
       })
     );
   };
 
-  const removeFromCart = (dish: any) => {
+  const removeFromCart = (dish: Dish) => {
     dispatch(
       removeCartItems({
         business: dish.business,
         business_id: dish.business_id,
-        menu_item: { ...dish, id: dish.dish_id },
+        menu_item: { ...dish, id: dish.dish_id || dish.id },
       })
     );
   };
 
-  const changeCategorySelection = (menu: any) => {
-    dispatch(changeFoodCategorySelection(menu));
+  const addAllDishesToCart = (businessId: string | number) => {
+    if (!user || user.permissions === "business-admin") return;
+    const businessDishes = groupedDishes[businessId]?.dishes || [];
+    businessDishes.forEach((dish) => addToCart(dish));
   };
-
-  const filterFood = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredFood = data?.foodHolder?.filter((item: any) =>
-    item.name.toUpperCase().includes(searchTerm.toUpperCase())
-  );
 
   // Top Section UI
   function TopSection() {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-            Today’s Menu{" "}
-            <span className="text-green-600">😋</span>
+            Today’s Surplus Menu <span className="text-green-600">🥗</span>
           </h1>
-          <div className="relative w-full max-w-md">
+          <div className="relative w-full sm:w-80">
             <input
-              onChange={filterFood}
+              onChange={(e) => setSearchTerm(e.target.value)}
               type="text"
-              placeholder="Search delicious eats..."
-              className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-full shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition-all duration-300 placeholder-gray-400 text-gray-700"
+              placeholder="Search businesses or meals..."
+              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none transition-all duration-200 placeholder-gray-400 text-gray-700 text-sm"
             />
-            <SearchIcon className="h-5 w-5 text-gray-500 absolute left-4 top-1/2 transform -translate-y-1/2" />
+            <SearchIcon className="h-4 w-4 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
           </div>
         </div>
-        <div className="relative bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-3xl p-8 flex items-center justify-between shadow-xl transform transition-all hover:shadow-2xl duration-300 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
           <div className="absolute inset-0 bg-opacity-10 bg-green-800 pattern-dots" />
-          <img src={delivery_bike_icon} alt="Delivery" className="w-40 h-40 object-contain z-10" />
-          <div className="text-center text-white z-10">
-            <p className="text-xl font-bold">Hey Jeremy!</p>
-            <p className="mt-2 text-sm max-w-xs mx-auto">
-              Enjoy <span className="font-bold text-yellow-200">free delivery</span> on every order over $20
+          <img src={delivery_bike_icon} alt="Delivery" className="w-32 h-32 object-contain z-10 mb-4 sm:mb-0" />
+          <div className="text-center text-white z-10 flex-1 px-4">
+            <p className="text-lg font-bold">Hey FoodBridge Partner!</p>
+            <p className="mt-1 text-sm max-w-xs mx-auto">
+              Get <span className="font-bold text-yellow-200">free delivery</span> on orders over 10 meals
             </p>
-            <button className="mt-4 px-8 py-2 bg-white text-green-600 rounded-full font-semibold shadow-md hover:bg-gray-100 focus:ring-4 focus:ring-green-200 focus:outline-none transition-all duration-300">
+            <button className="mt-3 px-6 py-1.5 bg-white text-green-600 rounded-full text-sm font-medium hover:bg-gray-100 focus:ring-2 focus:ring-green-500/20 transition-all duration-200">
               Learn More
             </button>
           </div>
-          <img src={banner_image_spags} alt="Food" className="w-40 h-40 object-cover rounded-xl z-10" />
+          <img src={banner_image_spags} alt="Surplus Food" className="w-32 h-32 object-cover rounded-lg z-10" />
         </div>
       </div>
     );
   }
 
-  // Menu Category UI
-  function MenuCategory() {
-    const { menuCategory } = data;
+  // Business and Dishes UI
+  function BusinessesAndDishes() {
+    const BusinessCard = ({ business }: { business: Business }) => {
+      const businessDishes = groupedDishes[business.id]?.dishes || [];
 
-    const MenuCard = ({ menu }: { menu: any }) => (
-      <button
-        onClick={() => changeCategorySelection(menu)}
-        className={`w-36 p-5 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
-          checkSelectedCategory(menu)
-            ? "bg-green-600 text-white shadow-md"
-            : "bg-white shadow-sm hover:bg-gray-50"
-        }`}
-      >
-        <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm">
-          <img src={menu?.menu_image} alt={menu?.name} className="w-8 h-8 object-contain" />
-        </div>
-        <p className={`mt-3 font-semibold text-sm ${checkSelectedCategory(menu) ? "text-white" : "text-gray-900"}`}>
-          {menu?.name}
-        </p>
-        <div
-          className={`mt-3 w-7 h-7 rounded-full flex items-center justify-center shadow-sm ${
-            checkSelectedCategory(menu) ? "bg-white" : "bg-green-600"
-          }`}
-        >
-          <ChevronRightIcon
-            className={`h-4 w-4 ${checkSelectedCategory(menu) ? "text-green-600" : "text-white"}`}
-          />
-        </div>
-      </button>
-    );
-
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Explore Categories</h2>
-          <button className="flex items-center text-sm font-medium text-green-600 hover:text-green-700 transition-colors duration-200">
-            View All
-            <ChevronRightIcon className="h-5 w-5 ml-1" />
-          </button>
-        </div>
-        <div className="flex space-x-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-          {menuCategory?.map((menu: any, index: number) => (
-            <MenuCard key={index} menu={menu} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  // Food UI
-  function Food() {
-    const FoodCard = ({ food_item }: { food_item: any }) => (
-      <div className="w-72 bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:shadow-xl hover:-translate-y-1 duration-300">
-        <div className="relative">
-          <img
-            src={food_item?.food_image}
-            alt={food_item?.name}
-            className="w-full h-48 object-cover"
-          />
-          <div className="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-xs font-medium text-green-600 shadow-sm">
-            ${food_item?.price}
-          </div>
-        </div>
-        <div className="p-5">
-          <h3 className="text-lg font-semibold text-gray-900 truncate">{food_item?.name}</h3>
-          <div className="mt-2 flex items-center">
-            <Rating />
-            <span className="ml-2 text-xs text-gray-500">(4.5)</span>
-          </div>
-          <div className="flex items-center justify-between mt-4">
-            <p className="text-green-600 font-bold text-lg">
-              ${food_item?.price.toFixed(2)}
-            </p>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => removeFromCart(food_item)}
-                className="w-9 h-9 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-              >
-                <MinusCircleIcon className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => addToCart(food_item)}
-                className="w-9 h-9 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-              >
-                <PlusIcon className="h-5 w-5" />
-              </button>
+      return (
+        <div className="bg-white rounded-2xl shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+          {/* Business Info */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6">
+            <img
+              src={business?.thumbnails || "https://via.placeholder.com/150"}
+              alt={business?.name}
+              className="w-24 h-24 object-cover rounded-lg shadow-sm"
+              loading="lazy"
+            />
+            <div className="text-center sm:text-left flex-1">
+              <h3 className="text-xl font-semibold text-gray-900 truncate">{business?.name}</h3>
+              <p className="text-sm text-gray-500">{business?.category || "Cuisine"}</p>
+              <span className="text-green-600 font-medium text-base">
+                Avg: ${business?.avg_price?.toFixed(2) || "N/A"}
+              </span>
             </div>
+            {businessDishes.length > 0 && (
+              <button
+                onClick={() => addAllDishesToCart(business.id)}
+                className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={!user || user.permissions === "business-admin"}
+              >
+                <ShoppingCartIcon className="h-4 w-4" />
+                <span>Add All</span>
+              </button>
+            )}
           </div>
+
+          {/* Dishes */}
+          {businessDishes.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {businessDishes.map((dish: Dish) => (
+                <div
+                  key={dish.dish_id || dish.id}
+                  className="bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200"
+                >
+                  <img
+                    src={dish?.food_image || dish?.thumbnails || "https://via.placeholder.com/100"}
+                    alt={dish?.name}
+                    className="w-16 h-16 object-cover rounded-md shadow-sm group-hover:scale-105 transition-transform duration-200"
+                    loading="lazy"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-medium text-gray-900 truncate">{dish?.name}</h4>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-green-600 font-medium text-sm">${dish?.price.toFixed(2)}</span>
+                      <div className="flex space-x-1">
+                        <button
+                          onClick={() => removeFromCart(dish)}
+                          className="w-7 h-7 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                        >
+                          <MinusCircleIcon className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => addToCart(dish)}
+                          className="w-7 h-7 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                        >
+                          <PlusIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-sm text-center">No dishes available</p>
+          )}
         </div>
-      </div>
-    );
+      );
+    };
 
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Dishes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {filteredFood?.map((food_item: any, index: number) => (
-            <FoodCard key={index} food_item={food_item} />
+        <h2 className="text-2xl font-semibold text-gray-900 mb-6">Featured Businesses</h2>
+        <div className="space-y-8">
+          {filteredBusinesses?.map((business: Business) => (
+            <BusinessCard key={business.id} business={business} />
           ))}
+          {!filteredBusinesses?.length && (
+            <p className="text-center text-gray-500 text-sm py-8">No businesses found</p>
+          )}
         </div>
       </div>
     );
   }
 
-  const checkSelectedCategory = (menu: any) =>
-    data?.selectedCategory?.id === menu?.id;
-
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       <TopSection />
-      <MenuCategory />
-      <Food />
+      <BusinessesAndDishes />
     </div>
   );
 }

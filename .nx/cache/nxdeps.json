@@ -562,6 +562,10 @@
             "hash": "7458394408083411223"
           },
           {
+            "file": "apps/business-dashboard/src/app/(auth)/api/auth/register/route.ts",
+            "hash": "2603983481904146401"
+          },
+          {
             "file": "apps/business-dashboard/src/app/(auth)/api/business/[id]/route.ts",
             "hash": "3672648450425789727"
           },
@@ -599,7 +603,7 @@
           },
           {
             "file": "apps/business-dashboard/src/app/(auth)/signin/page.tsx",
-            "hash": "2150426804877511069"
+            "hash": "9665720086070320139"
           },
           {
             "file": "apps/business-dashboard/src/app/(auth)/signup/layout.tsx",
@@ -707,7 +711,7 @@
           },
           {
             "file": "apps/business-dashboard/src/auth/Signup.tsx",
-            "hash": "16014792814064688917"
+            "hash": "7487586293174676545"
           },
           {
             "file": "apps/business-dashboard/src/components/common/FileSelctor.tsx",
@@ -779,7 +783,7 @@
           },
           {
             "file": "apps/business-dashboard/src/constants/formFields.js",
-            "hash": "397583340426608829"
+            "hash": "17322239634011163431"
           },
           {
             "file": "apps/business-dashboard/src/helpers/fetcher.ts",
@@ -807,7 +811,7 @@
           },
           {
             "file": "apps/business-dashboard/.next/app-build-manifest.json",
-            "hash": "7000712429796185315"
+            "hash": "11407596598118911978"
           },
           {
             "file": "apps/business-dashboard/.next/build-manifest.json",
@@ -818,16 +822,8 @@
             "hash": "1389868326933519382"
           },
           {
-            "file": "apps/business-dashboard/.next/server/app-paths-manifest.json",
-            "hash": "3397147707283028354"
-          },
-          {
             "file": "apps/business-dashboard/.next/server/middleware-build-manifest.js",
             "hash": "12578018668904100291"
-          },
-          {
-            "file": "apps/business-dashboard/.next/server/middleware-manifest.json",
-            "hash": "6522980172500734868"
           },
           {
             "file": "apps/business-dashboard/.next/server/middleware-react-loadable-manifest.js",
@@ -842,18 +838,6 @@
             "hash": "11891788324563068681"
           },
           {
-            "file": "apps/business-dashboard/.next/server/pages-manifest.json",
-            "hash": "1389868326933519382"
-          },
-          {
-            "file": "apps/business-dashboard/.next/server/server-reference-manifest.js",
-            "hash": "13321986162684417548"
-          },
-          {
-            "file": "apps/business-dashboard/.next/server/server-reference-manifest.json",
-            "hash": "8204496101908613432"
-          },
-          {
             "file": "apps/business-dashboard/.next/static/chunks/polyfills.js",
             "hash": "3837536670243305325"
           },
@@ -866,8 +850,28 @@
             "hash": "17018243955171961484"
           },
           {
+            "file": "apps/business-dashboard/.next/server/app-paths-manifest.json",
+            "hash": "2484224773174866556"
+          },
+          {
+            "file": "apps/business-dashboard/.next/server/middleware-manifest.json",
+            "hash": "6522980172500734868"
+          },
+          {
+            "file": "apps/business-dashboard/.next/server/pages-manifest.json",
+            "hash": "1389868326933519382"
+          },
+          {
+            "file": "apps/business-dashboard/.next/server/server-reference-manifest.js",
+            "hash": "13321986162684417548"
+          },
+          {
+            "file": "apps/business-dashboard/.next/server/server-reference-manifest.json",
+            "hash": "8204496101908613432"
+          },
+          {
             "file": "apps/business-dashboard/.next/trace",
-            "hash": "11423562648009572832"
+            "hash": "18129236072753041356"
           },
           {
             "file": "apps/business-dashboard/.next/types/package.json",
@@ -907,11 +911,11 @@
           },
           {
             "file": "apps/business-dashboard/.next/server/vendor-chunks/next@13.5.4_react-dom@18.2.0_react@18.2.0.js",
-            "hash": "1487834659280803336"
+            "hash": "14005197407567780067"
           },
           {
             "file": "apps/business-dashboard/.next/server/webpack-runtime.js",
-            "hash": "9602003494763588901"
+            "hash": "8135619808111948005"
           },
           {
             "file": "apps/business-dashboard/.next/types/app/dashboard/layout.ts",
@@ -927,7 +931,7 @@
           },
           {
             "file": "apps/business-dashboard/.next/server/app/dashboard/page_client-reference-manifest.js",
-            "hash": "15807476660228711445"
+            "hash": "10085332133352528379"
           },
           {
             "file": "apps/business-dashboard/.next/static/chunks/app-pages-internals.js",
@@ -935,7 +939,7 @@
           },
           {
             "file": "apps/business-dashboard/.next/static/chunks/app/dashboard/layout.js",
-            "hash": "1191543706567408324"
+            "hash": "13588510260931105179"
           },
           {
             "file": "apps/business-dashboard/.next/static/chunks/app/dashboard/loading.js",
@@ -947,7 +951,7 @@
           },
           {
             "file": "apps/business-dashboard/.next/static/chunks/app/layout.js",
-            "hash": "16155468396741656081"
+            "hash": "14522416793725749557"
           },
           {
             "file": "apps/business-dashboard/.next/static/chunks/main-app.js",
@@ -955,51 +959,107 @@
           },
           {
             "file": "apps/business-dashboard/.next/static/chunks/webpack.js",
-            "hash": "3716440411636462888"
+            "hash": "177325924695719831"
           },
           {
             "file": "apps/business-dashboard/.next/static/css/app/dashboard/layout.css",
-            "hash": "1691360235922940613"
+            "hash": "11614586767447642325"
           },
           {
             "file": "apps/business-dashboard/.next/static/css/app/layout.css",
-            "hash": "1691360235922940613"
+            "hash": "11614586767447642325"
           },
           {
             "file": "apps/business-dashboard/.next/static/webpack/633457081244afec._.hot-update.json",
             "hash": "10481436618516908015"
           },
           {
-            "file": "apps/business-dashboard/.next/static/webpack/2c3bb296c189c29e.webpack.hot-update.json",
+            "file": "apps/business-dashboard/.next/static/webpack/4743b58fcffd8c69.webpack.hot-update.json",
             "hash": "6552092527544278891"
           },
           {
-            "file": "apps/business-dashboard/.next/static/webpack/app/dashboard/layout.2c3bb296c189c29e.hot-update.js",
-            "hash": "11707330088051396798"
+            "file": "apps/business-dashboard/.next/static/webpack/app/dashboard/layout.4743b58fcffd8c69.hot-update.js",
+            "hash": "12560186627135275652"
           },
           {
-            "file": "apps/business-dashboard/.next/static/webpack/app/layout.2c3bb296c189c29e.hot-update.js",
-            "hash": "16028933044392039372"
+            "file": "apps/business-dashboard/.next/static/webpack/app/layout.4743b58fcffd8c69.hot-update.js",
+            "hash": "15611824357170509563"
           },
           {
-            "file": "apps/business-dashboard/.next/static/webpack/webpack.2c3bb296c189c29e.hot-update.js",
-            "hash": "12982519761049388189"
+            "file": "apps/business-dashboard/.next/static/webpack/webpack.4743b58fcffd8c69.hot-update.js",
+            "hash": "1703273718364551243"
           },
           {
-            "file": "apps/business-dashboard/.next/cache/webpack/edge-server-development/0.pack.gz_",
-            "hash": "10326902846726600012"
+            "file": "apps/business-dashboard/.next/cache/webpack/client-development/0.pack.gz",
+            "hash": "14076663341943093837"
           },
           {
-            "file": "apps/business-dashboard/.next/cache/webpack/edge-server-development/index.pack.gz_",
-            "hash": "4671242750752951906"
+            "file": "apps/business-dashboard/.next/cache/webpack/client-development/1.pack.gz",
+            "hash": "14703284027385233593"
+          },
+          {
+            "file": "apps/business-dashboard/.next/cache/webpack/client-development/2.pack.gz",
+            "hash": "2927113653716282147"
+          },
+          {
+            "file": "apps/business-dashboard/.next/cache/webpack/client-development/9.pack.gz",
+            "hash": "13961051529027647052"
+          },
+          {
+            "file": "apps/business-dashboard/.next/cache/webpack/client-development/index.pack.gz",
+            "hash": "11626950406306919132"
+          },
+          {
+            "file": "apps/business-dashboard/.next/cache/webpack/client-development/index.pack.gz.old",
+            "hash": "6184834934191320089"
           },
           {
             "file": "apps/business-dashboard/.next/cache/webpack/server-development/0.pack.gz",
-            "hash": "16381062480568995898"
+            "hash": "13470435780298269165"
           },
           {
             "file": "apps/business-dashboard/.next/cache/webpack/server-development/index.pack.gz",
-            "hash": "1456760590901855883"
+            "hash": "241259950160721404"
+          },
+          {
+            "file": "apps/business-dashboard/.next/cache/webpack/server-development/index.pack.gz.old",
+            "hash": "2626980514109090869"
+          },
+          {
+            "file": "apps/business-dashboard/.next/server/app/(auth)/signin/page.js",
+            "hash": "8940647823087519848"
+          },
+          {
+            "file": "apps/business-dashboard/.next/types/app/(auth)/signin/layout.ts",
+            "hash": "5493111910178142483"
+          },
+          {
+            "file": "apps/business-dashboard/.next/types/app/(auth)/signin/page.ts",
+            "hash": "11028447951749823471"
+          },
+          {
+            "file": "apps/business-dashboard/.next/server/app/(auth)/signin/page_client-reference-manifest.js",
+            "hash": "12500209909309370472"
+          },
+          {
+            "file": "apps/business-dashboard/.next/static/chunks/app/(auth)/signin/layout.js",
+            "hash": "4399616345379247239"
+          },
+          {
+            "file": "apps/business-dashboard/.next/static/chunks/app/(auth)/signin/page.js",
+            "hash": "6981722701471161288"
+          },
+          {
+            "file": "apps/business-dashboard/.next/static/css/app/(auth)/signin/layout.css",
+            "hash": "11614586767447642325"
+          },
+          {
+            "file": "apps/business-dashboard/.next/static/webpack/c3ffee88cd678560.webpack.hot-update.json",
+            "hash": "13405125561290911638"
+          },
+          {
+            "file": "apps/business-dashboard/.next/static/webpack/webpack.c3ffee88cd678560.hot-update.js",
+            "hash": "14193085447905415473"
           },
           {
             "file": "apps/business-dashboard/.next/server/app/(auth)/api/auth/[...nextauth]/route.js",
@@ -1110,68 +1170,60 @@
             "hash": "6698157805877012384"
           },
           {
-            "file": "apps/business-dashboard/.next/cache/webpack/client-development/1.pack.gz",
-            "hash": "17552284032339404233"
+            "file": "apps/business-dashboard/.next/server/app/(auth)/signup/page.js",
+            "hash": "13696590168573465653"
           },
           {
-            "file": "apps/business-dashboard/.next/cache/webpack/client-development/index.pack.gz.old",
-            "hash": "12422543083381759121"
+            "file": "apps/business-dashboard/.next/types/app/(auth)/signup/layout.ts",
+            "hash": "17486236991557200736"
           },
           {
-            "file": "apps/business-dashboard/.next/cache/webpack/client-development/index.pack.gz",
-            "hash": "4187040236764813018"
+            "file": "apps/business-dashboard/.next/types/app/(auth)/signup/page.ts",
+            "hash": "10181159343446111519"
           },
           {
-            "file": "apps/business-dashboard/.next/server/app/(auth)/signin/page.js",
-            "hash": "6063425092836182770"
+            "file": "apps/business-dashboard/.next/server/app/(auth)/signup/page_client-reference-manifest.js",
+            "hash": "12683912372754690537"
           },
           {
-            "file": "apps/business-dashboard/.next/types/app/(auth)/signin/layout.ts",
-            "hash": "5493111910178142483"
+            "file": "apps/business-dashboard/.next/static/chunks/app/(auth)/signup/layout.js",
+            "hash": "16496073324920676494"
           },
           {
-            "file": "apps/business-dashboard/.next/types/app/(auth)/signin/page.ts",
-            "hash": "11028447951749823471"
+            "file": "apps/business-dashboard/.next/static/chunks/app/(auth)/signup/page.js",
+            "hash": "6858280340852845088"
           },
           {
-            "file": "apps/business-dashboard/.next/server/app/(auth)/signin/page_client-reference-manifest.js",
-            "hash": "12500209909309370472"
+            "file": "apps/business-dashboard/.next/static/css/app/(auth)/signup/layout.css",
+            "hash": "11614586767447642325"
           },
           {
-            "file": "apps/business-dashboard/.next/static/chunks/app/(auth)/signin/layout.js",
-            "hash": "9252989489341022681"
-          },
-          {
-            "file": "apps/business-dashboard/.next/static/chunks/app/(auth)/signin/page.js",
-            "hash": "12243777414659560485"
-          },
-          {
-            "file": "apps/business-dashboard/.next/static/css/app/(auth)/signin/layout.css",
-            "hash": "1691360235922940613"
-          },
-          {
-            "file": "apps/business-dashboard/.next/static/webpack/1633a415c89dde64.webpack.hot-update.json",
+            "file": "apps/business-dashboard/.next/static/webpack/1206ac713465cdd6.webpack.hot-update.json",
             "hash": "13405125561290911638"
           },
           {
-            "file": "apps/business-dashboard/.next/static/webpack/webpack.1633a415c89dde64.hot-update.js",
-            "hash": "1051221925965898184"
+            "file": "apps/business-dashboard/.next/static/webpack/webpack.1206ac713465cdd6.hot-update.js",
+            "hash": "12597597283189457910"
+          },
+          {
+            "file": "apps/business-dashboard/.next/server/app/(auth)/api/auth/register/route.js",
+            "hash": "5730398193412698008"
+          },
+          {
+            "file": "apps/business-dashboard/.next/types/app/(auth)/api/auth/register/route.ts",
+            "hash": "229389922242352781"
+          },
+          {
+            "file": "apps/business-dashboard/.next/cache/webpack/client-development/5.pack.gz",
+            "hash": "9344622577430528123"
           },
           {
             "file": "apps/business-dashboard/.next/cache/webpack/server-development/1.pack.gz",
-            "hash": "886282118730809211"
+            "hash": "4341539029415558249"
           },
           {
             "file": "apps/business-dashboard/.next/cache/webpack/server-development/2.pack.gz",
-            "hash": "4191834987031196072"
-          },
-          {
-            "file": "apps/business-dashboard/.next/cache/webpack/server-development/index.pack.gz.old",
-            "hash": "10469051722336318437"
-          },
-          {
-            "file": "apps/business-dashboard/.next/cache/webpack/client-development/2.pack.gz",
-            "hash": "7311037512188783998"
+            "hash": "14739255216006652084"
           }
         ]
       }
@@ -1586,7 +1638,7 @@
           },
           {
             "file": "apps/business-service/src/app/domain/business/controller/business.controller.ts",
-            "hash": "7947650572126307169"
+            "hash": "2072995256128983925"
           },
           {
             "file": "apps/business-service/src/app/domain/business/controller/business.dish.controller.ts",
@@ -1622,7 +1674,7 @@
           },
           {
             "file": "apps/business-service/src/app/domain/business/services/business.service.ts",
-            "hash": "5197114872494101657"
+            "hash": "12058562143048786317"
           },
           {
             "file": "apps/business-service/src/app/domain/domain.module.ts",
@@ -2072,6 +2124,10 @@
             "hash": "5804090928818373300"
           },
           {
+            "file": "apps/foodbridge-main/public/landing-image.jpg",
+            "hash": "2351374208000435319"
+          },
+          {
             "file": "apps/foodbridge-main/public/logo192.png",
             "hash": "7585273181698778288"
           },
@@ -2097,7 +2153,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/App.tsx",
-            "hash": "236046651119144922"
+            "hash": "10250162907961371169"
           },
           {
             "file": "apps/foodbridge-main/src/assets/banner/1.jpeg",
@@ -2257,7 +2313,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/components/business-pages/home.tsx",
-            "hash": "6691781057910349438"
+            "hash": "14407018955381559723"
           },
           {
             "file": "apps/foodbridge-main/src/components/business-pages/left-side-bar.tsx",
@@ -2269,7 +2325,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/components/business-pages/right-side-bar.tsx",
-            "hash": "5079716943899957125"
+            "hash": "17162601509589363788"
           },
           {
             "file": "apps/foodbridge-main/src/components/checkout/addressModel.tsx",
@@ -2293,7 +2349,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/components/checkout/homeComp.tsx",
-            "hash": "6192121146163289281"
+            "hash": "4919995112317944912"
           },
           {
             "file": "apps/foodbridge-main/src/components/checkout/images/mastercard.png",
@@ -2333,11 +2389,11 @@
           },
           {
             "file": "apps/foodbridge-main/src/components/landing-page/category.tsx",
-            "hash": "1462290419715900714"
+            "hash": "6986974339195974855"
           },
           {
             "file": "apps/foodbridge-main/src/components/landing-page/foods.tsx",
-            "hash": "758872076315524003"
+            "hash": "6188430744028251016"
           },
           {
             "file": "apps/foodbridge-main/src/components/landing-page/headline-cards.tsx",
@@ -2349,7 +2405,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/components/landing-page/navbar.tsx",
-            "hash": "15063567695046490808"
+            "hash": "13166770121120876791"
           },
           {
             "file": "apps/foodbridge-main/src/components/search/Images/biriyani1-img.png",
@@ -2401,7 +2457,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/components/signup.tsx",
-            "hash": "15640610308901584721"
+            "hash": "11353766992200840288"
           },
           {
             "file": "apps/foodbridge-main/src/components/track-order/map.tsx",
@@ -2429,7 +2485,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/hooks/use-auth.ts",
-            "hash": "5934685062122558573"
+            "hash": "8519260933646557841"
           },
           {
             "file": "apps/foodbridge-main/src/hooks/user-context.ts",
@@ -2453,7 +2509,7 @@
           },
           {
             "file": "apps/foodbridge-main/src/redux/business/business.slice.ts",
-            "hash": "2037386996394380479"
+            "hash": "11912055456415655984"
           },
           {
             "file": "apps/foodbridge-main/src/redux/cart/cart.slice.ts",
@@ -2534,10 +2590,6 @@
           {
             "file": "apps/foodbridge-main/tsconfig.json",
             "hash": "1144304840317328371"
-          },
-          {
-            "file": "apps/foodbridge-main/public/landing-image.jpg",
-            "hash": "2351374208000435319"
           }
         ]
       }
@@ -4144,7 +4196,7 @@
           },
           {
             "file": "apps/user-service/src/app/domain/user/user.controller.ts",
-            "hash": "2513251023031136178"
+            "hash": "14321279833989575949"
           },
           {
             "file": "apps/user-service/src/app/domain/user/user.exception.ts",

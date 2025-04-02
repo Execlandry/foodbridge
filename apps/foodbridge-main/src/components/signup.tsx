@@ -6,12 +6,12 @@ import { Link } from "react-router-dom";
 
 export default function Signup() {
   const navigate = useNavigate();
-  // const { signupUser } = useAuth(); // Assuming there's a signupUser function in useAuth
+  const { signupUser ,loginUser} = useAuth(); // Uncommented and assuming it exists
   const { user } = useContext(UserContext) as UserContextType;
   
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [image, setImage] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
@@ -20,10 +20,21 @@ export default function Signup() {
     }
   }, [user, navigate]);
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Assuming signupUser exists in your auth hook
-    // signupUser({ name, email, image, password });
+    try {
+      await signupUser({
+        email:email,
+        first_name: firstName,
+        last_name: lastName,
+        password:password
+      });
+      loginUser({ email, password });
+      // navigate("/"); // Navigate to home page on successful signup
+    } catch (error) {
+      console.error("Signup failed:", error);
+      // Add error handling UI here if needed
+    }
   };
 
   const GoogleSignup = () => {
@@ -44,15 +55,29 @@ export default function Signup() {
           <div className="space-y-5">
             <div className="relative">
               <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 type="text"
-                placeholder="Name"
+                placeholder="First Name"
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 peer"
                 required
               />
               <label className="absolute left-4 -top-2 text-xs text-gray-500 bg-white px-1 transition-all duration-200 peer-focus:text-green-500">
-                Full Name
+                First Name
+              </label>
+            </div>
+
+            <div className="relative">
+              <input
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                type="text"
+                placeholder="Last Name"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 peer"
+                required
+              />
+              <label className="absolute left-4 -top-2 text-xs text-gray-500 bg-white px-1 transition-all duration-200 peer-focus:text-green-500">
+                Last Name
               </label>
             </div>
 
@@ -67,19 +92,6 @@ export default function Signup() {
               />
               <label className="absolute left-4 -top-2 text-xs text-gray-500 bg-white px-1 transition-all duration-200 peer-focus:text-green-500">
                 Email
-              </label>
-            </div>
-
-            <div className="relative">
-              <input
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                type="text"
-                placeholder="Profile Picture URL"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 peer"
-              />
-              <label className="absolute left-4 -top-2 text-xs text-gray-500 bg-white px-1 transition-all duration-200 peer-focus:text-green-500">
-                Profile Picture URL (optional)
               </label>
             </div>
 
@@ -146,7 +158,7 @@ export default function Signup() {
             />
             <path
               fill="#EA4335"
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.57 1 4.01 3.93 2.18 7.07L5.84 9.9c.87-2.6 3.3-4.52 6.16-4.52z"
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.57 1 4.01 3.93 2.18 7.07L5.84 9.9c.87-2.6 3.30-4.52 6.16-4.52z"
             />
           </svg>
           Sign up with Google

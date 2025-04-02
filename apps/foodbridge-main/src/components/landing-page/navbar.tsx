@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { MdLogin, MdLogout } from 'react-icons/md';
+import { MdLogin, MdLogout, MdMenu, MdClose } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { UserContext, UserContextType } from '../../hooks/user-context';
 import useAuth from '../../hooks/use-auth';
 
 function Navbar() {
   const [nav, setNav] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Track if menu is open on mobile
   const navigate = useNavigate();
   const { logoutUser } = useAuth();
   const { user } = useContext(UserContext) as UserContextType;
@@ -27,9 +28,9 @@ function Navbar() {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         setNav(false);
+        setIsMenuOpen(false); // Close the mobile menu if clicking outside
       }
     };
-    console.log(user, 'user');
     // Attach the event listener to the document
     document.addEventListener('click', handleClickOutside, true);
     return () => {
@@ -52,8 +53,8 @@ function Navbar() {
           </div>
 
           {/* Right Section */}
-          <div className="flex items-center space-x-6">
-            {user && user.permissions=="business-admin" ? (
+          <div className="flex items-center space-x-6 md:flex hidden">
+            {user && user.permissions != 'business-admin' ? (
               <>
                 {/* Cart */}
                 <button
@@ -82,13 +83,13 @@ function Navbar() {
                 {/* User Profile */}
                 <div className="flex items-center space-x-4">
                   <div className="group relative flex items-center">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center overflow-hidden ring-2 ring-white shadow-sm transition-all duration-300 group-hover:ring-green-300">
+                    {/* <div className="h-10 w-10 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center overflow-hidden ring-2 ring-white shadow-sm transition-all duration-300 group-hover:ring-green-300">
                       <img
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         src={user.avatar || 'https://via.placeholder.com/40'}
                         alt="User avatar"
                       />
-                    </div>
+                    </div> */}
                     <div className="ml-3">
                       <p className="text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors duration-300">
                         {user.name?.substring(0, 10) || 'User'}
@@ -134,11 +135,62 @@ function Navbar() {
                   Sign In as Business
                 </button>
               </div>
-
             )}
+          </div>
+
+          {/* Hamburger Menu Icon */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-gray-600 hover:text-green-600 focus:outline-none"
+            >
+              {isMenuOpen ? (
+                <MdClose className="w-8 h-8" />
+              ) : (
+                <MdMenu className="w-8 h-8" />
+              )}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white shadow-md">
+          {user ? (
+            <div className="flex flex-col space-y-4 py-4 px-6">
+              <button
+                onClick={() => navigate('/fbe/business')}
+                className="px-4 py-2 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-lg shadow-md hover:from-green-800 hover:to-green-900 focus:outline-none"
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg shadow-md hover:from-red-700 hover:to-red-800 focus:outline-none"
+              >
+                <MdLogout className="w-5 h-5 mr-2" />
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col space-y-4 py-4 px-6">
+              <button
+                onClick={() => navigate('/signin?role=agency')}
+                className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none"
+              >
+                Sign In as Agency
+              </button>
+              <button
+                onClick={() => (window.location.href = 'http://localhost:3007/signin')}
+                className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none"
+              >
+                Sign In as Business
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 }
