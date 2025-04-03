@@ -29,45 +29,53 @@ export async function GET(request: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export async function POST(request: NextApiRequest) {
+export async function POST(request: Request) {
   const session: any = await getServerSession(authOptions);
 
+  if (!session || !session.user?.access_token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
+    const formData = await request.json(); // Properly parsing the request body
+
     const response = await axios.post(
-      `http://localhost:3001/api/v1/business-service/businesses`,
+      "http://localhost:3001/api/v1/business-service/businesses",
       {
-        name: "Kanha Veg Restaurant",
-        description: "Veg Restaurant in North Goa",
-        average_price: "1200",
-        latitude: "11",
-        longitude: "11",
-        contact_no: "8998978987",
+        name: formData.name,
+        description: formData.description,
+        average_price: formData.average_price,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+        contact_no: formData.contact_no,
         banner: "https://gogole.com/banner.png",
-        delivery_options: "all",
-        pickup_options: "all",
-        opens_at: "2023-10-05T14:48:00.000Z",
-        closes_at: "2023-10-05T14:48:00.000Z",
+        delivery_options: formData.delivery_options,
+        pickup_options: formData.pickup_options,
+        opens_at: formData.opens_at,
+        closes_at: formData.closes_at,
         address: {
-          name: "Goan Restaurant",
-          city: "Punjim",
-          state: "Goa",
-          street: "North Goa",
-          pincode: "12001",
-          country: "India",
+          name: formData.address.name,
+          city: formData.address.city,
+          state: formData.address.state,
+          street: formData.address.street,
+          pincode: formData.address.pincode,
+          country: formData.address.country,
         },
       },
       {
         headers: {
-          Authorization: `Bearer ${session?.user?.access_token}`,
+          Authorization: `Bearer ${session.user.access_token}`,
+          "Content-Type": "application/json",
         },
       }
     );
-    const { data } = response;
-    // we got data here successfully !!
-    console.log(data);
-    return new Response(JSON.stringify(data), { status: 200 });
+
+    return NextResponse.json(response.data, { status: 201 });
   } catch (err) {
-    console.log(err);
-    return new Response("Internal Server Error", { status: 500 });
+    console.error("Error creating business:", err);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

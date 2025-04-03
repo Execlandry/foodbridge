@@ -6,6 +6,10 @@ import {
   CollectionIcon,
   DuplicateIcon,
   FilmIcon,
+  PlusCircleIcon,
+  LocationMarkerIcon,
+  ClockIcon,
+  CogIcon,
 } from "@heroicons/react/solid";
 import React, { useEffect, useState } from "react";
 import NavItem from "./NavItem";
@@ -22,32 +26,12 @@ const Nav = ({ sidebarOutsideClick }) => {
     setSidebarStatus(true);
   };
 
-  const subMenuToggle = () => {
-    setSubMenuToggleStatus(!subMenuToggleStatus);
-  };
-
-  //if menu has chile menu then  use seperate array
-  const childMenu = [
-    {
-      subMenuTitle: "child One",
-      linkHref: "/",
-    },
-    {
-      subMenuTitle: "child Two",
-      linkHref: "/",
-    },
-    {
-      subMenuTitle: "child Three",
-      linkHref: "/",
-    },
-  ];
-
   useEffect(() => {
     if (sidebarOutsideClick) {
       setSidebarStatus(false);
     }
   }, [sidebarOutsideClick]);
-  //console.log("sidebar Nav", sidebarOutsideClick)
+
   return (
     <>
       <nav className="flex flex-col mx-4 my-6 space-y-4">
@@ -85,15 +69,45 @@ const Nav = ({ sidebarOutsideClick }) => {
           <DuplicateIcon className="h-10" />
         </NavItem>
 
-        {/* this menu has child Menu     */}
         <NavItem
           hrefLink="/dashboard/payments"
           sidebarStatus={sidebarStatus}
           menuTitle="Payments"
-          subMenu={true}
-          subMenuArray={childMenu}
         >
           <FilmIcon className="h-10" />
+        </NavItem>
+
+        {/* New Items */}
+        {/* <NavItem
+          hrefLink="/dashboard/newlisting"
+          sidebarStatus={sidebarStatus}
+          menuTitle="New Listing"
+        >
+          <PlusCircleIcon className="h-10" />
+        </NavItem> */}
+
+        <NavItem
+          hrefLink="/dashboard/livetracking"
+          sidebarStatus={sidebarStatus}
+          menuTitle="Live Tracking"
+        >
+          <LocationMarkerIcon className="h-10" />
+        </NavItem>
+
+        <NavItem
+          hrefLink="/dashboard/pasthistory"
+          sidebarStatus={sidebarStatus}
+          menuTitle="Past History"
+        >
+          <ClockIcon className="h-10" />
+        </NavItem>
+
+        <NavItem
+          hrefLink="/dashboard/usersettings"
+          sidebarStatus={sidebarStatus}
+          menuTitle="User Setting"
+        >
+          <CogIcon className="h-10" />
         </NavItem>
       </nav>
     </>

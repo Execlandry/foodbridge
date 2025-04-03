@@ -14,7 +14,7 @@ const Header = ({ mobileNavsidebar, setMobileNavsidebar, user }: any) => {
         className="h-12 stroke-slate-600 cursor-pointer sm:hidden"
         onClick={() => setMobileNavsidebar(!mobileNavsidebar)}
       />
-      <SearchBox />
+      <SearchBox /> 
 
       <div className="flex flex-shrink-0 items-center ml-auto">
         <UserMenu user={user}/>

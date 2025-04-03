@@ -63,6 +63,50 @@ export async function PUT(
   }
 }
 
+export async function POST(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const session: any = await getServerSession(authOptions);
+  const slug = params.id; // 'a', 'b', or 'c'
+
+  try {
+    const formData = await request.json();
+    // fetch data from business apis from proxy
+    // GET SERVER SIDE SESSION AND PASS TOKEN TO NESTJS APIS
+    // ITS GET BUSINESS BY ID
+    // SIMILARLY WE CAN HAVE PUT/DELETE
+    const response = await axios.post(
+      `http://localhost:3001/api/v1/business-service/businesses/${slug}/dish`,
+
+      {
+        name: formData.name,
+        description: formData.description,
+        cuisine_type: "indian",
+        meal_type: formData.meal_type,
+        category: formData.category,
+        ingredients: formData.ingredients,
+        food_type: "vegan",
+        price: Number(formData.price),
+        thumbnails: formData.thumbnails,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${session?.user?.access_token}`,
+        },
+      }
+    );
+    const { data } = response;
+    // we got data here successfully !!
+    console.log(data);
+    return new Response(JSON.stringify(data), { status: 200 });
+    // return res.status(200).json(data)
+  } catch (err) {
+    console.log(err);
+    return new Response("Internal Server Error", { status: 500 });
+  }
+}
+
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
@@ -75,7 +119,7 @@ export async function DELETE(
     // GET SERVER SIDE SESSION AND PASS TOKEN TO NESTJS APIS
     // ITS GET BUSINESS BY ID
     // SIMILARLY WE CAN HAVE PUT/DELETE
-    const response = await axios.delete(
+    const response = await axios.get(
       `http://localhost:3001/api/v1/business-service/businesses/${slug}`,
       {
         headers: {

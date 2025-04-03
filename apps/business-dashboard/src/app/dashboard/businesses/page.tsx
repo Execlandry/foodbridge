@@ -3,14 +3,16 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {Business} from "@fbe/types";
 import { useEffect, useState } from "react";
+import { RestaurantPopup } from "@components/BusinessPopUp/BusinessPopUp";
 import Link from 'next/link'
 
 export default function Index() {
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-
+  const [BusinessData,SetBusinessData]=useState({});
   const [businesses, setBusinesses] = useState([])
 
   const fetchBusiness = async () =>  {
@@ -18,7 +20,13 @@ export default function Index() {
     const data = await res.json();
     setBusinesses(data)
   }
-
+  
+  const selectRestaurant=(data:any)=>
+  {
+    SetBusinessData(data);
+    console.log(data);
+    setIsPopupOpen(true);
+  }
   useEffect(() => {
     fetchBusiness();
   }, [])
@@ -31,9 +39,9 @@ export default function Index() {
   // list of businesses
   return (
     <div className="grid grid-cols-4 gap-2">
-      {businesses && businesses.map((data: Business ) => {
+    {businesses && businesses.map((data: Business ) => {
         return (
-          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <div key={data.id} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
           <a href="#">
             <img
               className="rounded-t-lg"
@@ -53,7 +61,27 @@ export default function Index() {
             <div onClick={() => openBusiness(data)}
               className="inline-flex cursor-pointer items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Read more
+              View Dishes
+              <svg
+                className="w-3.5 h-3.5 ml-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </div>
+            <div  onClick={() => selectRestaurant(data)}
+              className="inline-flex cursor-pointer items-center mx-2 my-2 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              View Profile
               <svg
                 className="w-3.5 h-3.5 ml-2"
                 aria-hidden="true"
@@ -71,10 +99,17 @@ export default function Index() {
               </svg>
             </div>
           </div>
+          <RestaurantPopup
+        restaurant={BusinessData}
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+      />
         </div>
+        
         )
-      })}
-     
-    </div>
-  );
+        
+      })
+      }
+        </div>
+      );
 }

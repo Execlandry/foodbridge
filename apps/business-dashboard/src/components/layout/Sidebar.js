@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import OutsideClick from "../../utils/outsideClick";
 import Logo from "./sidebar/Logo";
 import Nav from "./sidebar/Nav";
-import SettingButton from "./sidebar/SettingButton";
+// import SettingButton from "./sidebar/SettingButton";
 
 const Sidebar = ({ mobileNavsidebar }) => {
   const sidebarRef = useRef(null);
@@ -21,7 +21,7 @@ const Sidebar = ({ mobileNavsidebar }) => {
 
       <div className="flex-grow flex flex-col justify-between text-gray-500 bg-gray-800">
         <Nav sidebarOutsideClick={sidebarOutsideClick} />
-        <SettingButton />
+        {/* <SettingButton /> */}
       </div>
     </aside>
   );

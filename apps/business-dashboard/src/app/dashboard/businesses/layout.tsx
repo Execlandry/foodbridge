@@ -4,14 +4,12 @@
 import React, { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function RootLayout({ children }: any) {
   const { data: session } = useSession();
-  const router = useRouter();
 
-  const addBusiness = () => {
-    router.push(`dashboard/businesses/add`)
-  }
+
 
   return (
     <div className="p-6 sm:p-10 space-y-6">
@@ -21,7 +19,7 @@ export default function RootLayout({ children }: any) {
           <h2 className="text-gray-600 ml-0.5">Manage Business</h2>
         </div>
         <div className="flex flex-wrap items-start justify-end -mb-3">
-          <button onClick={()=> addBusiness()} className="inline-flex px-5 py-3 text-purple-600 hover:text-purple-700 focus:text-purple-700 hover:bg-purple-100 focus:bg-purple-100 border border-purple-600 rounded-md mb-3">
+          <Link href="/dashboard/businesses/add" className="inline-flex px-5 py-3 text-purple-600 hover:text-purple-700 focus:text-purple-700 hover:bg-purple-100 focus:bg-purple-100 border border-purple-600 rounded-md mb-3">
             <svg
               aria-hidden="true"
               fill="none"
@@ -37,8 +35,8 @@ export default function RootLayout({ children }: any) {
               />
             </svg>
             Add Business
-          </button>
-          <button className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3">
+          </Link>
+          <Link href="/dashboard/businesses" className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3">
             <svg
               aria-hidden="true"
               fill="none"
@@ -54,7 +52,7 @@ export default function RootLayout({ children }: any) {
               />
             </svg>
             View Business
-          </button>
+          </Link>
         </div>
       </div>
       {children}

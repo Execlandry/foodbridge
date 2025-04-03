@@ -126,7 +126,7 @@ export const BusinessSlice = createSlice({
         error: null,
       };
     },
-    [filteredBusinesses.pending.type]: (state: BusinessState) => {
+    [filteredBusinesses.pending.type]: (state: BusinessState, action: any) => {
       state.filteredDishes = {
         status: "pending",
         data: [],
@@ -140,14 +140,17 @@ export const BusinessSlice = createSlice({
         error: null,
       };
     },
-    [filteredBusinesses.rejected.type]: (state: BusinessState) => {
+
+    [filteredBusinesses.rejected.type]: (state: BusinessState, action: any) => {
       state.filteredDishes = {
         status: "rejected",
         data: [],
         error: null,
       };
     },
-    [fetchBusinessById.pending.type]: (state: BusinessState) => {
+
+    [fetchBusinessById.pending.type]: (state: BusinessState, action: any) => {
+
       state.selectedBusiness = {
         status: "pending",
         data: [],
@@ -161,7 +164,8 @@ export const BusinessSlice = createSlice({
         error: null,
       };
     },
-    [fetchBusinessById.rejected.type]: (state: BusinessState) => {
+
+    [fetchBusinessById.rejected.type]: (state: BusinessState, action: any) => {
       state.selectedBusiness = {
         status: "rejected",
         data: [],

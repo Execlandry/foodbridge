@@ -96,10 +96,7 @@ export class BusinessService {
     }
   }
 
-  async validateAuthorization(
-    user: UserMetaData,
-    param: fetchBusinessByIdDto
-  ) {
+  async validateAuthorization(user: UserMetaData, param: fetchBusinessByIdDto) {
     const { id } = param;
     const business = await this.businessRepo.findOne({
       where: { id },

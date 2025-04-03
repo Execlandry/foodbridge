@@ -252,6 +252,4 @@ export class CreateBusinessBodyDto {
   public address!: AddressDto;
 }
 
-export class UpdateBusinessBodyDto extends PartialType(
-  CreateBusinessBodyDto
-) {}
+export class UpdateBusinessBodyDto extends PartialType(CreateBusinessBodyDto) {}
