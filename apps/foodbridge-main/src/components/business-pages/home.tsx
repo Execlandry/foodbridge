@@ -1,319 +1,240 @@
+import React, { useEffect, useState, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ChevronRightIcon,
   PlusIcon,
   SearchIcon,
+  MinusCircleIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/outline";
-import React, { useEffect, useState } from "react";
-import { images } from "../../assets";
-import Rating from "./rating";
-import { dummyData } from "../utils";
-import delivery_bike_icon from "../../assets/banner/2.png";
-import banner_image_spags from "../../assets/banner/1.jpeg";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  changeFoodCategorySelection,
   fetchDishesForLandingPage,
   listDishesForLandingPage,
 } from "../../redux/dishes/dishes.slice";
 import { addCartItems, removeCartItems } from "../../redux/cart/cart.slice";
-import { MinusCircleIcon } from "@heroicons/react/solid";
+import { fetchBusinesses, topBusinesses } from "../../redux/business/business.slice";
+import Rating from "./rating";
+import delivery_bike_icon from "../../assets/banner/2.png";
+import banner_image_spags from "../../assets/banner/1.jpeg";
+import { UserContext, UserContextType } from '../../hooks/user-context';
+import useAuth from "../../hooks/use-auth";
+
+interface Business {
+  id: string | number;
+  name: string;
+  thumbnails?: string;
+  category?: string;
+  avg_price?: number;
+}
+
+interface Dish {
+  id: string | number;
+  dish_id?: string | number;
+  name: string;
+  food_image?: string;
+  thumbnails?: string;
+  price: number;
+  business: Business;
+  business_id?: string | number;
+}
+
+interface GroupedDishes {
+  [key: string]: {
+    business: Business;
+    dishes: Dish[];
+  };
+}
 
 function Home() {
   const dispatch = useDispatch();
   const { data } = useSelector(listDishesForLandingPage);
+  const { data: businessesData } = useSelector(topBusinesses);
+  const { user } = useContext(UserContext) as UserContextType;
+  const { logoutUser } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
 
-  async function addToCart(dish: any) {
-    console.log(dish);
+  useEffect(() => {
+    dispatch(fetchDishesForLandingPage());
+    dispatch(fetchBusinesses());
+  }, [dispatch]);
+
+  const groupDishesByBusiness = (): GroupedDishes => {
+    const grouped: GroupedDishes = {};
+    data?.foodHolder?.forEach((dish: Dish) => {
+      const businessId = dish?.business_id || "unknown";
+      if (!grouped[businessId] && dish?.business) {
+        grouped[businessId] = { business: dish.business, dishes: [] };
+      }
+      if (dish?.business) grouped[businessId].dishes.push(dish);
+    });
+    return grouped;
+  };
+
+  const groupedDishes = groupDishesByBusiness();
+  const filteredBusinesses = businessesData?.filter((business: Business) =>
+    business.name.toUpperCase().includes(searchTerm.toUpperCase())
+  );
+
+  const addToCart = (dish: Dish) => {
     dispatch(
       addCartItems({
         business_id: dish.business_id,
         business: dish.business,
-        menu_item: {
-          ...dish,
-          id: dish.dish_id,
-        },
+        menu_item: { ...dish, id: dish.dish_id || dish.id },
       })
     );
-  }
+  };
 
-  async function removeFromCart(dish: any) {
+  const removeFromCart = (dish: Dish) => {
     dispatch(
       removeCartItems({
         business: dish.business,
         business_id: dish.business_id,
-        menu_item: {
-          ...dish,
-          id: dish.dish_id,
-        },
+        menu_item: { ...dish, id: dish.dish_id || dish.id },
       })
     );
-  }
-
-  useEffect(() => {
-    dispatch(fetchDishesForLandingPage());
-  }, []);
-
-  const changeCategorySelection = (menu: any) => {
-    dispatch(changeFoodCategorySelection(menu));
   };
 
-  /**top section UI */
+  const addAllDishesToCart = (businessId: string | number) => {
+    if (!user || user.permissions === "business-admin") return;
+    const businessDishes = groupedDishes[businessId]?.dishes || [];
+    businessDishes.forEach((dish) => addToCart(dish));
+  };
+
+  // Top Section UI
   function TopSection() {
     return (
-      <div className="max-w-[1400px]">
-        <div className="justify-between flex-row flex mr-10">
-          <p className="text-2xl font-bold">Today Menu &#128523;</p>
-
-          <div
-            className="bg-white h-10 items-center justify-center 
-          flex shadow-2xl align-baseline rounded-l-3xl rounded-r-3xl"
-          >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            Today’s Surplus Menu <span className="text-green-600">🥗</span>
+          </h1>
+          <div className="relative w-full sm:w-80">
             <input
-              onChange={filterFood}
-              className=" appearance-none w-full ml-5 mr-8 bg-transparent h-full
-       text-gray-700 leading outline-none"
-              id="username"
+              onChange={(e) => setSearchTerm(e.target.value)}
               type="text"
-              placeholder="Search food by name"
+              placeholder="Search businesses or meals..."
+              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none transition-all duration-200 placeholder-gray-400 text-gray-700 text-sm"
             />
-
-            <SearchIcon className="h-8 w-8 text-gray-500 px-1 mr-5" />
+            <SearchIcon className="h-4 w-4 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
           </div>
         </div>
+        <div className="relative bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-opacity-10 bg-green-800 pattern-dots" />
+          <img src={delivery_bike_icon} alt="Delivery" className="w-32 h-32 object-contain z-10 mb-4 sm:mb-0" />
+          <div className="text-center text-white z-10 flex-1 px-4">
+            <p className="text-lg font-bold">Hey FoodBridge Partner!</p>
+            <p className="mt-1 text-sm max-w-xs mx-auto">
+              Get <span className="font-bold text-yellow-200">free delivery</span> on orders over 10 meals
+            </p>
+            <button className="mt-3 px-6 py-1.5 bg-white text-green-600 rounded-full text-sm font-medium hover:bg-gray-100 focus:ring-2 focus:ring-green-500/20 transition-all duration-200">
+              Learn More
+            </button>
+          </div>
+          <img src={banner_image_spags} alt="Surplus Food" className="w-32 h-32 object-cover rounded-lg z-10" />
+        </div>
+      </div>
+    );
+  }
 
-        <div className="bg-orange-300 rounded-2xl mt-5 ml-0 mr-10 shadow-xl">
-          <div className="flex flex-row justify-between mt-3">
+  // Business and Dishes UI
+  function BusinessesAndDishes() {
+    const BusinessCard = ({ business }: { business: Business }) => {
+      const businessDishes = groupedDishes[business.id]?.dishes || [];
+
+      return (
+        <div className="bg-white rounded-2xl shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+          {/* Business Info */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6">
             <img
-              src={delivery_bike_icon}
-              alt={delivery_bike_icon}
-              className="w-48 h-44 rounded-l-2xl"
+              src={business?.thumbnails || "https://via.placeholder.com/150"}
+              alt={business?.name}
+              className="w-24 h-24 object-cover rounded-lg shadow-sm"
+              loading="lazy"
             />
-
-            <div className="items-center justify-center flex flex-col">
-              <p className="text-md font-bold">Hello Jeremy</p>
-
-              <p className="text-center mt-2">
-                <label className="text-gray-500">Get free delivery evey</label>
-                <label className="text-orange-400 font-bold"> $20</label>
-                <label className="text-gray-500"> purchase</label>
-              </p>
-
+            <div className="text-center sm:text-left flex-1">
+              <h3 className="text-xl font-semibold text-gray-900 truncate">{business?.name}</h3>
+              <p className="text-sm text-gray-500">{business?.category || "Cuisine"}</p>
+              <span className="text-green-600 font-medium text-base">
+                Avg: ${business?.avg_price?.toFixed(2) || "N/A"}
+              </span>
+            </div>
+            {businessDishes.length > 0 && (
               <button
-                className="text-white h-10 flex  mt-3
-               bg-gradient-to-r bg-transparent from-orange-500 to-orange-500 
-               rounded-3xl items-center justify-center text-center"
+                onClick={() => addAllDishesToCart(business.id)}
+                className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={!user || user.permissions === "business-admin"}
               >
-                <label className="ml-10 mr-10">Learn More</label>
+                <ShoppingCartIcon className="h-4 w-4" />
+                <span>Add All</span>
               </button>
-            </div>
-
-            <img
-              src={banner_image_spags}
-              alt={banner_image_spags}
-              className="w-36 h-44 rounded-r-2xl"
-            />
+            )}
           </div>
-        </div>
-      </div>
-    );
-  }
 
-  /**menu category UI */
-  function MenuCategory() {
-    const { menuCategory, foodHolder } = data;
-
-    /**Menu Card UI*/
-    const MenuCard = ({ ...props }) => {
-      const { menu } = props;
-      return (
-        <button
-          onClick={() => changeCategorySelection(menu)}
-          className={
-            checkSelectedCategory(menu)
-              ? "bg-gradient-to-r bg-transparent from-orange-500 toto-orange-500adow-2xl rounded-2xl ml-3   items-center justify-center mt-5 w-32"
-              : "bg-white shadow-2xl rounded-2xl ml-5 items-center justify-center mt-5 w-32"
-          }
-        >
-          <div className="mt-5 mb-5 mr-10 ml-10 items-center justify-center content-center flex flex-col">
-            <div className="bg-white h-12 w-12 justify-center items-center rounded-full mt-0 flex">
-              <img
-                src={menu?.menu_image}
-                alt={menu?.menu_image}
-                className="w-6 h-6"
-              />
-            </div>
-
-            <div
-              className={
-                checkSelectedCategory(menu)
-                  ? "mt-5 font-bold text-sm text-white"
-                  : "mt-5 font-bold text-sm"
-              }
-            >
-              {menu?.name}
-            </div>
-
-            <div
-              className={
-                checkSelectedCategory(menu)
-                  ? "bg-white h-6 w-6 justify-center items-center rounded-full mt-5 flex"
-                  : " bg-gradient-to-r bg-transparent from-orange-500 to-orange-500 h-6 w-6 justify-center items-center rounded-full mt-5 flex"
-              }
-            >
-              <ChevronRightIcon
-                className={
-                  checkSelectedCategory(menu)
-                    ? "h-3 w-3 text-orange-400"
-                    : "h-3 w-3 text-white"
-                }
-              />
-            </div>
-          </div>
-        </button>
-      );
-    };
-
-    return (
-      <div className="mt-8 max-w-[1400px]">
-        <div className="justify-between flex-row flex mr-10">
-          <p className="text-xl font-bold">Menu Category</p>
-
-          <button>
-            <p className="text-sm text-orange-400">View All</p>
-
-            <div className="bg-orange-400 h-6 w-6 justify-center items-center rounded-md ml-3 flex">
-              <ChevronRightIcon className="h-3 w-3 text-white" />
-            </div>
-          </button>
-        </div>
-
-        {/* list menus horizontally */}
-        <div className="flex flex-row">
-          {menuCategory?.map((menu: any, index: number) => {
-            return <MenuCard key={index} menu={menu} />;
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  /**food UI */
-  function Food() {
-    const { foodHolder } = data;
-
-    /**Food Card UI*/
-    const FoodCard = ({ ...props }) => {
-      const { food_item } = props;
-
-      return (
-        <div className="ml-5 items-center justify-center mt-3">
-          <div className="mt-0 mb-5 mr-10 ml-10 items-center justify-center content-center flex flex-col relative">
-            <div className="object-cover">
-              <img
-                src={food_item?.food_image}
-                alt={food_item?.name}
-                className="w-28 h-28 rounded-full"
-              />
-            </div>
-
-            <div className="bg-white shadow-2xl rounded-lg w-56 items-start justify-start flex flex-col mt-5">
-              <div className="mt-5 mr-5 ml-5 items-start justify-start flex w-48">
-                <div className="font-bold text-md truncate">
-                  {food_item?.name}
+          {/* Dishes */}
+          {businessDishes.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {businessDishes.map((dish: Dish) => (
+                <div
+                  key={dish.dish_id || dish.id}
+                  className="bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200"
+                >
+                  <img
+                    src={dish?.food_image || dish?.thumbnails || "https://via.placeholder.com/100"}
+                    alt={dish?.name}
+                    className="w-16 h-16 object-cover rounded-md shadow-sm group-hover:scale-105 transition-transform duration-200"
+                    loading="lazy"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-medium text-gray-900 truncate">{dish?.name}</h4>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-green-600 font-medium text-sm">${dish?.price.toFixed(2)}</span>
+                      <div className="flex space-x-1">
+                        <button
+                          onClick={() => removeFromCart(dish)}
+                          className="w-7 h-7 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                        >
+                          <MinusCircleIcon className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => addToCart(dish)}
+                          className="w-7 h-7 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                        >
+                          <PlusIcon className="h-4 w-4" />
+                        </button>
+                        
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              {/* rating bar */}
-
-              <div className="ml-4 mt-1">
-                <Rating />
-              </div>
-
-              <div className="mt-0 mb-5 mr-5 ml-5 flex justify-between items-center flex-row w-48">
-                <div>
-                  <label className=" text-orange-400 font-bold text-xs">
-                    $
-                  </label>
-                  <label className="font-bold text-md">
-                    {food_item?.price}
-                  </label>
-                </div>
-
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => addToCart(food_item)}
-                    className=" h-8 w-8 justify-center items-center rounded-full flex 
-                  bg-gradient-to-r bg-transparent from-orange-500 to-orange-500 
-                  shadow-2xl"
-                  >
-                    <PlusIcon className="h-4 w-4 text-white" />
-                  </button>
-                  <button
-                    onClick={() => removeFromCart(food_item)}
-                    className=" h-8 w-8 justify-center items-center rounded-full flex 
-                  bg-gradient-to-r bg-transparent from-orange-500 to-orange-500 
-                  shadow-2xl"
-                  >
-                    <MinusCircleIcon className="h-4 w-4 text-white" />
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <p className="text-gray-500 text-sm text-center">No dishes available</p>
+          )}
         </div>
       );
     };
 
     return (
-      <div className="mt-5 max-w-[1400px]">
-        {/* list food vertically */}
-        <div className="flex flex-row flex-wrap">
-          {foodHolder?.map((food_item: any, index: number) => {
-            return <FoodCard key={index} food_item={food_item} />;
-          })}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-12">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-6">Featured Businesses</h2>
+        <div className="space-y-8">
+          {filteredBusinesses?.map((business: Business) => (
+            <BusinessCard key={business.id} business={business} />
+          ))}
+          {!filteredBusinesses?.length && (
+            <p className="text-center text-gray-500 text-sm py-8">No businesses found</p>
+          )}
         </div>
       </div>
     );
-  }
-
-  /**check if category is selected */
-  function checkSelectedCategory(menu: any) {
-    const { selectedCategory } = data;
-
-    if (
-      typeof selectedCategory !== "undefined" &&
-      selectedCategory !== null &&
-      selectedCategory?.id === menu?.id
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**filter food items */
-  function filterFood(event: any) {
-    const text = event.target.value;
-
-    const newData = data?.foodHolder?.filter((item: any) => {
-      const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-
-    // setData({ ...data, food: newData, search: text });
   }
 
   return (
-    <div className="relative font-mono mt-5">
-      {/* top section with search bar */}
-      {TopSection()}
-
-      {/* render menu categories */}
-      {MenuCategory()}
-
-      {/* render food */}
-      {Food()}
+    <div className="bg-gray-50 min-h-screen">
+      <TopSection />
+      <BusinessesAndDishes />
     </div>
   );
 }

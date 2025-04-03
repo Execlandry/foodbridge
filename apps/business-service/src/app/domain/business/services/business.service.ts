@@ -42,10 +42,8 @@ export class BusinessService {
     return await this.searchService.search(searchParam);
   }
 
-  public async fetchAllMyBusiness(user: UserMetaData) {
-    const { userId } = user;
+  public async fetchAllMyBusiness() {
     return await this.businessRepo.find({
-      where: { owner_id: userId },
       relations: ["dishes"],
     });
   }

@@ -112,8 +112,8 @@ export class UserController {
     return this.service.findUserByProperty(param);
   }
 
-  @UseGuards(AccessTokenGuard, RolesGuard)
-  @RoleAllowed(UserRoles["system-admin"])
+  // @UseGuards(AccessTokenGuard, RolesGuard)
+  // @RoleAllowed(UserRoles["system-admin"])
   @ApiConsumes("application/json")
   @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
   @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
