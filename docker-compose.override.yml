@@ -1,5 +1,13 @@
 version: '3'
 services:
+  rmq-listerner:
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
   postgres-user:
     environment:
       - POSTGRES_USER=api
@@ -62,9 +70,24 @@ services:
       - POSTGRES_MULTIPLE_DATABASES="business-api","business-api-testing"
     volumes:
       - ./docker-utils:/docker-entrypoint-initdb.d
-      - restaurant_api_data:/data/postgres
+      - business_api_data:/data/postgres
     ports:
       - 5435:5432
+
+  pgadmin:
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 5050:80
+    depends_on:
+      - postgres-user
+      - postgres-cart
+      - postgres-delivery
+      - postgres-files
+      - postgres-order
+      - postgres-business
+
   es01:
     container_name: es01
     environment:
@@ -92,8 +115,9 @@ services:
       - 5601:5601               
 volumes:
   auth_api_data: {}
-  restaurant_api_data: {}
+  business_api_data: {}
   cart_api_data: {}
   es_data: {}
   delivery_api_data: {}
   order_api_data: {}
+  pgadmin_data: {}

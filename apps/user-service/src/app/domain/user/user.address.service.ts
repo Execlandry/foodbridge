@@ -23,8 +23,7 @@ import { UserMetaData } from "../auth/guards/user";
 export class UserAddressService {
   constructor(
     private readonly logger: Logger,
-    @InjectRepository(UserEntity) 
-    private userRepo: Repository<UserEntity>,
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
     @InjectRepository(UserAddressEntity)
     private userAddressRepo: Repository<UserAddressEntity>
   ) {}

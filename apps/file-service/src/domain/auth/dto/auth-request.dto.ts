@@ -4,7 +4,7 @@ import { IsDefined, IsString, IsEmail, IsOptional } from 'class-validator';
 export class UserSigInDto {
   @ApiProperty({
     description: 'email',
-    example: 'hello@gmail.com',
+    example: 'user@gmail.com',
     required: true,
   })
   @IsDefined()
@@ -14,7 +14,7 @@ export class UserSigInDto {
 
   @ApiProperty({
     description: 'password',
-    example: '23435r3453453',
+    example: 'letmeinplease',
     required: true,
   })
   @IsDefined()

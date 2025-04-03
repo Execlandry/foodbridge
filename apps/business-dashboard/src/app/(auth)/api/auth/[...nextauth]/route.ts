@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
         // api call
         try {
           const response = await axios.post(
-            "http://localhost:3001/api/v1/user-service/auth/login",
+            "http://localhost:3001/api/v1/auth-service/auth/login",
             {
               email: credentials?.email,
               password: credentials.password,

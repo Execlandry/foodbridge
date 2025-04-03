@@ -1,4 +1,4 @@
-import { getToken } from 'next-auth/jwt';
+import { getToken } from "next-auth/jwt";
 import {
   NextFetchEvent,
   NextMiddleware,

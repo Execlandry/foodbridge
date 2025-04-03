@@ -68,7 +68,7 @@ const Nav = ({ sidebarOutsideClick }) => {
         <NavItem
           hrefLink="/dashboard/businesses"
           sidebarStatus={sidebarStatus}
-          menuTitle="Businesses"
+          menuTitle="Business"
           subMenu={false}
           subMenuArray={null}
         >

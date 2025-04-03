@@ -3,31 +3,29 @@ import { TerminusModule } from "@nestjs/terminus";
 import { ConfigModule } from "@fbe/config";
 import { AppLoggerModule } from "@fbe/logger";
 import { DBModule } from "@fbe/database";
+
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { AuthModule } from "./auth/auth.module";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { CartEntity } from "./cart/entity/cart.entity";
 import { CartController } from "./cart/controller/cart.controller";
 import { CartService } from "./cart/services/cart.service";
-
-
-
+import { AuthModule } from "./auth/auth.module";
+import { PaymentEntity } from "./payment/entity/payment.entity";
+import { PaymentController } from "./payment/controller/payment.controller";
+import { PaymentService } from "./payment/services/payment.service";
 @Module({
   imports: [
     AuthModule,
     EventEmitterModule.forRoot(),
-    TypeOrmModule.forFeature([CartEntity]),
+    TypeOrmModule.forFeature([CartEntity, PaymentEntity]),
     DBModule.forRoot({
-      entities: [
-        CartEntity
-      ],
+      entities: [CartEntity, PaymentEntity],
     }),
     TerminusModule,
     AppLoggerModule,
     ConfigModule,
   ],
-
-  controllers: [CartController],
-  providers: [CartService],
+  controllers: [CartController, PaymentController],
+  providers: [CartService, PaymentService],
 })
 export class DomainModule {}

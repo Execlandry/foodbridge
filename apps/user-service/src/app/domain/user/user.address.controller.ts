@@ -21,12 +21,12 @@ import {
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger";
+import { Logger } from "@fbe/logger";
+import { CreateAddressDto } from "./dto/user-request.dto";
 import { UserSignupResponseDto } from "./dto/user-response.dto";
+import { UserAddressService } from "./user.address.service";
 import { User, UserMetaData } from "../auth/guards/user";
 import { AccessTokenGuard } from "../auth/guards/access_token.guard";
-import { Logger } from "@fbe/logger";
-import { UserAddressService } from "./user.address.service";
-import { CreateAddressDto } from "./dto/user-request.dto";
 
 @ApiBearerAuth("authorization")
 @Controller("users")

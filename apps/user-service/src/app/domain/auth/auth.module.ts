@@ -9,8 +9,8 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { AccessTokenJwtStrategy } from "./strategies/access_jwt-strategy";
 import { RefreshTokenJwtStrategy } from "./strategies/refresh_jwt-strategy";
-import { GoogleOauthStrategy } from "./strategies/google_jwt.strategy";
 import { GoogleController } from "./google.controller";
+import { GoogleOauthStrategy } from "./strategies/google_jwt.strategy";
 @Module({
   imports: [
     AppLoggerModule,
@@ -20,8 +20,13 @@ import { GoogleController } from "./google.controller";
     JwtModule.register({}),
     forwardRef(() => UserModule),
   ],
-  controllers: [AuthController,GoogleController],
-  providers: [AuthService, RefreshTokenJwtStrategy, AccessTokenJwtStrategy,GoogleOauthStrategy],
+  controllers: [AuthController, GoogleController],
+  providers: [
+    AuthService,
+    RefreshTokenJwtStrategy,
+    AccessTokenJwtStrategy,
+    GoogleOauthStrategy,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

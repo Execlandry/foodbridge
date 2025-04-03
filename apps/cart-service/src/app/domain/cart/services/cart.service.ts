@@ -7,7 +7,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { ConfigService } from "@fbe/config";
 import { Logger } from "@fbe/logger";
 import { Like, Repository, Connection, QueryRunner } from "typeorm";
-import * as bcrypt from "bcrypt";
 
 import { NotFoundException } from "@nestjs/common";
 import { CartEntity } from "../entity/cart.entity";
@@ -16,8 +15,8 @@ import {
   MenuItemBodyDto,
   UpdateCartMenuItemBodyDto,
 } from "../dto/cart.dto";
-import { UserMetaData } from "../../auth/guards/user";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { UserMetaData } from "../../auth/guards/user";
 
 @Injectable()
 export class CartService {
@@ -27,59 +26,48 @@ export class CartService {
     private cartRepo: Repository<CartEntity>,
     private eventEmitter: EventEmitter2
   ) {}
+
   async createCartMenuItem(
     user: UserMetaData,
     payload: CreateCartMenuItemBodyDto
   ) {
-    let createdRestaurant = null;
-    console.log(payload);
-    const { userId } = user;
     const { business_id } = payload;
+
     const existingCart = await this.cartRepo.findOne({
       where: {
         business_id,
-        user_id: userId,
+        user_id: user.userId,
       },
     });
-    let items: MenuItemBodyDto[] = [];
+    let existingItems: MenuItemBodyDto[] = [];
     if (existingCart) {
-      items = existingCart.menu_items;
-      items.push(payload.menu_item);
+      existingItems = existingCart.menu_items;
+      const isItemExists = existingItems.find(
+        (i) => i.id === payload.menu_item.id
+      );
+      if (!isItemExists) {
+        payload.menu_item.count = 1;
+        existingItems.push(payload.menu_item);
+      } else {
+        existingItems = existingItems.map((i) => {
+          if (i.id === payload.menu_item.id) {
+            i.count = i.count + 1;
+            return i;
+          }
+          return i;
+        });
+      }
+      existingCart.menu_items = existingItems;
       return await existingCart.save();
     } else {
-      items = [];
-      items.push(payload.menu_item);
+      payload.menu_item.count = 1;
+      existingItems.push(payload.menu_item);
       return await this.cartRepo.save({
         user_id: user.userId,
-        business_id: payload.business_id,
-        menu_items: items,
+        business_id: business_id,
+        menu_items: existingItems,
+        business: payload.business,
       });
-    }
-  }
-
-  async updateCartMenuItem(
-    user: UserMetaData,
-    payload: UpdateCartMenuItemBodyDto
-  ) {
-    const { userId } = user;
-    const { business_id, menu_item } = payload;
-    const existingCart = await this.cartRepo.findOne({
-      where: {
-        business_id,
-        user_id: userId,
-      },
-    });
-    if (!existingCart) {
-      throw new NotFoundException();
-    } else {
-      const updatedMenuItems = existingCart.menu_items.map((i) => {
-        if (i.id === menu_item.id) {
-          return payload.menu_item;
-        }
-        return i;
-      });
-      existingCart.menu_items = updatedMenuItems;
-      return await existingCart.save();
     }
   }
 
@@ -98,23 +86,19 @@ export class CartService {
     if (!existingCart) {
       throw new NotFoundException();
     } else {
-      const updatedMenuItems = existingCart.menu_items.filter(
-        (i) => i.id !== menu_item.id
-      );
+      const updatedMenuItems = existingCart.menu_items
+        .map((i) => {
+          if (i.id === menu_item.id) {
+            i.count = i.count - 1;
+            return i;
+          }
+          return i;
+        })
+        .filter((i) => i.count > 0);
       existingCart.menu_items = updatedMenuItems;
       return await existingCart.save();
     }
   }
-
-  async listUserCart(user: UserMetaData) {
-    const { userId } = user;
-    return await this.cartRepo.findOne({
-      where: {
-        user_id: userId,
-      },
-    });
-  }
-
   async clearCartMenuItem(user: UserMetaData) {
     const { userId } = user;
     const item = await this.cartRepo.findOne({
@@ -124,5 +108,14 @@ export class CartService {
     });
     await this.cartRepo.delete({ id: item.id });
     return null;
+  }
+
+  async listUserCart(user: UserMetaData) {
+    const { userId } = user;
+    return await this.cartRepo.findOne({
+      where: {
+        user_id: userId,
+      },
+    });
   }
 }

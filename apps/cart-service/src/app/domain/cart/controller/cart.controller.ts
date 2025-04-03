@@ -39,11 +39,14 @@ import {
 } from "src/app/app.constants";
 import { CartService } from "../services/cart.service";
 import { Type } from "class-transformer";
+import {
+  CreateCartMenuItemBodyDto,
+  UpdateCartMenuItemBodyDto,
+} from "../dto/cart.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
 import { RoleAllowed } from "../../auth/guards/role-decorator";
-import { CreateCartMenuItemBodyDto, UpdateCartMenuItemBodyDto } from "../dto/cart.dto";
 
 @ApiBearerAuth("authorization")
 @Controller("cart")
@@ -95,21 +98,6 @@ export class CartController {
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @UseGuards(AccessTokenGuard)
   @Put("/")
-  public async updateUserCart(
-    @User() user: UserMetaData,
-    @Body() payload: UpdateCartMenuItemBodyDto
-  ) {
-    return await this.service.updateCartMenuItem(user, payload);
-  }
-
-  @HttpCode(HttpStatus.CREATED)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Delete("/")
   public async deleteUserMenuItemCart(
     @User() user: UserMetaData,
     @Body() payload: UpdateCartMenuItemBodyDto

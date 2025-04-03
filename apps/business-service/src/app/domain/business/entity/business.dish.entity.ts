@@ -24,7 +24,10 @@ export class BusinessDishEntity extends BaseEntity {
 
   @Column({ type: "varchar", default: null })
   public category!: string;
-  
+
+  @Column({ type: "varchar", default: null })
+  public food_type!: string;
+
   @Column({ type: "varchar", default: null })
   public meal_type!: string;
 
@@ -32,16 +35,19 @@ export class BusinessDishEntity extends BaseEntity {
   public cuisine_type!: string;
 
   @Column({ type: "varchar", default: null })
-  public food_type!: string;
-
-  @Column({ type: "varchar", default: null })
   public ingredients!: string;
 
-  @Column({ type: "jsonb", default: null })
-  public thumbnails!: any;
+  @Column({ type: "varchar", default: null })
+  public thumbnails!: string;
 
   @Column({ type: "integer" })
   public price!: number;
+
+  @Column({ type: "integer", default: null })
+  public delivery_time!: number;
+
+  @Column({ type: "integer", default: null })
+  public rating!: number;
 
   @ManyToOne(() => BusinessEntity, (event) => event.dishes)
   @JoinColumn({ name: "business_id", referencedColumnName: "id" })

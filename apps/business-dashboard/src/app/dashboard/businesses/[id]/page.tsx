@@ -14,7 +14,7 @@ export default function Index({ params }: any) {
   const [business, setBusiness] = useState<Business>({});
   const [menuItem, setMenuItem] = useState<any>([])
 
-  const fetchRestaurants = async () =>  {
+  const fetchBusiness = async () =>  {
     const res = await fetch(`/api/business/${id}`);
     const data = await res.json();
     setBusiness(data);
@@ -43,7 +43,7 @@ export default function Index({ params }: any) {
   }
 
   useEffect(() => {
-    fetchRestaurants();
+    fetchBusiness();
   }, [])
 
 

@@ -3,10 +3,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch, Control } from "react-hook-form";
 import { useRef, useState } from "react";
-import CustomFileSelector from "@components/common/FileSelector";
-import ImagePreview from "@components/common/ImagePreview";
-// import ImagePreview from "@components/common/Imagepreview";
-// import CustomFileSelector from "@components/common/FileSelctor";
+import ImagePreview from "@components/common/Imagepreview";
+import CustomFileSelector from "@components/common/FileSelctor";
 
 
 function Error({ message }: { message: string }) {
@@ -25,7 +23,7 @@ export default function AddBusiness() {
       //convert `FileList` to `File[]`
       const _files = Array.from(e.target.files);
       // do the upload here to AWS S3
-      // upload these files to AWS S3 after getting signed url for upload 
+      // upload these files to AWS S3 after getting signe durl for upload 
       setImages(_files);
     }
   };
@@ -37,7 +35,7 @@ export default function AddBusiness() {
     console.log(data)
   }
 
-  // list of restaurants
+  // list of businesses
   return (
     <>  <div
     className=" h-screen w-full items-center ">
@@ -116,3 +114,4 @@ export default function AddBusiness() {
 </div> </>
   );
 }
+

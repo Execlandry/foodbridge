@@ -14,4 +14,3 @@ node_modules
 /apps/**/dist
 /infra/**/build
 /infra/**/dist
-.npmrc

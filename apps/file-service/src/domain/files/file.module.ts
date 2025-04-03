@@ -5,10 +5,9 @@ import FileDaoService from './file.dao.service';
 import { FileService } from './file.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { ConfigModule } from '@fbe/config';
-import { AWSS3Module } from '@fbe/aws-s3';
 
 @Module({
-  imports: [AWSS3Module,PrismaModule, ConfigModule],
+  imports: [PrismaModule, ConfigModule],
   controllers: [FileController],
   providers: [FileService, FileDaoService],
   exports: [FileService, FileDaoService],

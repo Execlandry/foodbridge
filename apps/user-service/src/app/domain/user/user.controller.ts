@@ -39,11 +39,11 @@ import { AccessTokenGuard } from "../auth/guards/access_token.guard";
 import { RoleAllowed } from "../auth/guards/role-decorator";
 import { RolesGuard } from "../auth/guards/role-guard";
 import {
-  fieldsToUpdateDto,
   FindUserDto,
   UpdateUserByIdDto,
   UpdateUserPermissionBodyDto,
   UserSignupDto,
+  fieldsToUpdateDto,
 } from "./dto/user-request.dto";
 import { UserSignupResponseDto } from "./dto/user-response.dto";
 import { UserService } from "./user.service";
@@ -57,11 +57,6 @@ import {
 } from "src/app/app.constants";
 import { UserRoles } from "@fbe/types";
 
-// user signup
-// fetch user info
-// reset password
-// update your own profile
-// fetch list of all users if role/permission is admin
 @ApiBearerAuth("authorization")
 @Controller("users")
 @UsePipes(
@@ -77,13 +72,10 @@ export class UserController {
     private readonly logger: Logger
   ) {}
 
-  // define all our user routes
-
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
-    // ADD RESPONSE DTO TYPE HERE
     type: UserSignupResponseDto,
-    description: "USER CREATED SUCCESSFULLY",
+    description: "user created successfully",
   })
   @ApiOkResponse({ type: UserSignupResponseDto, description: "" })
   @ApiOperation({ description: "user create api " })

@@ -21,7 +21,7 @@ export class AuthModule {}
 /*
 HTTP REST APIs
 
-/api/v1/restaurants 
+/api/v1/businesses 
     - /search (query param) [ES]
     -/ POST (create a new business) (pagination) (address)
     -/:id (get business)
@@ -31,7 +31,7 @@ HTTP REST APIs
         - GET
         - patch
 
-/api/v1/restaurants/:id/dishes
+/api/v1/businesses/:id/dishes
     - / GET fetch all menu items (pagination)
     - / POST create new dish
     - /:id DELETE 
@@ -40,7 +40,7 @@ HTTP REST APIs
         - GET
         - patch
 
-/api/v1/restaurants/:id/dishes
+/api/v1/businesses/:id/dishes
     - / GET fetch all menu items (pagination)
     - / POST create new dish
     - /:id DELETE 

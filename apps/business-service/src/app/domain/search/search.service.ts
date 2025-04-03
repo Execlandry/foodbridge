@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
-
+import { Mapping, Settings } from "./mapping";
 import { ConfigService } from "@fbe/config";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
-import { Mapping, Settings } from './mapping';
-import { CreateBusinessBodyDto, SearchQueryDto } from "../business/dto/business.dto";
+import { BusinessService } from "../business/services/business.service";
+import { SearchQueryDto } from "../business/dto/business.dto";
 import { BusinessEntity } from "../business/entity/business.entity";
 import { BusinessAddressEntity } from "../business/entity/business.address.entity";
+
 @Injectable()
 export class SearchService {
   constructor(
@@ -36,15 +37,13 @@ export class SearchService {
       throw err;
     }
   }
-  @OnEvent('index.dish.business')
-  public async indexBusinessWithDish(data:{
-    business:BusinessEntity,
-    menuItems:string
-  }): Promise<any> {
-    console.log("Received event data:", data);
-    const {business,menuItems}=data;
 
-   
+  @OnEvent("index.dish.business")
+  public async indexBusinessWithDish(data: {
+    business: BusinessEntity;
+    menuItems: string;
+  }): Promise<any> {
+    const { business, menuItems } = data;
     console.log("inside [index.business] handler");
     try {
       const payload = {
@@ -62,20 +61,19 @@ export class SearchService {
       throw err;
     }
   }
+
   @OnEvent("index.business")
-  public async indexBusiness(data:{
-    business:BusinessEntity,
-    address:BusinessAddressEntity
+  public async indexBusiness(data: {
+    business: BusinessEntity;
+    address: BusinessAddressEntity;
   }): Promise<any> {
-    const {business,address}=data;
+    const { business, address } = data;
     console.log("inside [index.business] handler");
     try {
       const payload = {
         id: business.id,
         name: business.name,
         description: business.description,
-        // latitude: "11",
-        // longitude: "11",
         contact_no: business.contact_no,
         cuisine: business.cuisine,
         banner: business.banner,
@@ -84,11 +82,11 @@ export class SearchService {
         pickup_options: business.pickup_options,
         opens_at: business.opens_at,
         closes_at: business.closes_at,
+        menu: "",
         address: address.street,
         city: address.city,
         state: address.state,
-        //change this later
-        street: address.state,
+        street: address.street,
         pincode: address.pincode,
         country: address.country,
       };
@@ -125,39 +123,45 @@ export class SearchService {
       throw err;
     }
   }
-  public buildSearchQuery(searchParam:SearchQueryDto){
-    const {search_text} = searchParam;
+
+  public buildSearchQuery(searchParam: SearchQueryDto) {
+    const { search_text } = searchParam;
     try {
-      const query=[];
-      if(search_text){
+      const query = [];
+      if (search_text) {
         query.push({
-          multi_match:{
+          multi_match: {
             query: `${search_text}`,
-            type: 'cross_fields',
-            fields:[
-              'name',
-              'name.word_delimiter',
-              'description',
-              'description.word_delimiter',
-              'menu',
-              'menu.word_delimiter',
-              'city',
-              'address',
+            type: "cross_fields",
+            fields: [
+              "name",
+              "name.word_delimiter",
+              "description",
+              "description.word_delimiter",
+              "menu",
+              "menu.word_delimiter",
+              "city",
+              "address",
             ],
-            operator: 'or',
-          }
+            operator: "or",
+          },
         });
+      } else {
+        return {
+          query: {
+            match_all: { boost: "1.0" },
+          },
+        };
       }
       return {
-        query:{
-          bool:{
+        query: {
+          bool: {
             must: query,
-          }
-        }
-      }
-      
-    } catch (error) {
-      
+          },
+        },
+      };
+    } catch (err) {
+      throw err;
     }
   }
 }

@@ -36,8 +36,8 @@ export async function POST(request: NextApiRequest) {
     const response = await axios.post(
       `http://localhost:3001/api/v1/business-service/businesses`,
       {
-        name: "Kanha Veg Business",
-        description: "Veg Business in North Goa",
+        name: "Kanha Veg Restaurant",
+        description: "Veg Restaurant in North Goa",
         average_price: "1200",
         latitude: "11",
         longitude: "11",
@@ -48,7 +48,7 @@ export async function POST(request: NextApiRequest) {
         opens_at: "2023-10-05T14:48:00.000Z",
         closes_at: "2023-10-05T14:48:00.000Z",
         address: {
-          name: "Goan Business",
+          name: "Goan Restaurant",
           city: "Punjim",
           state: "Goa",
           street: "North Goa",

@@ -17,7 +17,7 @@ import {
 import { Type as validateType } from "class-transformer";
 import { UserRoles } from "@fbe/types";
 
-export class fetchBusinessByIdDto{
+export class fetchBusinessByIdDto {
   @ApiProperty({
     description: "uuid",
     example: "uuid",
@@ -25,8 +25,8 @@ export class fetchBusinessByIdDto{
   })
   @IsUUID()
   public id!: string;
-
 }
+
 export class AddressDto {
   @ApiProperty({
     description: "city",
@@ -86,16 +86,17 @@ export class AddressDto {
 export class SearchQueryDto {
   @ApiProperty({
     description: "latitude",
-    example: "11",
+    example: "",
     required: false,
   })
+  @IsOptional()
   @IsDefined()
   @IsString()
   public latitude!: string;
 
   @ApiProperty({
     description: "longitude",
-    example: "11",
+    example: "",
     required: false,
   })
   @IsOptional()
@@ -105,19 +106,19 @@ export class SearchQueryDto {
 
   @ApiProperty({
     description: "search_text",
-    example:"",
-    required:true,
+    example: "",
+    required: false,
   })
-  @IsDefined()
+  @IsOptional()
   @IsString()
-  public search_text!:string;
+  public search_text!: string;
 
   @ApiProperty({
     description: "page count",
     example: "1",
     required: false,
   })
-  @Transform(({value})=>parseInt(value))
+  @Transform(({ value }) => parseInt(value))
   @IsOptional()
   @IsNumber()
   public page!: number;
@@ -127,7 +128,7 @@ export class SearchQueryDto {
     example: "10",
     required: false,
   })
-  @Transform(({value})=>parseInt(value))
+  @Transform(({ value }) => parseInt(value))
   @IsOptional()
   @IsNumber()
   public limit!: number;
@@ -135,8 +136,8 @@ export class SearchQueryDto {
 
 export class CreateBusinessBodyDto {
   @ApiProperty({
-    description: "name of business",
-    example: "alchemy org",
+    description: "name",
+    example: "Kanha Veg Business",
     required: true,
   })
   @IsDefined()
@@ -145,7 +146,7 @@ export class CreateBusinessBodyDto {
 
   @ApiProperty({
     description: "desc of business",
-    example: "alchemy org",
+    example: "Veg Business in North Goa",
     required: true,
   })
   @IsOptional()
@@ -235,11 +236,11 @@ export class CreateBusinessBodyDto {
   @ApiProperty({
     description: "address payload",
     example: {
-      name: "Goan restuarant",
-      city: "panjim",
+      name: "Goan Business",
+      city: "Punjim",
       state: "Goa",
       street: "North Goa",
-      pincode: "345254",
+      pincode: "12001",
       country: "India",
     },
     required: true,
@@ -251,4 +252,6 @@ export class CreateBusinessBodyDto {
   public address!: AddressDto;
 }
 
-export class UpdateBusinessBodyDto extends PartialType(CreateBusinessBodyDto){}
+export class UpdateBusinessBodyDto extends PartialType(
+  CreateBusinessBodyDto
+) {}

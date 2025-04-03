@@ -17,8 +17,7 @@ import {
   ValidateNested,
 } from "class-validator";
 import { Type as validateType } from "class-transformer";
-import { cuisineType, foodType, mealType } from '@fbe/types';
-
+import { mealType, cuisineType, foodType } from "@fbe/types";
 
 export class MenuItemBodyDto {
   @ApiProperty({
@@ -103,15 +102,22 @@ export class MenuItemBodyDto {
   public price!: number;
 
   @ApiProperty({
-    description: "thumbnails",
-    example: ["https://google.com/banner.png"],
+    description: "number of items",
+    example: 2,
     required: true,
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @ArrayMinSize(1)
-  public thumbnails!: string[];
+  @IsNumber()
+  public count!: number;
+
+  @ApiProperty({
+    description: "thumbnails",
+    example: "https://google.com/banner.png",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public thumbnails!: string;
 }
 
 export class CreateCartMenuItemBodyDto {
@@ -125,6 +131,14 @@ export class CreateCartMenuItemBodyDto {
   public business_id!: string;
 
   @ApiProperty({
+    description: "business",
+    example: {},
+    required: true,
+  })
+  @IsObject()
+  public business!: any;
+
+  @ApiProperty({
     description: "menu_item object",
     example: {
       id: "5272ec36-d9db-11ed-afa1-0242ac120009",
@@ -136,8 +150,9 @@ export class CreateCartMenuItemBodyDto {
       category: "category",
       ingredients: "ingredients",
       food_type: "vegan",
+      count: 1,
       price: 500,
-      thumbnails: ["https://google.com/banner.png"],
+      thumbnails: "https://google.com/banner.png",
     },
     required: true,
   })

@@ -6,8 +6,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
+  OneToOne,
 } from "typeorm";
 import { BusinessDishEntity } from "./business.dish.entity";
+import { BusinessAddressEntity } from "./business.address.entity";
 
 @Entity("businesses")
 export class BusinessEntity extends BaseEntity {
@@ -67,6 +69,9 @@ export class BusinessEntity extends BaseEntity {
 
   @OneToMany(() => BusinessDishEntity, (event) => event.business)
   public dishes!: BusinessDishEntity[];
+
+  @OneToOne(() => BusinessAddressEntity)
+  address: BusinessAddressEntity;
 
   @CreateDateColumn({
     type: "timestamptz",

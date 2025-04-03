@@ -5,7 +5,7 @@ import { SwaggerConfig } from "./swagger.interface";
  * Change this to suit your app!
  */
 export const SWAGGER_CONFIG: SwaggerConfig = {
-  title: "cart service",
+  title: "order service",
   description: " api specs",
   version: "1.0",
   tags: [],

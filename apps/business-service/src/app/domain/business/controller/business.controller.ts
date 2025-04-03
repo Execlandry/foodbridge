@@ -38,7 +38,12 @@ import {
 } from "src/app/app.constants";
 import { BusinessService } from "../services/business.service";
 import { Type } from "class-transformer";
-import { CreateBusinessBodyDto, fetchBusinessByIdDto, SearchQueryDto, UpdateBusinessBodyDto } from "../dto/business.dto";
+import {
+  CreateBusinessBodyDto,
+  SearchQueryDto,
+  UpdateBusinessBodyDto,
+  fetchBusinessByIdDto,
+} from "../dto/business.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
@@ -66,10 +71,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on lat/lon or search text",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return search businesses successfully",
+    description: "return search business successfully",
   })
   @Get("/search")
   public async searchBusiness(@Query() query: SearchQueryDto) {
@@ -83,10 +88,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "search businesses based on specific id",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return search businesses successfull by id",
+    description: "return search business successfully",
   })
   @Get("/:id")
   public async fetchBusinessById(@Param() param: fetchBusinessByIdDto) {
@@ -100,10 +105,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "create a business",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return create business successfully",
+    description: "return search business successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -122,10 +127,10 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "update a specific business detail",
+    description: "search business based on lat/lon",
   })
   @ApiOkResponse({
-    description: "return updated a business detail successfull",
+    description: "return search business successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -135,7 +140,7 @@ export class BusinessController {
     @Param() param: fetchBusinessByIdDto,
     @Body() payload: UpdateBusinessBodyDto
   ) {
-    return await this.service.updateBusiness(user, payload,param);
+    return await this.service.updateBusiness(user, payload, param);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -145,17 +150,15 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "return all admin businesses",
+    description: "return all admin business",
   })
   @ApiOkResponse({
-    description: "return all admin businesses successfull",
+    description: "return search business successfully",
   })
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Get("/")
-  public async fetchAllMyBusinesses(
-    @User() user: UserMetaData
-  ) {
-    return await this.service.fetchAllMyBusinesses(user);
+  public async fetchAllMyBusiness(@User() user: UserMetaData) {
+    return await this.service.fetchAllMyBusiness(user);
   }
 }
