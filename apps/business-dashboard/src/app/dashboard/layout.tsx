@@ -7,8 +7,7 @@ import Footer from "../../components/layout/Footer";
 import Header from "../../components/layout/Header";
 import Sidebar from "../../components/layout/Sidebar";
 import { useSession } from "next-auth/react";
-
-
+  
 export default function RootLayout({ children }: any) {
 
   const [mobileNavsidebar, setMobileNavsidebar] = useState(false);

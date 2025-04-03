@@ -112,9 +112,7 @@ export class BusinessDishService {
       where: { id },
     });
     if (!dish) {
-      throw new NotFoundException(
-        `business dish with this Id not found ${id}`
-      );
+      throw new NotFoundException(`business dish with this Id not found ${id}`);
     }
     return dish;
   }
@@ -190,10 +188,7 @@ export class BusinessDishService {
     });
   }
 
-  async getAllDishByBusiness(
-    user: UserMetaData,
-    param: BusinessParamParamDto
-  ) {
+  async getAllDishByBusiness(user: UserMetaData, param: BusinessParamParamDto) {
     const { id } = param;
     const business = await this.businessRepo.findOne({
       where: { id },
