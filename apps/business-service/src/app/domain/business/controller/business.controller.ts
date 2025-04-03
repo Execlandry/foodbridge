@@ -155,10 +155,10 @@ export class BusinessController {
   @ApiOkResponse({
     description: "return search business successfully",
   })
-  @RoleAllowed(UserRoles["business-admin"])
-  @UseGuards(AccessTokenGuard, RolesGuard)
+  // @RoleAllowed(UserRoles["business-admin"])
+  // @UseGuards(AccessTokenGuard, RolesGuard)
   @Get("/")
-  public async fetchAllMyBusiness(@User() user: UserMetaData) {
-    return await this.service.fetchAllMyBusiness(user);
+  public async fetchAllMyBusiness() {
+    return await this.service.fetchAllMyBusiness();
   }
 }
