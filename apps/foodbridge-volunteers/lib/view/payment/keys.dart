@@ -1,4 +1,0 @@
-String PublishableKey =
-    "";
-String SecretKey =
-    "";
