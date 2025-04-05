@@ -15,11 +15,10 @@ export default function Signup() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (user) {
-      navigate("/");
+    if (user && user.permissions!="business-admin") {
+      navigate("/fbe/business");
     }
   }, [user, navigate]);
-
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {

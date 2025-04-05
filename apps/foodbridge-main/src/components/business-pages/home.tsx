@@ -18,6 +18,7 @@ import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
 import { UserContext, UserContextType } from '../../hooks/user-context';
 import useAuth from "../../hooks/use-auth";
+import { useNavigate } from "react-router-dom";
 
 interface Business {
   id: string | number;
@@ -47,6 +48,7 @@ interface GroupedDishes {
 
 function Home() {
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   const { data } = useSelector(listDishesForLandingPage);
   const { data: businessesData } = useSelector(topBusinesses);
   const { user } = useContext(UserContext) as UserContextType;
@@ -54,6 +56,9 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    if (user && user.permissions=="business-admin") {
+      return navigate("/");
+    }
     dispatch(fetchDishesForLandingPage());
     dispatch(fetchBusinesses());
   }, [dispatch]);
@@ -202,7 +207,6 @@ function Home() {
                         >
                           <PlusIcon className="h-4 w-4" />
                         </button>
-                        
                       </div>
                     </div>
                   </div>
