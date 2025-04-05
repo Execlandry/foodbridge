@@ -15,7 +15,7 @@ export default function Signup() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (user) {
+    if (user && user.permissions!="business-admin") {
       navigate("/");
     }
   }, [user, navigate]);

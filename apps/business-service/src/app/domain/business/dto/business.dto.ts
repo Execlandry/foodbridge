@@ -189,7 +189,7 @@ export class CreateBusinessBodyDto {
 
   @ApiProperty({
     description: "banner",
-    example: "https://gogole.com/banner.png",
+    example: "https://media.istockphoto.com/id/182456671/photo/beach-shack-in-northern-goa.jpg?s=1024x1024&w=is&k=20&c=e-70PBoLX1sVs1HlRe6MoxHOV2FT1BRe18TlnMYYHQ8=",
     required: true,
   })
   @IsOptional()

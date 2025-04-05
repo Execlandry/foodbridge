@@ -18,11 +18,12 @@ import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
 import { UserContext, UserContextType } from '../../hooks/user-context';
 import useAuth from "../../hooks/use-auth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface Business {
   id: string | number;
   name: string;
-  thumbnails?: string;
+  banner?: string;
   category?: string;
   avg_price?: number;
 }
@@ -52,8 +53,12 @@ function Home() {
   const { user } = useContext(UserContext) as UserContextType;
   const { logoutUser } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate= useNavigate()
 
   useEffect(() => {
+    if(user && user.permissions=="business-admin"){
+      return navigate("/");
+    }
     dispatch(fetchDishesForLandingPage());
     dispatch(fetchBusinesses());
   }, [dispatch]);
@@ -147,7 +152,7 @@ function Home() {
           {/* Business Info */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6">
             <img
-              src={business?.thumbnails || "https://via.placeholder.com/150"}
+              src={business?.banner || "https://via.placeholder.com/150"}
               alt={business?.name}
               className="w-24 h-24 object-cover rounded-lg shadow-sm"
               loading="lazy"
@@ -155,9 +160,9 @@ function Home() {
             <div className="text-center sm:text-left flex-1">
               <h3 className="text-xl font-semibold text-gray-900 truncate">{business?.name}</h3>
               <p className="text-sm text-gray-500">{business?.category || "Cuisine"}</p>
-              <span className="text-green-600 font-medium text-base">
+              {/* <span className="text-green-600 font-medium text-base">
                 Avg: ${business?.avg_price?.toFixed(2) || "N/A"}
-              </span>
+              </span> */}
             </div>
             {businessDishes.length > 0 && (
               <button

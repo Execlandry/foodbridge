@@ -206,7 +206,7 @@ export class CreateBusinessDishBodyDto {
   @ApiProperty({
     description: "thumbnails",
     example:
-      "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_1024/18301f1b90116218438a5e6a82336d15",
+      "https://www.cookforindia.com/wp-content/uploads/2016/08/Paneer-Tikka-_LR.jpg",
     required: true,
   })
   @IsString()

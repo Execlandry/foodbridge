@@ -61,8 +61,15 @@ const MapComponent: React.FC<MapProps> = ({ start, end }) => {
       addWaypoints: false,
       fitSelectedRoutes: true,
       show: false,
-      createMarker: () => null, // Prevent default markers
-      lineOptions: { styles: [{ color: 'blue', weight: 4 }] },
+      // createMarker: () => null, // Prevent default markers
+      
+      lineOptions: { 
+        styles: [{ color: 'blue', weight: 4 }],
+        extendToWaypoints: true, 
+        missingRouteTolerance: 10 
+      }
+      
+
     }).addTo(mapInstance.current);
 
     // Ensure the directions panel is hidden

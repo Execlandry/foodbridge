@@ -290,10 +290,10 @@ function Checkout() {
 
   {/* Modal */}
   {showModal && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+    <div className="inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
         <div className="flex items-center justify-between p-5 border-b border-gray-200">
-          <h3 className="text-xl font-bold text-gray-900">Add New Address</h3>
+          {/* <h3 className="text-xl font-bold text-gray-900">Add New Address</h3> */}
           <button
             onClick={() => setShowModal(false)}
             className="text-gray-500 hover:text-gray-700 text-2xl font-bold"

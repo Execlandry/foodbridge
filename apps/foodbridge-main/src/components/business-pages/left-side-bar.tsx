@@ -22,54 +22,55 @@ export const LeftBarRoutes = [
     route: "/",
     icon: HomeIcon,
   },
+  // {
+  //   id: 2,
+  //   name: "Chat",
+  //   route: "/fbe/chat",
+  //   icon: ChatAlt2Icon,
+  // },
   {
     id: 2,
-    name: "Chat",
-    route: "/fbe/chat",
-    icon: ChatAlt2Icon,
-  },
-  {
-    id: 10,
     name: "Search",
     route: "/search",
     icon: SearchIcon,
   },
+
   {
-    id: 9,
+    id: 3,
     name: "Businesses",
     route: "/fbe/business",
     icon: FolderOpenIcon,
   },
-  {
-    id: 3,
-    name: "Wallet",
-    route: "/fbe/wallet",
-    icon: CashIcon,
-  },
+  // {
+  //   id: 3,
+  //   name: "Wallet",
+  //   route: "/fbe/wallet",
+  //   icon: CashIcon,
+  // },
   {
     id: 4,
     name: "Track",
     route: "/fbe/track",
     icon: FaMapMarked,
   },
-  {
-    id: 5,
-    name: "Orders",
-    route: "/fbe/checkout",
-    icon: ShoppingBagIcon,
-  },
-  {
-    id: 6,
-    name: "Favorite",
-    route: "/favorite",
-    icon: HeartIcon,
-  },
-  {
-    id: 7,
-    name: "Settings",
-    route: "/settings",
-    icon: CogIcon,
-  },
+  // {
+  //   id: 5,
+  //   name: "Orders",
+  //   route: "/fbe/checkout",
+  //   icon: ShoppingBagIcon,
+  // },
+  // {
+  //   id: 6,
+  //   name: "Favorite",
+  //   route: "/favorite",
+  //   icon: HeartIcon,
+  // },
+  // {
+  //   id: 7,
+  //   name: "Settings",
+  //   route: "/settings",
+  //   icon: CogIcon,
+  // },
 ];
 
 export default function LeftSideBar() {

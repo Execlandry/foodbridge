@@ -11,6 +11,6 @@ const router = useRouter();
 
 
   return (
-        <Dashboard user={user}/>
+        <Dashboard/>
   )
 }

@@ -53,11 +53,11 @@ function Navbar() {
           </div>
 
           {/* Right Section */}
-          <div className="flex items-center space-x-6 md:flex hidden">
+          <div className="flex items-center space-x-7 md:flex hidden">
             {user && user.permissions != 'business-admin' ? (
               <>
                 {/* Cart */}
-                <button
+                {/* <button
                   className="relative group p-2 rounded-full bg-gray-50 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:scale-105"
                   aria-label="Cart"
                 >
@@ -78,7 +78,7 @@ function Navbar() {
                   <div className="absolute -top-1 -right-1 bg-green-500 w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white shadow-md">
                     <span className="text-white text-xs font-semibold">4</span>
                   </div>
-                </button>
+                </button> */}
 
                 {/* User Profile */}
                 <div className="flex items-center space-x-4">
