@@ -59,17 +59,23 @@ export class CartService {
       // }
       // existingCart.menu_items = existingItems;
       existingItems.push(payload.menu_item);
-      return await existingCart.save();
+       await existingCart.save();
     } else {
       // payload.menu_item.count = 1;
       existingItems.push(payload.menu_item);
-      return await this.cartRepo.save({
+       await this.cartRepo.save({
         user_id: user.userId,
         business_id: business_id,
         menu_items: existingItems,
         business: payload.business,
       });
     }
+    const FinalData = await this.cartRepo.find({
+      where: {
+        user_id: user.userId,
+      },
+    });
+    return FinalData;
   }
 
   async deleteCartMenuItem(
@@ -113,7 +119,7 @@ export class CartService {
 
   async listUserCart(user: UserMetaData) {
     const { userId } = user;
-    return await this.cartRepo.findOne({
+    return await this.cartRepo.find({
       where: {
         user_id: userId,
       },

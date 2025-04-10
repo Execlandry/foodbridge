@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect ,useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BellIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline";
@@ -14,6 +14,7 @@ interface RightSideBarProps {
 function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
   const dispatch = useDispatch();
   const { logoutUser } = useAuth();
+  const [DATA, setDATA] = useState<any[]>([]);
   const { data } = useSelector(CartItemsSelector);
   const navigate = useNavigate();
   const { user } = useContext(UserContext) as UserContextType;
@@ -26,6 +27,7 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
 
   // Mini Navbar UI
   function MiniNavBar() {
+    console.log("cart data",data)
     return (
       <div className="p-4 bg-white border-b border-gray-100 sticky top-0 z-10">
         <div className="flex items-center justify-between">
@@ -110,15 +112,20 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
           </button>
         </div>
         <div className="space-y-3">
-          {data?.menu_items?.map((cart_item: any, index: number) => (
-            <CartCard key={index} cart_item={cart_item} />
-          ))}
-          {!data?.menu_items?.length && (
-            <div className="text-center py-8 text-gray-500 text-sm">
-              Your cart is empty
-            </div>
-          )}
-        </div>
+
+  {data?.length > 0 ? (
+    data.map((item: any, idx: number) =>
+      item.menu_items?.map((cart_item: any, index: number) => (
+        <CartCard key={`${idx}-${index}`} cart_item={cart_item} />
+      ))
+    )
+  ) : (
+    <div className="text-center py-8 text-gray-500 text-sm">
+      Your cart is empty
+    </div>
+  )}
+</div>
+
       </div>
     );
   }
@@ -133,12 +140,12 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
     return (
       <div className="p-4 bg-gray-50 border-t border-gray-100 sticky bottom-0">
         <div className="space-y-4">
-          <input
+          {/* <input
             type="text"
             placeholder="Any suggestions? We’ll pass it on..."
             className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200"
-          />
-          <button className="w-full py-2 border-2 border-dashed border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+          /> */}
+          {/* <button className="w-full py-2 border-2 border-dashed border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/20">
             Apply Coupon
           </button>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
@@ -162,11 +169,11 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
                 <span className="font-semibold text-green-600">${total.toFixed(2)}</span>
               </div>
             </div>
-          </div>
+          </div> */}
           <button
             onClick={goToCheckout}
             className="w-full py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 focus:outline-none transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
-            disabled={!data?.menu_items?.length}
+            disabled={!data}
           >
             Proceed to Checkout
           </button>
