@@ -65,6 +65,7 @@ function Businesses() {
       }
       grouped[businessId].dishes.push(dish);
     });
+    console.log(dishesData);
     return grouped;
   };
 

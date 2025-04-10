@@ -39,7 +39,7 @@ export class MenuItemBodyDto {
   public name!: string;
 
   @ApiProperty({
-    description: "descriotion",
+    description: "description",
     example:
       "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
     required: true,

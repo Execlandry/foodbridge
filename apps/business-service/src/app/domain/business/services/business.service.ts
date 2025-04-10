@@ -23,6 +23,7 @@ import { UserMetaData } from "../../auth/guards/user";
 import { SearchService } from "../../search/search.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { groupBy } from "../../utility";
+import { ResponseError } from "@elastic/elasticsearch/lib/errors";
 
 @Injectable()
 export class BusinessService {
@@ -57,10 +58,11 @@ export class BusinessService {
     const address = await this.businessAddRepo.findOne({
       where: { business: { id } },
     });
+    const availabledishes=response.dishes.filter((dish)=>dish.status=='available')
     const dishMenuItems = response.dishes;
-    const categories = groupBy(dishMenuItems, "category");
+    // const categories = groupBy(dishMenuItems, "category");
     response.address = address;
-    response.dishes = categories;
+    response.dishes = availabledishes;
     return response;
   }
 

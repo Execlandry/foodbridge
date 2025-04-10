@@ -19,7 +19,7 @@ export const LeftBarRoutes = [
   {
     id: 1,
     name: "Home",
-    route: "/",
+    route: "/fbe/business",
     icon: HomeIcon,
   },
   {

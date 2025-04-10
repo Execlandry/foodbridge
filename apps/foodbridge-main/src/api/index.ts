@@ -18,6 +18,7 @@ export class ExternalApis {
   }
   static async addCartItems(payload: any) {
     const url = `${this.url}/cart-service/cart`;
+    console.log("payload : ",payload);
     const response = await axios.post(url, payload);
     return response.data;
   }

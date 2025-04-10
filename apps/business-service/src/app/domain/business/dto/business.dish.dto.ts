@@ -29,16 +29,23 @@ export enum OrderBy {
   "DESC" = "DESC",
 }
 
-export enum mealType {
-  "breakfast" = "breakfast",
-  "lunch" = "lunch",
-  "dinner" = "dinner",
-}
-export enum cuisineType {
-  "indian" = "indian",
-  "north_indian" = "north_indian",
-  "italian" = "italian",
-  "chinese" = "chinese",
+// export enum mealType {
+//   "breakfast" = "breakfast",
+//   "lunch" = "lunch",
+//   "dinner" = "dinner",
+// }
+// export enum cuisineType {
+//   "indian" = "indian",
+//   "north_indian" = "north_indian",
+//   "italian" = "italian",
+//   "chinese" = "chinese",
+// }
+
+export enum status {
+  "available" = "available",
+  "pending" = "pending",
+  "failed" = "failed",
+  "completed" = "completed",
 }
 
 export enum foodType {
@@ -150,32 +157,32 @@ export class CreateBusinessDishBodyDto {
   @IsString()
   public description!: string;
 
-  @ApiProperty({
-    description: "cuisine_type",
-    required: true,
-    enum: cuisineType,
-    example: cuisineType.indian,
-  })
-  @IsEnum(cuisineType)
-  public cuisine_type!: string;
+  // @ApiProperty({
+  //   description: "cuisine_type",
+  //   required: true,
+  //   enum: cuisineType,
+  //   example: cuisineType.indian,
+  // })
+  // @IsEnum(cuisineType)
+  // public cuisine_type!: string;
 
-  @ApiProperty({
-    description: "meal_type",
-    required: true,
-    enum: mealType,
-    example: mealType.breakfast,
-  })
-  @IsEnum(mealType)
-  public meal_type!: string;
+  // @ApiProperty({
+  //   description: "meal_type",
+  //   required: true,
+  //   enum: mealType,
+  //   example: mealType.breakfast,
+  // })
+  // @IsEnum(mealType)
+  // public meal_type!: string;
 
-  @ApiProperty({
-    description: "category",
-    example: "category",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public category!: string;
+  // @ApiProperty({
+  //   description: "category",
+  //   example: "category",
+  //   required: true,
+  // })
+  // @IsOptional()
+  // @IsString()
+  // public category!: string;
 
   @ApiProperty({
     description: "ingredients",
@@ -196,12 +203,23 @@ export class CreateBusinessDishBodyDto {
   public food_type!: string;
 
   @ApiProperty({
-    description: "price",
+    description: "quantity",
     example: 500,
     required: true,
   })
   @IsNumber()
-  public price!: number;
+  @IsDefined()
+  public quantity!: number;
+
+  
+  @ApiProperty({
+    description: "food_type",
+    required: true,
+    enum: status,
+    example: status.available,
+  })
+  @IsEnum(status)
+  public status!: string;
 
   @ApiProperty({
     description: "thumbnails",

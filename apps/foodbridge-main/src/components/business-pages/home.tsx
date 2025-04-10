@@ -18,6 +18,7 @@ import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
 import { UserContext, UserContextType } from '../../hooks/user-context';
 import useAuth from "../../hooks/use-auth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface Business {
   id: string | number;
@@ -51,11 +52,18 @@ function Home() {
   const { data: businessesData } = useSelector(topBusinesses);
   const { user } = useContext(UserContext) as UserContextType;
   const { logoutUser } = useAuth();
+  const navigate=useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    // if(user && user.permissions=="business-admin")
+    // {
+    //   window.location.href = 'http://localhost:3007/signin';
+    //   return;
+    // }
     dispatch(fetchDishesForLandingPage());
     dispatch(fetchBusinesses());
+    // console.log(data);
   }, [dispatch]);
 
   const groupDishesByBusiness = (): GroupedDishes => {
@@ -67,6 +75,7 @@ function Home() {
       }
       if (dish?.business) grouped[businessId].dishes.push(dish);
     });
+    console.log(grouped);
     return grouped;
   };
 
@@ -76,11 +85,19 @@ function Home() {
   );
 
   const addToCart = (dish: Dish) => {
+    console.log(dish);
     dispatch(
       addCartItems({
         business_id: dish.business_id,
         business: dish.business,
-        menu_item: { ...dish, id: dish.dish_id || dish.id },
+        menu_item: {  
+          name: dish.name,
+          description: dish.description,
+          status: dish.status,
+          food_type:dish.food_type,
+          thumbnails:dish.thumbnails,
+         id: dish.id 
+        }
       })
     );
   };
@@ -140,7 +157,8 @@ function Home() {
   // Business and Dishes UI
   function BusinessesAndDishes() {
     const BusinessCard = ({ business }: { business: Business }) => {
-      const businessDishes = groupedDishes[business.id]?.dishes || [];
+      const businessDishes = groupedDishes[business.id]?.dishes||[];
+      // groupedDishes[business.id]?.dishes || [];
 
       return (
         <div className="bg-white rounded-2xl shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
@@ -156,10 +174,10 @@ function Home() {
               <h3 className="text-xl font-semibold text-gray-900 truncate">{business?.name}</h3>
               <p className="text-sm text-gray-500">{business?.category || "Cuisine"}</p>
               <span className="text-green-600 font-medium text-base">
-                Avg: ${business?.avg_price?.toFixed(2) || "N/A"}
+                {/* Avg: ${business?.avg_price?.toFixed(2) || "N/A"} */}
               </span>
             </div>
-            {businessDishes.length > 0 && (
+            {/* {businessDishes.length > 0 && ( */}
               <button
                 onClick={() => addAllDishesToCart(business.id)}
                 className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
@@ -168,11 +186,11 @@ function Home() {
                 <ShoppingCartIcon className="h-4 w-4" />
                 <span>Add All</span>
               </button>
-            )}
+            
           </div>
 
           {/* Dishes */}
-          {businessDishes.length > 0 ? (
+          {/* {businessDishes.length > 0 ? ( */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {businessDishes.map((dish: Dish) => (
                 <div
@@ -188,7 +206,7 @@ function Home() {
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-medium text-gray-900 truncate">{dish?.name}</h4>
                     <div className="flex items-center justify-between mt-1">
-                      <span className="text-green-600 font-medium text-sm">${dish?.price.toFixed(2)}</span>
+                      {/* <span className="text-green-600 font-medium text-sm">${dish?.price.toFixed(2)}</span> */}
                       <div className="flex space-x-1">
                         <button
                           onClick={() => removeFromCart(dish)}
@@ -209,9 +227,9 @@ function Home() {
                 </div>
               ))}
             </div>
-          ) : (
+          {/* ) : (
             <p className="text-gray-500 text-sm text-center">No dishes available</p>
-          )}
+          )} */}
         </div>
       );
     };

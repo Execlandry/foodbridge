@@ -11,44 +11,46 @@ export const fetchDishesForLandingPage = createAsyncThunk(
   // make these apis in external service
   // we are hitting proxy
   async () => {
-    const { data } = await axios.get(
+    const data  = await axios.get(
       `http://localhost:3000/api/v1/business-service/dishes?&page=1&limit=50`
     );
+    // console.log(data);
 
-    const foodData = data.map((item: any) => {
+    const foodData = data.data.map((item: any) => {
       return {
         id: item.id,
         dish_id: item.id,
         name: item.name,
         description: item.description,
         thumbnails: item.thumbnails,
-        food_image: item.thumbnails,
-        cuisine_type: item.cuisine_type,
+        // food_image: item.thumbnails,
+        // cuisine_type: item.cuisine_type,
         food_type: item.food_type,
-        meal_type: item.meal_type,
-        price: item.price,
-        menu_id: item.category,
+        // meal_type: item.meal_type,
+        // price: item.price,
+        // menu_id: item.category,
         business_id: item.business.id,
         business: item.business,
-        status: true,
+        status: item.status,
       };
     });
+    // console.log(foodData)
     // duplicates removal
 
-    const categories = data.map((item: any) => {
-      return {
-        name: item.category,
-        id: item.category,
-        menu_image: item.thumbnails,
-      };
-    });
-    const uniqueCategory: any = removeDuplicates(categories);
+    // const categories = data.map((item: any) => {
+    //   return {
+    //     name: item.category,
+    //     id: item.category,
+    //     menu_image: item.thumbnails,
+    //   };
+    // });
+    // const uniqueCategory: any = removeDuplicates(categories);
 
     return {
       // set one category default selected
-      selectedCategory: uniqueCategory[0],
+      // selectedCategory: uniqueCategory[0],
       // all menu category
-      menuCategory: uniqueCategory,
+      // menuCategory: uniqueCategory,
       foodHolder: foodData,
       food: foodData,
     };
@@ -59,8 +61,8 @@ const initialState: BusinessState = {
   dishes: {
     status: "not-started",
     data: {
-      selectedCategory: null,
-      menuCategory: [],
+      // selectedCategory: null,
+      // menuCategory: [],
       food: [],
       foodHolder: [],
     },
@@ -75,8 +77,9 @@ export const DishMenuItemSlice = createSlice({
     changeFoodCategorySelection: (state: BusinessState, action: any) => {
       const data = state.dishes.data;
       const menu = action.payload;
+      const food=data;
       // apply filter based ons selected category
-      const food = data.food.filter((i: any) => menu.id === i.menu_id);
+      // const food = data.food.filter((i: any) => menu.id === i.menu_id);
       state.dishes = {
         status: "resolved",
         data: {
