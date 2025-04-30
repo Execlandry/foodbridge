@@ -14,7 +14,6 @@ interface CartState {
 
 export const fetchCartItems = createAsyncThunk("fetch/cartItems", async () => {
   const test=ExternalApis.fetchCart()
-  console.log("test : ",test)
   return test;
 });
 

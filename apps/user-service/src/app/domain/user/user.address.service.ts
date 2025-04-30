@@ -18,6 +18,7 @@ import { AuthService } from "../auth/auth.service";
 import { NotFoundException } from "@nestjs/common";
 import { UserAddressEntity } from "./entity/user.address.entity";
 import { UserMetaData } from "../auth/guards/user";
+import { ApiBadRequestResponse } from "@nestjs/swagger";
 
 @Injectable()
 export class UserAddressService {
@@ -42,11 +43,36 @@ export class UserAddressService {
       ...body,
       user,
     };
-    const createdAddress = await this.userAddressRepo.save(saveEntity);
-    this.logger.log(
-      `address created successfully ${JSON.stringify(createdAddress)}`
-    );
-    return createdAddress;
+    
+    const Address=await this.userAddressRepo.findOne({ where: { id: apiUser.userId } });
+    if(!Address)
+    {
+      const saveEntity = {
+        ...body,
+        user,
+      };
+      const createdAddress = await this.userAddressRepo.save(saveEntity);
+      this.logger.log(
+        `address created successfully ${JSON.stringify(createdAddress)}`
+      );
+      return createdAddress;
+    }
+    else
+    {
+      Address.city=body.city;
+      Address.lat=body.lat;
+      Address.long=body.long;
+      Address.country=body.country;
+      Address.street=body.street;
+      Address.state=body.state;
+      Address.name=body.name;
+      Address.pincode=body.pincode;
+      Address.save();
+      this.logger.log(
+        `address created successfully ${JSON.stringify(Address)}`
+      );
+      return Address;
+    }
   }
 
   async fetchAllAddress(apiUser: UserMetaData) {

@@ -14,7 +14,6 @@ interface RightSideBarProps {
 function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
   const dispatch = useDispatch();
   const { logoutUser } = useAuth();
-  const [DATA, setDATA] = useState<any[]>([]);
   const { data } = useSelector(CartItemsSelector);
   const navigate = useNavigate();
   const { user } = useContext(UserContext) as UserContextType;
@@ -91,14 +90,14 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">{cart_item?.name}</p>
-            <p className="text-xs text-gray-500 mt-1">
+            {/* <p className="text-xs text-gray-500 mt-1">
               {cart_item?.count} <span className="text-green-600">×</span> ${Number(cart_item?.price).toFixed(2)}
-            </p>
+            </p> */}
           </div>
         </div>
-        <p className="text-sm font-semibold text-green-600 pl-4">
+        {/* <p className="text-sm font-semibold text-green-600 pl-4">
           ${(Number(cart_item?.price) * Number(cart_item?.count)).toFixed(2)}
-        </p>
+        </p> */}
       </div>
     );
 
@@ -106,10 +105,10 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
       <div className="p-4 flex-1 overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Your Order</h2>
-          <button className="flex items-center text-sm text-green-600 hover:text-green-700 transition-colors duration-200">
+          {/* <button className="flex items-center text-sm text-green-600 hover:text-green-700 transition-colors duration-200">
             View All
             <ChevronRightIcon className="h-4 w-4 ml-1" />
-          </button>
+          </button> */}
         </div>
         <div className="space-y-3">
 

@@ -16,7 +16,7 @@ import { OrderEntity } from "../entity/order.entity";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import {
   CreatePaymentBodyDto,
-  Status,
+  PaymentStatus,
   UpdateByIdDto,
   UpdateByIdQueryDto,
 } from "../dto/order.dto";
@@ -44,18 +44,21 @@ export class OrderService implements OnModuleInit {
     const items = payload.menu_items;
     let totalAmount = 0;
     items.forEach((i) => {
-      totalAmount = totalAmount + i.count * i.price;
+      // totalAmount = totalAmount + i.count * i.price;
     });
     return this.orderRepo.save({
       user_id: user.userId,
-      amount: totalAmount,
       address: payload.address,
       business: payload.business,
-      address_id: payload.address_id,
-      business_id: payload.business_id,
+      amount:payload.amount,
+      driver:null,
+      // address_id: payload.address_id,
+      // business_id: payload.business_id,
       menu_items: payload.menu_items,
       order_status: "initiated",
       payment_status: "in_progress",
+      driver_id:payload.driver_id,
+      request_for_driver:payload.request_for_driver
     });
   }
 
@@ -87,10 +90,10 @@ export class OrderService implements OnModuleInit {
     // update payment status to success or feailed for order Id
     order.payment_status = query.status;
     order.order_status =
-      query.status === Status.success ? "payment_processed" : "payment_failed";
+      query.status === PaymentStatus.success ? "payment_processed" : "payment_failed";
     const savedOrder = await order.save();
 
-    if (Status.success === query.status) {
+    if (PaymentStatus.success === query.status) {
       this.client.emit<any>("order_processed_success", {
         order_id: savedOrder.id,
         order: savedOrder,

@@ -19,6 +19,13 @@ export const fetchOrderItems = createAsyncThunk(
   }
 );
 
+export const PlaceOrder = createAsyncThunk(
+  "fetch/creatOrder",
+  async (payload:any) => {
+    return ExternalApis.createOrder(payload);
+  }
+);
+
 const initialState = {
   order: {
     status: "idle",

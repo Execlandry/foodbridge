@@ -69,10 +69,13 @@ export class ExternalApis {
     return response.data;
   }
 
-  static async createOrder(data: any) {
+  static async createOrder(data: any) 
+  {
     const response = await axios.post("/api/v1/order-service/order", data);
+    console.log(response.data);
     return response.data;
   }
+
   static async fetchLatestOrder() {
     const response = await axios.get("/api/v1/order-service/order");
     return response.data;

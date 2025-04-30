@@ -59,7 +59,7 @@ export class CartService {
       // }
       // existingCart.menu_items = existingItems;
       existingItems.push(payload.menu_item);
-       await existingCart.save();
+      await existingCart.save();
     } else {
       // payload.menu_item.count = 1;
       existingItems.push(payload.menu_item);
@@ -93,7 +93,10 @@ export class CartService {
     if (!existingCart) {
       throw new NotFoundException();
     } else {
-      // const updatedMenuItems = existingCart.menu_items
+      existingCart.menu_items = existingCart.menu_items.filter(
+        (item) => item.id !== menu_item.id
+      );
+         // const updatedMenuItems = existingCart.menu_items
       //   .map((i) => {
       //     if (i.id === menu_item.id) {
       //       i.count = i.count - 1;
@@ -103,9 +106,16 @@ export class CartService {
       //   })
       //   .filter((i) => i.count > 0);
       // existingCart.menu_items = updatedMenuItems;
-      return await existingCart.save();
+      await existingCart.save();
     }
+    const Newcart = await this.cartRepo.find({
+      where: {
+        user_id: userId,
+      },
+    });
+    return Newcart;
   }
+
   async clearCartMenuItem(user: UserMetaData) {
     const { userId } = user;
     const item = await this.cartRepo.findOne({

@@ -17,6 +17,7 @@ import Rating from "./rating";
 import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
 import { UserContext, UserContextType } from '../../hooks/user-context';
+import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
 import useAuth from "../../hooks/use-auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -32,9 +33,10 @@ interface Dish {
   id: string | number;
   dish_id?: string | number;
   name: string;
-  food_image?: string;
   thumbnails?: string;
-  price: number;
+  description:string;
+  status:string;
+  food_type:string;
   business: Business;
   business_id?: string | number;
 }
@@ -50,10 +52,12 @@ function Home() {
   const dispatch = useDispatch();
   const { data } = useSelector(listDishesForLandingPage);
   const { data: businessesData } = useSelector(topBusinesses);
+  const { data: cartData } = useSelector(CartItemsSelector);
   const { user } = useContext(UserContext) as UserContextType;
   const { logoutUser } = useAuth();
   const navigate=useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [cartItems,setcartItems]= useState<string[]>([]);
 
   useEffect(() => {
     // if(user && user.permissions=="business-admin")
@@ -63,6 +67,7 @@ function Home() {
     // }
     dispatch(fetchDishesForLandingPage());
     dispatch(fetchBusinesses());
+    dispatch(fetchCartItems());
     // console.log(data);
   }, [dispatch]);
 
@@ -79,13 +84,30 @@ function Home() {
     return grouped;
   };
 
+  useEffect(() => {
+    const cartDishIds: string[] = [];
+    if (cartData && Array.isArray(cartData)) {
+      for (const cart of cartData) {
+        if (cart.menu_items && Array.isArray(cart.menu_items)) {
+          for (const item of cart.menu_items) {
+            cartDishIds.push(item.id);
+          }
+        }
+      }
+    setcartItems(cartDishIds);
+    console.log(cartDishIds);
+  }
+}, [cartData]);
+
+
+
   const groupedDishes = groupDishesByBusiness();
   const filteredBusinesses = businessesData?.filter((business: Business) =>
     business.name.toUpperCase().includes(searchTerm.toUpperCase())
   );
 
   const addToCart = (dish: Dish) => {
-    console.log(dish);
+    // console.log(dish);
     dispatch(
       addCartItems({
         business_id: dish.business_id,
@@ -96,7 +118,7 @@ function Home() {
           status: dish.status,
           food_type:dish.food_type,
           thumbnails:dish.thumbnails,
-         id: dish.id 
+          id: dish.id 
         }
       })
     );
@@ -107,16 +129,21 @@ function Home() {
       removeCartItems({
         business: dish.business,
         business_id: dish.business_id,
-        menu_item: { ...dish, id: dish.dish_id || dish.id },
+        menu_item: {   name: dish.name,
+          description: dish.description,
+          status: dish.status,
+          food_type:dish.food_type,
+          thumbnails:dish.thumbnails,
+         id: dish.id  },
       })
     );
   };
 
-  const addAllDishesToCart = (businessId: string | number) => {
-    if (!user || user.permissions === "business-admin") return;
-    const businessDishes = groupedDishes[businessId]?.dishes || [];
-    businessDishes.forEach((dish) => addToCart(dish));
-  };
+  // const addAllDishesToCart = (businessId: string | number) => {
+  //   if (!user || user.permissions === "business-admin") return;
+  //   const businessDishes = groupedDishes[businessId]?.dishes || [];
+  //   businessDishes.forEach((dish) => addToCart(dish));
+  // };
 
   // Top Section UI
   function TopSection() {
@@ -158,6 +185,7 @@ function Home() {
   function BusinessesAndDishes() {
     const BusinessCard = ({ business }: { business: Business }) => {
       const businessDishes = groupedDishes[business.id]?.dishes||[];
+      // const CartDishes=businessDishes.filter((dish: Dish) => !cartItems.includes(dish.dish_id?.toString() || ''));
       // groupedDishes[business.id]?.dishes || [];
 
       return (
@@ -178,27 +206,27 @@ function Home() {
               </span>
             </div>
             {/* {businessDishes.length > 0 && ( */}
-              <button
+              {/* <button
                 onClick={() => addAllDishesToCart(business.id)}
                 className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 disabled={!user || user.permissions === "business-admin"}
               >
                 <ShoppingCartIcon className="h-4 w-4" />
                 <span>Add All</span>
-              </button>
+              </button> */}
             
           </div>
 
           {/* Dishes */}
           {/* {businessDishes.length > 0 ? ( */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {businessDishes.map((dish: Dish) => (
+              { businessDishes.map((dish: Dish) => (
                 <div
                   key={dish.dish_id || dish.id}
-                  className="bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200"
+                  className={`bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200 ${cartItems.includes(dish.dish_id?.toString() || '') ? 'bg-green-200' : ''}`}
                 >
                   <img
-                    src={dish?.food_image || dish?.thumbnails || "https://via.placeholder.com/100"}
+                    src={dish?.thumbnails || "https://via.placeholder.com/100"}
                     alt={dish?.name}
                     className="w-16 h-16 object-cover rounded-md shadow-sm group-hover:scale-105 transition-transform duration-200"
                     loading="lazy"
@@ -211,12 +239,15 @@ function Home() {
                         <button
                           onClick={() => removeFromCart(dish)}
                           className="w-7 h-7 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                          disabled={!cartItems.includes(dish.dish_id?.toString() || '')}
                         >
                           <MinusCircleIcon className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => addToCart(dish)}
-                          className="w-7 h-7 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                          className={`w-7 h-7 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-200 focus:ring-2 focus:ring-green-500/20 
+                            ${cartItems.includes(dish.dish_id?.toString() || '') ? 'bg-green-800' : 'bg-green-500'}`}
+                          disabled={cartItems.includes(dish.dish_id?.toString() || '')}
                         >
                           <PlusIcon className="h-4 w-4" />
                         </button>

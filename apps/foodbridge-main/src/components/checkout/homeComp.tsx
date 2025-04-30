@@ -1,24 +1,66 @@
 /*eslint no-constant-condition: 0*/
 
-import { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import delivery_bike_icon from '../../assets/banner/2.png';
-import banner_image_spags from '../../assets/banner/1.jpeg';
-import { loadStripe } from '@stripe/stripe-js';
-import { SearchIcon } from '@heroicons/react/outline';
-import { UserContext, UserContextType } from '../../hooks/user-context';
+import { useContext, useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import delivery_bike_icon from "../../assets/banner/2.png";
+import banner_image_spags from "../../assets/banner/1.jpeg";
+import { loadStripe } from "@stripe/stripe-js";
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import { SearchIcon } from "@heroicons/react/outline";
+// import L from "leaflet";
+// import 'leaflet/dist/leaflet.css';
+// import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+// import 'leaflet-routing-machine';
+import { UserContext, UserContextType } from "../../hooks/user-context";
+import MapComponent from "./RouteDisplay";
 import {
   UserAddressSelector,
   createAddress,
   fetchAddress,
   selectAddress,
   selectedUserAddressSelector,
-} from '../../redux/user/user.slice';
-import { CartItemsSelector, fetchCartItems } from '../../redux/cart/cart.slice';
-import { Elements } from '@stripe/react-stripe-js';
-import CheckoutCredit from './checkout-credit';
+} from "../../redux/user/user.slice";
+import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
+import { PlaceOrder,fetchOrderItems } from '../../redux/order/order.slice';
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutCredit from "./checkout-credit";
+import { Divider } from "@chakra-ui/react";
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUB_KEY || '');
+interface MenuItems {
+  description: string;
+  food_type: string;
+  id: string;
+  name: string;
+  status: string;
+  thumbnails: string;
+}
+
+interface business {
+  average_price: string;
+  average_rating: string;
+  banner: string;
+  closes_at: string;
+  contact_no: string;
+  created_at: string;
+  cuisine: string;
+  deleted_at: string;
+  description: string;
+  id: string;
+  is_available: boolean;
+  latitude: string;
+  longitude: string;
+  name: string;
+  owner_id: string;
+}
+interface cart {
+  business: business;
+  business_id: string;
+  id: string;
+  user_id: string;
+  menu_items: MenuItems[];
+}
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUB_KEY || "");
 
 export function TopSection() {
   return (
@@ -39,23 +81,39 @@ export function TopSection() {
 
       <div className="bg-gray-100 rounded-2xl mt-5 mr-10 shadow-xl">
         <div className="flex flex-row justify-between mt-3">
-          <img src={delivery_bike_icon} alt="Delivery Bike" className="w-48 h-44 rounded-l-2xl" />
+          <img
+            src={delivery_bike_icon}
+            alt="Delivery Bike"
+            className="w-48 h-44 rounded-l-2xl"
+          />
           <div className="flex flex-col items-center justify-center">
-            <p className="text-md font-bold">Hello Jeremy</p>
+            <p className="text-md font-bold">Hello User</p>
             <p className="text-center mt-2">
-              <span className="text-gray-500">Get free delivery every</span>
-              <span className="text-orange-400 font-bold"> $20</span>
-              <span className="text-gray-500"> purchase</span>
+              <span className="text-gray-500">purchase Suplus food items </span>
+              <span className="text-orange-400 font-bold pl-1">
+                {" "}
+                available for donations{" "}
+              </span>
+              <span className="text-gray-500"> with delivery service</span>
             </p>
             <button className="text-white h-10 mt-3 bg-gradient-to-r from-orange-500 to-orange-500 rounded-3xl px-10">
               Learn More
             </button>
           </div>
-          <img src={banner_image_spags} alt="Spaghetti" className="w-36 h-44 rounded-r-2xl" />
+          <img
+            src={banner_image_spags}
+            alt="Spaghetti"
+            className="w-36 h-44 rounded-r-2xl"
+          />
         </div>
       </div>
     </div>
   );
+}
+
+interface MapComponentProps {
+  orderCoordinates: { lat: number; lng: number };
+  geocodedCoords: { lat: number; lng: number } | null;
 }
 
 function Checkout() {
@@ -65,75 +123,184 @@ function Checkout() {
   const { data: addresses } = useSelector(UserAddressSelector);
   const selectedAddress = useSelector(selectedUserAddressSelector);
   const { data: menuItem } = useSelector(CartItemsSelector);
+  const [srclat, setsrclat] = useState<any>([]);
+  const [srclong, setsrclong] = useState<any>([]);
+  const [selectedOrder, setSelectedOrder] = useState<cart | null>(null);
 
   const [formData, setFormData] = useState({
-    city: 'delhi',
-    state: 'delhi',
-    lat: '12',
-    long: '11',
-    country: 'INDIA',
-    pincode: '6789876',
-    street: 'street',
-    name: '45/11 Vira Path Gurgaon',
+    city: "delhi",
+    state: "delhi",
+    lat: "12",
+    long: "11",
+    country: "INDIA",
+    pincode: "6789876",
+    street: "street",
+    name: "45/11 Vira Path Gurgaon",
   });
+
+  const [requestfordriver, setrequestfordriver] = useState<boolean[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  const OrderPlace = () => {
+    menuItem.forEach(function(value:any,index:any)
+    {
+      console.log(value,"\n",index);
+      console.log(addresses[0]);
+      console.log(requestfordriver[index]);
+      dispatch(PlaceOrder({
+        business:value.business,
+        driver_id:"",
+        driver:{},
+        address:addresses[0],
+        request_for_driver:requestfordriver[index],
+        amount:"10",
+        menu_items:value.menu_items
+      }))
+    });
+  };
+  const HandleDriverUpdate =
+    (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const updatedArray = [...requestfordriver];
+      updatedArray[index] = e.target.checked;
+      setrequestfordriver(updatedArray);
+      console.log("address  ", addresses);
+      console.log("menuitem : ", menuItem);
+      setsrclat(addresses[0].lat);
+      setsrclong(addresses[0].long);
+    };
+
+  async function Coordinates(addressObj: any) {
+    const { name, street, city, state, country, pincode } = addressObj;
+
+    // Merge address into a single encoded string
+    const address = `${name},+${street},+${city},+${state},+${country},${pincode}`;
+
+    // Construct the API URL
+    const apiKey = "pk.00118eabe58a823ba3c1eddccba9eda9";
+    const url = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${address}&format=json`;
+
+    // Set a timeout of 5 seconds using AbortController
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        signal: controller.signal,
+        headers: {
+          "User-Agent": "foodbridge-main",
+        },
+      });
+
+      clearTimeout(timeout);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data || data.length === 0) {
+        throw new Error("No coordinates found for the given address");
+      }
+
+      return {
+        lat: data[0].lat,
+        long: data[0].lon,
+      };
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.error("Fetch timed out.");
+      } else {
+        console.error("Error fetching coordinates:", error.message);
+      }
+      return null;
+    }
+  }
+
   const selectUserAddress = (address: any) => {
     dispatch(selectAddress(address));
+    console.log(menuItem);
+    console.log(selectedAddress);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(createAddress(formData));
+    const value = await Coordinates(formData);
+    console.log(value);
+
+    let updatedFormData = formData;
+
+    if (value) {
+      updatedFormData = {
+        ...formData,
+        lat: value.lat,
+        long: value.long,
+      };
+      setFormData(updatedFormData);
+    }
+
+    console.log(updatedFormData);
+    dispatch(createAddress(updatedFormData));
+    dispatch(fetchAddress());
     setShowModal(false);
+  };
+
+  const addNFalseValues = (n: number) => {
+    const newValues = new Array(n).fill(false);
+    setrequestfordriver((prev) => [...prev, ...newValues]);
   };
 
   useEffect(() => {
     if (user) {
       dispatch(fetchAddress());
       dispatch(fetchCartItems());
+      addNFalseValues(menuItem.length);
+      console.log(addresses);
     }
   }, [user, dispatch]);
 
   return (
     <>
-  <TopSection />
-  <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-    <div className="max-w-7xl mx-auto">
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Main Content */}
-        <div className="w-full lg:w-3/4 space-y-8">
-          {/* Account Section */}
-          <div className="bg-white rounded-xl shadow-sm p-6 w-full">
-            {user ? (
-              <div className="space-y-4">
-                <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-                <div className="flex items-center gap-4 text-lg">
-                  <span className="text-gray-700 font-medium">{user.email}</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    className="w-6 h-6 text-green-500"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+      <TopSection />
+      <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Main Content */}
+            <div className="w-full space-y-8">
+              {/* Account Section */}
+              <div className="bg-white rounded-xl shadow-sm p-6 w-full">
+                {/* {user ? ( */}
+                <div className="space-y-4">
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    Welcome Back
+                  </h1>
+                  <div className="flex items-center gap-4 text-lg">
+                    <span className="text-gray-700 font-medium">User</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-6 h-6 text-green-500"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            ) : (
+                {/* ) : (
               <div className="space-y-6">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">Account</h1>
@@ -152,29 +319,93 @@ function Checkout() {
                   </button>
                 </div>
               </div>
-            )}
-          </div>
+            )} */}
+              </div>
 
-          {/* Delivery Address Section */}
-          <div className="bg-white rounded-xl shadow-sm p-6 w-full">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Delivery Address</h1>
-            {user && (
-              <div className="space-y-6">
-                <p className="text-gray-600 font-medium">
-                  Your saved addresses
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Existing Addresses */}
-                  <div className="space-y-4">
-                    {addresses?.map((address:any) => (
-                      <div
-                        key={address.id}
-                        className={`p-4 rounded-lg border-2 ${
-                          selectedAddress?.id === address.id
-                            ? 'border-green-500 bg-green-50'
-                            : 'border-gray-200 hover:border-gray-300'
-                        } transition-colors`}
-                      >
+              {/* Delivery Address Section */}
+              <div className="bg-white rounded-xl shadow-sm p-6 w-full">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                  Delivery Address
+                </h1>
+                {user && (
+                  <div className="space-y-6">
+                    <p className="text-gray-600 font-medium">
+                      Your saved addresses
+                    </p>
+                    <div>
+                      {/* Existing Addresses */}
+                      <div className="space-y-4 w-full">
+                        {addresses?.map((address: any) => (
+                          <div
+                            key={address.id}
+                            className={`p-4 rounded-lg border-2 ${
+                              selectedAddress?.id === address.id
+                                ? "border-green-500 bg-green-50"
+                                : "border-gray-200 hover:border-gray-300"
+                            } transition-colors`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="w-6 h-6 text-gray-500 mt-1"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                                />
+                              </svg>
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold text-gray-900">
+                                  {address.name}
+                                </h3>
+                                <p className="text-gray-600 text-sm mt-1">
+                                  {address.street}, {address.city},{" "}
+                                  {address.state} {address.pincode},{" "}
+                                  {address.country}
+                                </p>
+                                <button
+                                  // onClick={() => selectUserAddress(address)}
+                                  onClick={() => setShowModal(true)}
+                                  className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                                >
+                                  Change Address
+                                </button>
+                              </div>
+                            </div>
+                            {address.lat && address.long && (
+                              <div className="mt-4 w-full h-64">
+                                <iframe
+                                  title="Address Location"
+                                  width="100%"
+                                  height="100%"
+                                  frameBorder="0"
+                                  scrolling="no"
+                                  marginHeight={0}
+                                  marginWidth={0}
+                                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${
+                                    parseFloat(address.long) - 0.01
+                                  }%2C${parseFloat(address.lat) - 0.01}%2C${
+                                    parseFloat(address.long) + 0.01
+                                  }%2C${
+                                    parseFloat(address.lat) + 0.01
+                                  }&layer=mapnik&marker=${parseFloat(
+                                    address.lat
+                                  )}%2C${parseFloat(address.long)}`}
+                                  className="rounded-lg border"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Add New Address */}
+                      {/* <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg">
                         <div className="flex items-start gap-3">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -187,65 +418,37 @@ function Checkout() {
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                              d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                             />
                           </svg>
                           <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-gray-900">{address.name}</h3>
+                            <h3 className="text-lg font-semibold text-gray-900">
+                              Add New Address
+                            </h3>
                             <p className="text-gray-600 text-sm mt-1">
-                              {address.street}, {address.city}, {address.state} {address.pincode}, {address.country}
+                              Add a new delivery location
                             </p>
                             <button
-                              onClick={() => selectUserAddress(address)}
+                              onClick={() => setShowModal(true)}
                               className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                             >
-                              Deliver Here
+                              Add New
                             </button>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Add New Address */}
-                  <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg">
-                    <div className="flex items-start gap-3">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6 text-gray-500 mt-1"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                        />
-                      </svg>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900">Add New Address</h3>
-                        <p className="text-gray-600 text-sm mt-1">
-                          Add a new delivery location
-                        </p>
-                        <button
-                          onClick={() => setShowModal(true)}
-                          className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-                        >
-                          Add New
-                        </button>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
-                </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Payment Method Section */}
-          <div className="bg-white rounded-xl shadow-sm p-6 w-full">
+              {/* Payment Method Section */}
+              {/* <div className="bg-white rounded-xl shadow-sm p-6 w-full">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Payment Method</h1>
             {user && (
               <div className="flex flex-col md:flex-row gap-6">
@@ -282,57 +485,181 @@ function Checkout() {
                 </div>
               </div>
             )}
+          </div> */}
+              <div className="flex flex-col ">
+                <div className="flex flex-row gap-4 justify-around">
+                  {Array.isArray(menuItem) &&
+                    menuItem.map(
+                      (cart: cart, index: number) =>
+                        // Only render if menu_items exist and are not empty
+                        Array.isArray(cart.menu_items) &&
+                        cart.menu_items.length > 0 && (
+                          <div
+                            key={index}
+                            style={{
+                              padding: "20px",
+                              border: "1px solid #ccc",
+                              borderRadius: "12px",
+                              background: "#f9f9f9",
+                              margin: "20px auto",
+                            }}
+                          >
+                            <h2>{cart.business.name}</h2>
+
+                            {cart.business.banner && (
+                              <img
+                                src={cart.business.banner}
+                                alt="Business Banner"
+                                style={{
+                                  width: "100%",
+                                  borderRadius: "10px",
+                                  marginBottom: "15px",
+                                }}
+                              />
+                            )}
+
+                            <p>
+                              <strong>Description:</strong>{" "}
+                              {cart.business.description}
+                            </p>
+                            <p>
+                              <strong>Average Price:</strong> ₹
+                              {cart.business.average_price}
+                            </p>
+                            <p>
+                              <strong>Contact Number:</strong>{" "}
+                              {cart.business.contact_no}
+                            </p>
+                            <p>
+                              <strong>Available:</strong>{" "}
+                              {cart.business.is_available ? "Yes" : "No"}
+                            </p>
+                            <p>
+                              <strong>Location:</strong> Latitude{" "}
+                              {cart.business.latitude}, Longitude{" "}
+                              {cart.business.longitude}
+                            </p>
+                            <h3 style={{ marginTop: "25px" }}>Menu Items</h3>
+
+                            {cart.menu_items.map(
+                              (dish: MenuItems, dishIndex: number) => (
+                                <div
+                                  key={dishIndex}
+                                  style={{
+                                    border: "1px dashed #aaa",
+                                    padding: "15px",
+                                    borderRadius: "10px",
+                                    marginBottom: "15px",
+                                    background: "#fff",
+                                  }}
+                                >
+                                  <h4 style={{ marginBottom: "8px" }}>
+                                    {dish.name}
+                                  </h4>
+                                  {dish.thumbnails && (
+                                    <img
+                                      src={dish.thumbnails}
+                                      alt={dish.name}
+                                      style={{
+                                        width: "100%",
+                                        borderRadius: "8px",
+                                        marginBottom: "10px",
+                                      }}
+                                    />
+                                  )}
+                                  <p>
+                                    <strong>Food Type:</strong> {dish.food_type}
+                                  </p>
+                                  <p>
+                                    <strong>Status:</strong> {dish.status}
+                                  </p>
+                                  <p>
+                                    <strong>Description:</strong>{" "}
+                                    {dish.description}
+                                  </p>
+                                </div>
+                              )
+                            )}
+                            <div className="flex flex-row items-center gap-2">
+                              <label htmlFor=""> Request For Driver : </label>
+                              <input
+                                type="checkbox"
+                                onChange={HandleDriverUpdate(index)}
+                                onClick={() => setSelectedOrder(cart)}
+                              />
+                            </div>
+                          </div>
+                        )
+                    )}
+                </div>
+
+                <button onClick={() => OrderPlace()}>confirm Order</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  {/* Modal */}
-  {showModal && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-5 border-b border-gray-200">
-          <h3 className="text-xl font-bold text-gray-900">Add New Address</h3>
-          <button
-            onClick={() => setShowModal(false)}
-            className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
-          >
-            ×
-          </button>
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
+            <div className="flex items-center justify-between p-5 border-b border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900">
+                Change Address
+              </h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              {["name", "street", "city", "state", "pincode"].map((field) => (
+                <input
+                  key={field}
+                  onChange={handleChange}
+                  type="text"
+                  name={field}
+                  id={field}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-900 text-sm"
+                  placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                  required
+                />
+              ))}
+              <button
+                type="submit"
+                className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Change Address
+              </button>
+            </form>
+            <div className="p-5 border-t border-gray-200 text-right">
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-red-500 hover:text-red-600 font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {['name', 'street', 'city', 'state', 'pincode'].map((field) => (
-            <input
-              key={field}
-              onChange={handleChange}
-              type="text"
-              name={field}
-              id={field}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-900 text-sm"
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              required
-            />
-          ))}
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
-          >
-            Add Address
-          </button>
-        </form>
-        <div className="p-5 border-t border-gray-200 text-right">
-          <button
-            onClick={() => setShowModal(false)}
-            className="text-red-500 hover:text-red-600 font-medium"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  )}
-</>
+      )}
+      {selectedOrder && (
+        <MapComponent
+          orderCoordinates={{
+            lat: parseFloat(selectedOrder.business.latitude),
+            lng: parseFloat(selectedOrder.business.longitude),
+          }}
+          geocodedCoords={{
+            lat: parseFloat(srclat),
+            lng: parseFloat(srclong),
+          }}
+          onClose={() => setSelectedOrder(null)}
+        />
+      )}
+    </>
   );
 }
 

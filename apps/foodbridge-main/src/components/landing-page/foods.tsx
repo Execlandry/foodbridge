@@ -131,7 +131,7 @@ function Businesses() {
                   </div>
 
                   {/* Add All to Cart Button */}
-                  {businessDishes.length > 0 && (
+                  {/* {businessDishes.length > 0 && (
                     <button
                       onClick={() => addAllDishesToCart(business.id)}
                       className={`w-full flex items-center justify-center space-x-2 px-5 py-3 text-lg font-semibold rounded-lg transition-all duration-200 focus:outline-none bg-green-600 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-400"}`}
@@ -142,7 +142,7 @@ function Businesses() {
                         Add All Dishes to Cart
                       </span>
                     </button>
-                  )}
+                  )} */}
 
                   {/* Dishes Under Business */}
                   {businessDishes.length > 0 ? (

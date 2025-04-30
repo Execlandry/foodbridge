@@ -17,10 +17,13 @@ export const fetchDishesForLandingPage = createAsyncThunk(
     // console.log(data);
 
     const foodData = data.data.map((item: any) => {
-      return {
-        id: item.id,
+      if(item.status==="available")
+      {
+        return {
+          id: item.id,
         dish_id: item.id,
         name: item.name,
+        quantitity:item.quantity,
         description: item.description,
         thumbnails: item.thumbnails,
         // food_image: item.thumbnails,
@@ -33,6 +36,7 @@ export const fetchDishesForLandingPage = createAsyncThunk(
         business: item.business,
         status: item.status,
       };
+    }
     });
     // console.log(foodData)
     // duplicates removal

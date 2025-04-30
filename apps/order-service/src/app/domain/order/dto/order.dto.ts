@@ -3,11 +3,13 @@ import { Transform, Type as ValidateType } from "class-transformer";
 import {
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsDateString,
   IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
+  isObject,
   IsObject,
   IsOptional,
   IsString,
@@ -48,32 +50,32 @@ export class MenuItemBodyDto {
   @IsString()
   public description!: string;
 
-  @ApiProperty({
-    description: "cuisine_type",
-    required: true,
-    enum: cuisineType,
-    example: cuisineType.indian,
-  })
-  @IsEnum(cuisineType)
-  public cuisine_type!: string;
+  // @ApiProperty({
+  //   description: "cuisine_type",
+  //   required: true,
+  //   enum: cuisineType,
+  //   example: cuisineType.indian,
+  // })
+  // @IsEnum(cuisineType)
+  // public cuisine_type!: string;
 
-  @ApiProperty({
-    description: "meal_type",
-    required: true,
-    enum: mealType,
-    example: mealType.breakfast,
-  })
-  @IsEnum(mealType)
-  public meal_type!: string;
+  // @ApiProperty({
+  //   description: "meal_type",
+  //   required: true,
+  //   enum: mealType,
+  //   example: mealType.breakfast,
+  // })
+  // @IsEnum(mealType)
+  // public meal_type!: string;
 
-  @ApiProperty({
-    description: "category",
-    example: "category",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public category!: string;
+  // @ApiProperty({
+  //   description: "category",
+  //   example: "category",
+  //   required: true,
+  // })
+  // @IsOptional()
+  // @IsString()
+  // public category!: string;
 
   @ApiProperty({
     description: "ingredients",
@@ -94,21 +96,21 @@ export class MenuItemBodyDto {
   public food_type!: string;
 
   @ApiProperty({
-    description: "price",
-    example: 500,
+    description: "quantity",
+    example: 3,
     required: true,
   })
   @IsNumber()
-  public price!: number;
+  public quantity!: number;
 
-  @ApiProperty({
-    description: "number of items",
-    example: 2,
-    required: true,
-  })
-  @IsOptional()
-  @IsNumber()
-  public count!: number;
+  // @ApiProperty({
+  //   description: "number of items",
+  //   example: 2,
+  //   required: true,
+  // })
+  // @IsOptional()
+  // @IsNumber()
+  // public count!: number;
 
   @ApiProperty({
     description: "thumbnails",
@@ -121,37 +123,100 @@ export class MenuItemBodyDto {
 }
 
 export class CreatePaymentBodyDto {
-  @ApiProperty({
-    description: "business_id",
-    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
-    required: true,
-  })
-  @IsUUID()
-  public business_id!: string;
+  // @ApiProperty({
+  //   description: "business_id",
+  //   example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+  //   required: true,
+  // })
+  // @IsUUID()
+  // public business_id!: string;
 
   @ApiProperty({
     description: "business",
-    example: {},
+    example: {
+    id: "dee90081-616b-4744-b2fd-7ee11f38070a",
+    name: "Kanha Veg Business",
+    description: "Veg Business in North Goa",
+    owner_id: "c8584afc-f395-4892-97df-d12487e39771",
+    website_url: null,
+    social_links: null,
+    cuisine: null,
+    average_price: 1200,
+    average_rating: null,
+    latitude: "11",
+    is_available: true,
+    longitude: "11",
+    contact_no: "8998978987",
+    banner: "https://gogole.com/banner.png",
+    delivery_options: "all",
+    pickup_options: "all",
+    },
     required: true,
   })
   @IsObject()
   public business!: any;
 
   @ApiProperty({
+    description: "driver_id",
+    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+    required: false,
+  })
+  @IsUUID()
+  public driver_id!: string;
+
+  @ApiProperty({
+    description:"driver",
+    example:
+    {
+      mobno:"1234567891",
+      availability:false,
+      location:"porvorim",
+      ratings:4,
+    },
+    required:false,
+  })
+  @IsObject()
+  public driver!:any;
+
+  @ApiProperty({
     description: "address obj",
-    example: {},
+    example: {  
+      id: "3bd5a21a-3410-48f6-84ff-138dc8dd30db",
+      name: "Aguada Road",
+      city: "Candolim",
+      lat: "15.501107",
+      long: "73.769915",
+      street: "Bamon Vaddo",
+      pincode: "403515",
+      country: "INDIA",
+      state: "Goa",},
     required: true,
   })
   @IsObject()
   public address!: any;
 
+  // @ApiProperty({
+  //   description: "address_id",
+  //   example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+  //   required: true,
+  // })
+  // @IsUUID()
+  // public address_id!: string;
+
   @ApiProperty({
-    description: "address_id",
-    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+    description: "Request for driver",
+    example: false,
+    required: false,
+  })
+  @IsBoolean()
+  public request_for_driver!: boolean;
+
+  @ApiProperty({
+    description: "amount",
+    example: "200",
     required: true,
   })
-  @IsUUID()
-  public address_id!: string;
+  public amount!: string;
 
   @ApiProperty({
     description: "menu_item object",
@@ -161,13 +226,13 @@ export class CreatePaymentBodyDto {
         name: "paneer tikka masala",
         description:
           "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
-        cuisine_type: "indian",
-        meal_type: "breakfast",
-        category: "category",
+        // cuisine_type: "indian",
+        // meal_type: "breakfast",
+        // category: "category",
         ingredients: "ingredients",
         food_type: "vegan",
-        count: 1,
-        price: 500,
+        // count: 1,
+        quantity: 3,
         thumbnails: "https://google.com/banner.png",
       },
     ],
@@ -189,19 +254,28 @@ export class UpdateByIdDto {
   public id!: string;
 }
 
-export enum Status {
+export enum PaymentStatus {
   "success" = "success",
   "failure" = "failure",
+}
+
+export enum OrderStatus
+{
+  "intitated"="initiated",
+  "accepted"="accepted",
+  "pickuped"="pickuped",
+  "delivered"="delivered",
+  "failed"="failed"
 }
 
 export class UpdateByIdQueryDto {
   @ApiProperty({
     description: "success/failure",
-    example: Status.success,
-    enum: Status,
+    example: PaymentStatus.success,
+    enum: PaymentStatus,
     required: true,
   })
-  @IsEnum(Status)
+  @IsEnum(PaymentStatus)
   @IsString()
   public status!: string;
 }

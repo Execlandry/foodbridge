@@ -17,28 +17,35 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "varchar", select: true })
   public user_id!: string;
 
-  @Column({ type: "uuid", select: true })
-  public business_id!: string;
+  @Column({ type: "varchar", select: true })
+  public driver_id!: string;
+
+  @Column({ type: "jsonb", select: true, default: null })
+  public driver!: any;
+
+  // @Column({ type: "uuid", select: true })
+  // public business_id!: string;
 
   @Column({ type: "jsonb", select: true })
   public business!: any;
 
-  @Column({ type: "uuid", select: true, default: null })
-  public address_id!: string;
+  // @Column({ type: "uuid", select: true, default: null })
+  // public address_id!: string;
 
   @Column({ type: "jsonb", select: true, default: null })
   public address!: any;
 
+  @Column({ type: "boolean", default: false })
+  public request_for_driver!: boolean;
+
   @Column({ type: "varchar", default: "draft" })
   public payment_status!: string;
-  // success and failure
 
   @Column({ type: "varchar", default: "draft" })
   public order_status!: string;
-  // initiated, payment_processed, in_delivery, delivered, completed
 
-  @Column({ type: "int", select: true })
-  public amount!: number;
+  @Column({ type: "varchar", default:0 })
+  public amount!: string;
 
   @Column({ type: "jsonb", default: null })
   public menu_items!: MenuItemBodyDto[];
