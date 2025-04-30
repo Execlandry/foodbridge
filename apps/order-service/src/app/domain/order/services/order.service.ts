@@ -41,17 +41,17 @@ export class OrderService implements OnModuleInit {
   }
 
   async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
-    const items = payload.menu_items;
-    let totalAmount = 0;
-    items.forEach((i) => {
-      // totalAmount = totalAmount + i.count * i.price;
-    });
+    // const items = payload.menu_items;
+    // let totalAmount = 0;
+    // items.forEach((i) => {
+    //   // totalAmount = totalAmount + i.count * i.price;
+    // });
     return this.orderRepo.save({
       user_id: user.userId,
       address: payload.address,
       business: payload.business,
       amount:payload.amount,
-      driver:null,
+      driver:payload.driver,
       // address_id: payload.address_id,
       // business_id: payload.business_id,
       menu_items: payload.menu_items,

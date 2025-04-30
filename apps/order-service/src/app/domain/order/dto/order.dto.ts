@@ -100,8 +100,8 @@ export class MenuItemBodyDto {
     example: 3,
     required: true,
   })
-  @IsNumber()
-  public quantity!: number;
+  @IsString()
+  public quantity!: string;
 
   // @ApiProperty({
   //   description: "number of items",
@@ -161,7 +161,6 @@ export class CreatePaymentBodyDto {
     example: "5272ec36-d9db-11ed-afa1-0242ac120002",
     required: false,
   })
-  @IsUUID()
   public driver_id!: string;
 
   @ApiProperty({

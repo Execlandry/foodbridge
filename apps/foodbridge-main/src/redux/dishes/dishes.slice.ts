@@ -20,12 +20,14 @@ export const fetchDishesForLandingPage = createAsyncThunk(
       if(item.status==="available")
       {
         return {
-          id: item.id,
+        id: item.id,
         dish_id: item.id,
         name: item.name,
         quantitity:item.quantity,
         description: item.description,
         thumbnails: item.thumbnails,
+        ingredients:item.ingredients,
+        quantity:item.quantity,
         // food_image: item.thumbnails,
         // cuisine_type: item.cuisine_type,
         food_type: item.food_type,

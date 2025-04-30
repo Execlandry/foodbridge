@@ -71,6 +71,7 @@ export class ExternalApis {
 
   static async createOrder(data: any) 
   {
+    console.log("order",data);
     const response = await axios.post("/api/v1/order-service/order", data);
     console.log(response.data);
     return response.data;

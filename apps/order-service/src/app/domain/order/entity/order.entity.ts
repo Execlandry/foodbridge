@@ -17,7 +17,7 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "varchar", select: true })
   public user_id!: string;
 
-  @Column({ type: "varchar", select: true })
+  @Column({ type: "varchar", select: true,default:null })
   public driver_id!: string;
 
   @Column({ type: "jsonb", select: true, default: null })
@@ -38,16 +38,16 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "boolean", default: false })
   public request_for_driver!: boolean;
 
-  @Column({ type: "varchar", default: "draft" })
+  @Column({ type: "varchar", default: "draft",select:true })
   public payment_status!: string;
 
-  @Column({ type: "varchar", default: "draft" })
+  @Column({ type: "varchar", default: "draft" ,select:true})
   public order_status!: string;
 
-  @Column({ type: "varchar", default:0 })
+  @Column({ type: "varchar",select:true, default:0 })
   public amount!: string;
 
-  @Column({ type: "jsonb", default: null })
+  @Column({ type: "jsonb",select:true, default: null })
   public menu_items!: MenuItemBodyDto[];
 
   @CreateDateColumn({

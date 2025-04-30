@@ -36,6 +36,8 @@ interface Dish {
   thumbnails?: string;
   description:string;
   status:string;
+  ingredients:string,
+  quantity:string,
   food_type:string;
   business: Business;
   business_id?: string | number;
@@ -117,6 +119,8 @@ function Home() {
           description: dish.description,
           status: dish.status,
           food_type:dish.food_type,
+          quantity:dish.quantity.toString(),
+          ingredients:dish.ingredients,
           thumbnails:dish.thumbnails,
           id: dish.id 
         }
@@ -234,7 +238,7 @@ function Home() {
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-medium text-gray-900 truncate">{dish?.name}</h4>
                     <div className="flex items-center justify-between mt-1">
-                      {/* <span className="text-green-600 font-medium text-sm">${dish?.price.toFixed(2)}</span> */}
+                      <span className="text-green-600 font-medium text-sm"> {dish?.quantity} Kg</span>
                       <div className="flex space-x-1">
                         <button
                           onClick={() => removeFromCart(dish)}

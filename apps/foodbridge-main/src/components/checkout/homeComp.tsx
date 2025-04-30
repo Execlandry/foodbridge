@@ -163,8 +163,17 @@ function Checkout() {
         amount:"10",
         menu_items:value.menu_items
       }))
+      updatestatus(value.menu_items)
     });
   };
+
+  const updatestatus=(menuitem:any)=>
+  {
+    for(const item of menuitem)
+    {
+      
+    }
+  }
   const HandleDriverUpdate =
     (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const updatedArray = [...requestfordriver];
@@ -262,10 +271,17 @@ function Checkout() {
     if (user) {
       dispatch(fetchAddress());
       dispatch(fetchCartItems());
-      addNFalseValues(menuItem.length);
-      console.log(addresses);
     }
   }, [user, dispatch]);
+
+  useEffect(() => {
+      addNFalseValues(menuItem.length);
+      const address = addresses?.[0];
+      if (address) {
+        setsrclat(address.lat);
+        setsrclong(address.long);
+      }  
+  }, [menuItem,addresses]);
 
   return (
     <>

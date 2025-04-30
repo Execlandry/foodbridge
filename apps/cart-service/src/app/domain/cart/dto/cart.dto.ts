@@ -25,6 +25,7 @@ enum status{
   "failed"="failed",
   "completed"="completed",
 }
+
 export class MenuItemBodyDto {
   @ApiProperty({
     description: "id",
@@ -72,14 +73,23 @@ export class MenuItemBodyDto {
   // @IsEnum(mealType)
   // public meal_type!: string;
 
-  // @ApiProperty({
-  //   description: "category",
-  //   example: "category",
-  //   required: true,
-  // })
-  // @IsOptional()
-  // @IsString()
-  // public category!: string;
+  @ApiProperty({
+    description: "Ingredients",
+    example: "Ingredient",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public ingredients!: string;
+
+  @ApiProperty({
+    description: "quantity",
+    example: "quantity",
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  public quantity!: string;
 
   // @ApiProperty({
   //   description: "ingredients",
@@ -167,6 +177,8 @@ export class CreateCartMenuItemBodyDto {
       // ingredients: "ingredients",
       food_type: "vegan",
       status:"available",
+      ingredients:"ingredient",
+      quantity:"10",
       // count: 1,
       // price: 500,
       thumbnails: "https://google.com/banner.png",
