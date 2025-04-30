@@ -134,22 +134,22 @@ export class CreatePaymentBodyDto {
   @ApiProperty({
     description: "business",
     example: {
-    id: "dee90081-616b-4744-b2fd-7ee11f38070a",
-    name: "Kanha Veg Business",
-    description: "Veg Business in North Goa",
-    owner_id: "c8584afc-f395-4892-97df-d12487e39771",
-    website_url: null,
-    social_links: null,
-    cuisine: null,
-    average_price: 1200,
-    average_rating: null,
-    latitude: "11",
-    is_available: true,
-    longitude: "11",
-    contact_no: "8998978987",
-    banner: "https://gogole.com/banner.png",
-    delivery_options: "all",
-    pickup_options: "all",
+      id: "dee90081-616b-4744-b2fd-7ee11f38070a",
+      name: "Kanha Veg Business",
+      description: "Veg Business in North Goa",
+      owner_id: "c8584afc-f395-4892-97df-d12487e39771",
+      website_url: null,
+      social_links: null,
+      cuisine: null,
+      average_price: 1200,
+      average_rating: null,
+      latitude: "11",
+      is_available: true,
+      longitude: "11",
+      contact_no: "8998978987",
+      banner: "https://gogole.com/banner.png",
+      delivery_options: "all",
+      pickup_options: "all",
     },
     required: true,
   })
@@ -164,22 +164,21 @@ export class CreatePaymentBodyDto {
   public driver_id!: string;
 
   @ApiProperty({
-    description:"driver",
-    example:
-    {
-      mobno:"1234567891",
-      availability:false,
-      location:"porvorim",
-      ratings:4,
+    description: "driver",
+    example: {
+      mobno: "1234567891",
+      availability: false,
+      location: "porvorim",
+      ratings: 4,
     },
-    required:false,
+    required: false,
   })
   @IsObject()
-  public driver!:any;
+  public driver!: any;
 
   @ApiProperty({
     description: "address obj",
-    example: {  
+    example: {
       id: "3bd5a21a-3410-48f6-84ff-138dc8dd30db",
       name: "Aguada Road",
       city: "Candolim",
@@ -188,7 +187,8 @@ export class CreatePaymentBodyDto {
       street: "Bamon Vaddo",
       pincode: "403515",
       country: "INDIA",
-      state: "Goa",},
+      state: "Goa",
+    },
     required: true,
   })
   @IsObject()
@@ -258,13 +258,12 @@ export enum PaymentStatus {
   "failure" = "failure",
 }
 
-export enum OrderStatus
-{
-  "intitated"="initiated",
-  "accepted"="accepted",
-  "pickuped"="pickuped",
-  "delivered"="delivered",
-  "failed"="failed"
+export enum OrderStatus {
+  "intitated" = "initiated",
+  "accepted" = "accepted",
+  "pickuped" = "pickuped",
+  "delivered" = "delivered",
+  "failed" = "failed",
 }
 
 export class UpdateByIdQueryDto {

@@ -1,8 +1,8 @@
-import React from 'react'
-import Home from '../../components/checkout/homeComp';
+import React from "react";
+import Home from "../../components/checkout/homeComp";
 
 const HomeComp = () => {
-  return <Home />
-}
+  return <Home />;
+};
 
 export default HomeComp;

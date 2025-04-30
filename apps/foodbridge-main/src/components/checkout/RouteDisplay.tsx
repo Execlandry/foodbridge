@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import 'leaflet-routing-machine';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import "leaflet-routing-machine";
 
 interface CoOrdinates {
   orderCoordinates: {
@@ -30,17 +30,18 @@ export default function MapComponent({
   const [distance, setDistance] = useState<number | null>(null);
   const COST_PER_KM = 10; // ₹10 per km
 
-
-  
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
   useEffect(() => {
@@ -140,7 +141,10 @@ export default function MapComponent({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="w-1/2 h-fit rounded-lg overflow-hidden mt-4 p-10 bg-white "  ref={modalRef}>
+      <div
+        className="w-1/2 h-fit rounded-lg overflow-hidden mt-4 p-10 bg-white "
+        ref={modalRef}
+      >
         <div ref={mapRef} className="w-[40vw] h-96"></div>
         {distance !== null && (
           <div className="mt-2">

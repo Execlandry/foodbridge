@@ -10,7 +10,7 @@ import {
 import { addCartItems } from "../../redux/cart/cart.slice";
 import { ShoppingCartIcon } from "@heroicons/react/outline";
 import useAuth from "../../hooks/use-auth";
-import { UserContext, UserContextType } from '../../hooks/user-context';
+import { UserContext, UserContextType } from "../../hooks/user-context";
 
 // Define types
 interface Business {
@@ -47,10 +47,11 @@ function Businesses() {
   const navigate = useNavigate();
   const { logoutUser } = useAuth();
   const { user } = useContext(UserContext) as UserContextType;
-  
-  const { data: businessesData, status: businessStatus } = useSelector(topBusinesses);
+
+  const { data: businessesData, status: businessStatus } =
+    useSelector(topBusinesses);
   const { data: dishesData, status: dishesStatus } = useSelector(topDishes);
-  
+
   useEffect(() => {
     storeDispatch(fetchBusinesses());
     storeDispatch(fetchTopDishes("order_by=ASC"));
@@ -73,10 +74,13 @@ function Businesses() {
 
   // Add all dishes of a business to the cart
   const addAllDishesToCart = (businessId: string | number) => {
-    if (!user || user.permissions == "business-admin") {navigate("/signin"); return}// Prevent unauthorized users
+    if (!user || user.permissions == "business-admin") {
+      navigate("/signin");
+      return;
+    } // Prevent unauthorized users
 
     const businessDishes = groupedDishes[businessId]?.dishes || [];
-    
+
     businessDishes.forEach((dish) => {
       storeDispatch(
         addCartItems({
@@ -96,7 +100,10 @@ function Businesses() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <h1 className="text-5xl font-extrabold text-center text-gray-900 mb-12 tracking-tight">
-          Explore <span className="text-green-600 bg-green-100 px-3 py-1 rounded-full">Top Businesses</span>
+          Explore{" "}
+          <span className="text-green-600 bg-green-100 px-3 py-1 rounded-full">
+            Top Businesses
+          </span>
         </h1>
 
         {/* Loading Indicator */}
@@ -117,13 +124,20 @@ function Businesses() {
                   {/* Business Info */}
                   <div className="flex flex-col sm:flex-row items-center sm:items-start mb-6">
                     <img
-                      src={business?.thumbnails || "https://via.placeholder.com/300x200"}
+                      src={
+                        business?.thumbnails ||
+                        "https://via.placeholder.com/300x200"
+                      }
                       alt={business?.name}
                       className="w-32 h-32 object-cover rounded-xl sm:mr-6 mb-4 sm:mb-0 shadow-sm"
                     />
                     <div className="text-center sm:text-left">
-                      <h3 className="text-2xl font-bold text-gray-900">{business?.name}</h3>
-                      <p className="text-sm text-gray-500 italic">{business?.category || "Cuisine"}</p>
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        {business?.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 italic">
+                        {business?.category || "Cuisine"}
+                      </p>
                       <span className="text-green-600 font-semibold text-lg">
                         ${business?.avg_price?.toFixed(2) || "N/A"}
                       </span>
@@ -153,19 +167,28 @@ function Businesses() {
                           className="bg-gradient-to-br from-gray-50 to-green-50 rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
                         >
                           <img
-                            src={dish?.thumbnails || "https://via.placeholder.com/300x200"}
+                            src={
+                              dish?.thumbnails ||
+                              "https://via.placeholder.com/300x200"
+                            }
                             alt={dish?.name}
                             className="w-full h-40 object-cover rounded-lg mb-3 shadow-sm"
                           />
-                          <h4 className="text-lg font-semibold text-gray-900 truncate">{dish?.name}</h4>
+                          <h4 className="text-lg font-semibold text-gray-900 truncate">
+                            {dish?.name}
+                          </h4>
                           <div className="flex items-center justify-between mt-3">
-                            <span className="text-green-600 font-bold text-lg">${dish?.price?.toFixed(2)}</span>
+                            <span className="text-green-600 font-bold text-lg">
+                              ${dish?.price?.toFixed(2)}
+                            </span>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-500 italic text-center mt-4">No dishes available for this business.</p>
+                    <p className="text-gray-500 italic text-center mt-4">
+                      No dishes available for this business.
+                    </p>
                   )}
                 </div>
               );

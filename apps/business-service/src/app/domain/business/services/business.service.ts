@@ -58,7 +58,9 @@ export class BusinessService {
     const address = await this.businessAddRepo.findOne({
       where: { business: { id } },
     });
-    const availabledishes=response.dishes.filter((dish)=>dish.status=='available')
+    const availabledishes = response.dishes.filter(
+      (dish) => dish.status == "available"
+    );
     const dishMenuItems = response.dishes;
     // const categories = groupBy(dishMenuItems, "category");
     response.address = address;

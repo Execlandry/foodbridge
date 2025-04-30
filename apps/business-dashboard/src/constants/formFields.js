@@ -71,8 +71,7 @@ const signupFields = [
     autoComplete: "new-password",
     isRequired: true,
     placeholder: "Confirm Password",
-  }
+  },
 ];
-
 
 export { loginFields, signupFields };

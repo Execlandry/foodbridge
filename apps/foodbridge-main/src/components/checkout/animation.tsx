@@ -1,11 +1,3 @@
-
 export default function Animation() {
-
-
-
-    return (
-      <span>Loading ..</span>
-     
-    );
-  }
-  
+  return <span>Loading ..</span>;
+}

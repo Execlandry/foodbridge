@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 
 const API_URL = process.env.API_URL || "http://localhost:3002/api/v1/users";
-const AUTH_TOKEN = process.env.AUTH_TOKEN || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjZWUzNzg1Ny1jNDBjLTQ5ZWMtYWZhYS0wYTE1NDdmN2Y3MGMiLCJlbWFpbCI6InRAZ21haWwuY29tIiwicGVybWlzc2lvbnMiOiJidXNpbmVzcy1hZG1pbiIsImlhdCI6MTc0MzU3NzI0NCwiZXhwIjoxNzQzNjYzNjQ0fQ.9v_XmBUdbGKJy-vAr6SCm6eBM5__Ge1rcTI9syEzRoM";
+const AUTH_TOKEN =
+  process.env.AUTH_TOKEN ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjZWUzNzg1Ny1jNDBjLTQ5ZWMtYWZhYS0wYTE1NDdmN2Y3MGMiLCJlbWFpbCI6InRAZ21haWwuY29tIiwicGVybWlzc2lvbnMiOiJidXNpbmVzcy1hZG1pbiIsImlhdCI6MTc0MzU3NzI0NCwiZXhwIjoxNzQzNjYzNjQ0fQ.9v_XmBUdbGKJy-vAr6SCm6eBM5__Ge1rcTI9syEzRoM";
 
 interface UserRequestBody {
   email: string;
@@ -12,8 +14,8 @@ interface UserRequestBody {
 }
 
 const getHeaders = () => ({
-  "accept": "application/json",
-  "Authorization": `Bearer ${AUTH_TOKEN}`,
+  accept: "application/json",
+  Authorization: `Bearer ${AUTH_TOKEN}`,
   "Content-Type": "application/json",
 });
 
@@ -77,16 +79,21 @@ export async function POST(req: Request) {
           console.log("Permissions assigned successfully:", permissionData);
         }
       } catch (permissionError) {
-        console.error("Permission assignment error:", 
-          permissionError instanceof Error ? permissionError.message : String(permissionError));
+        console.error(
+          "Permission assignment error:",
+          permissionError instanceof Error
+            ? permissionError.message
+            : String(permissionError)
+        );
       }
     }
 
     return NextResponse.json(user, { status: 201 });
-
   } catch (error) {
-    console.error("User registration error:", 
-      error instanceof Error ? error.message : String(error));
+    console.error(
+      "User registration error:",
+      error instanceof Error ? error.message : String(error)
+    );
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

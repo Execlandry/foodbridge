@@ -1,211 +1,476 @@
-"use client"
-import React, { useState } from 'react';
-import {  
-  ViewGridIcon  ,   // Closest to UtensilsCrossed  
-  DocumentTextIcon,  // Closest to Type  
-  TagIcon,  
-  AcademicCapIcon,   // Alternative for Coffee (symbolic)  
-  LightBulbIcon,     // Closest available Battery icon         
-  CloudIcon,         // Alternative to Leaf  
-  CurrencyDollarIcon, // Represents currency/money  
-  CameraIcon         // Alternative for Photo  
+"use client";
+
+import React, { useState } from "react";
+import {
+  ViewGridIcon,
+  DocumentTextIcon,
+  TagIcon,
+  CloudIcon,
+  CameraIcon,
+  ScaleIcon,
+  CheckCircleIcon,
+  CalendarIcon,
+  AnnotationIcon,
 } from "@heroicons/react/solid";
-import { send } from 'process';
 
+interface FoodItemForm {
+  name: string;
+  description: string;
+  ingredients: string;
+  food_type: string;
+  quantity: number;
+  quantity_unit: string;
+  posted_at?: string;
+  expires_at?: string;
+  notes?: string;
+  status: string;
+  thumbnails: File | string;
+}
 
-
-
-function App({params}:any) {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    cuisine_type: '',
-    meal_type: '',
-    category: '',
-    ingredients: '',
-    food_type: '',
-    price: '',
-    thumbnails: ''
+function AddFoodItemForm({ params }: any) {
+  const [formData, setFormData] = useState<FoodItemForm>({
+    name: "paneer tikka masala",
+    description:
+      "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
+    ingredients: "ingredients",
+    food_type: "vegan",
+    quantity: 500,
+    quantity_unit: "grams",
+    posted_at: "",
+    expires_at: "",
+    notes: "",
+    status: "available",
+    thumbnails:
+      "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_1024/18301f1b90116218438a5e6a82336d15",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const {id}=params;
+  const { id } = params;
 
-    const sendData = async () => {
-      try {
-        console.log(formData);
-        const res = await fetch(`/api/business/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-        const data=await res.json();
-        console.log("Response:", data);
-      } catch (error) {
-        console.error("Error sending data:", error);
+  async function uploadImage(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append("filename", file);
+
+    try {
+      const response = await fetch("http://localhost:3008/api/v1/files", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Image upload failed! status: ${response.status}`);
       }
-    };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendData();
+      const data = await response.json();
+      if (!data[0].url) {
+        throw new Error("No URL returned from image upload");
+      }
+
+      return data[0].url;
+    } catch (error: any) {
+      throw new Error(`Error uploading image: ${error.message}`);
+    }
+  }
+
+  const sendData = async (data: FoodItemForm) => {
+    try {
+      const dataToSend = {
+        ...data,
+        thumbnails: typeof data.thumbnails === "string" ? data.thumbnails : "",
+        quantity: Number(data.quantity),
+        posted_at: data.posted_at || undefined,
+        expires_at: data.expires_at || undefined,
+        notes: data.notes || undefined,
+      };
+
+      const res = await fetch(`/api/business/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const responseData = await res.json();
+      console.log("Response:", responseData);
+      return responseData;
+    } catch (error: any) {
+      throw new Error(`Error sending data: ${error.message}`);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      let thumbnailUrl = "";
+      if (formData.thumbnails instanceof File) {
+        thumbnailUrl = await uploadImage(formData.thumbnails);
+      } else if (typeof formData.thumbnails === "string") {
+        thumbnailUrl = formData.thumbnails;
+      } else {
+        throw new Error("No valid thumbnail image provided");
+      }
+
+      const updatedFormData = {
+        ...formData,
+        thumbnails: thumbnailUrl,
+      };
+
+      await sendData(updatedFormData);
+
+      setFormData({
+        name: "",
+        description: "",
+        ingredients: "",
+        food_type: "",
+        quantity: 0,
+        quantity_unit: "",
+        posted_at: "",
+        expires_at: "",
+        notes: "",
+        status: "available",
+        thumbnails: "",
+      });
+    } catch (error: any) {
+      setError(error.message || "Failed to submit form");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: name === "quantity" ? Number(value) : value,
     }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        thumbnails: file,
+      }));
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-purple-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center text-purple-800 mb-6">
+    <div className="min-h-screen bg-gradient-to-b from-green-50/50 to-white flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-green-100">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-green-900 mb-6">
           Add Food Item
         </h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <ViewGridIcon className="h-5 w-5 text-purple-500" />
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-lg">
+              {error}
             </div>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Dish Name"
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            />
-          </div>
+          )}
 
-          <div className="relative">
-            <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
-              <DocumentTextIcon className="h-5 w-5 text-purple-500" />
-            </div>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Description"
-              rows={3}
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            />
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <TagIcon className="h-5 w-5 text-purple-500" />
-            </div>
-            <input
-              type="text"
-              name="cuisine_type"
-              value={formData.cuisine_type}
-              onChange={handleChange}
-              placeholder="Cuisine Type"
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            />
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <AcademicCapIcon className="h-5 w-5 text-purple-500" />
-            </div>
-            <select
-              name="meal_type"
-              value={formData.meal_type}
-              onChange={handleChange}
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white"
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-green-900 mb-1"
             >
-              <option value="">Select Meal Type</option>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-              <option value="snacks">Snacks</option>
-            </select>
+              Dish Name
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <ViewGridIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Dish Name"
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+                required
+              />
+            </div>
           </div>
 
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <LightBulbIcon className="h-5 w-5 text-purple-500" />
-            </div>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Category"
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            />
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <CloudIcon className="h-5 w-5 text-purple-500" />
-            </div>
-            <input
-              type="text"
-              name="ingredients"
-              value={formData.ingredients}
-              onChange={handleChange}
-              placeholder="Ingredients"
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            />
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <ViewGridIcon className="h-5 w-5 text-purple-500" />
-            </div>
-            <select
-              name="food_type"
-              value={formData.food_type}
-              onChange={handleChange}
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white"
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-green-900 mb-1"
             >
-              <option value="">Select Food Type</option>
-              <option value="vegan">Vegan</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="non-vegetarian">Non-Vegetarian</option>
-            </select>
+              Description
+            </label>
+            <div className="relative">
+              <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
+                <DocumentTextIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Description"
+                rows={4}
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+              />
+            </div>
           </div>
 
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <CurrencyDollarIcon className="h-5 w-5 text-purple-500" />
+          <div>
+            <label
+              htmlFor="ingredients"
+              className="block text-sm font-medium text-green-900 mb-1"
+            >
+              Ingredients
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <CloudIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <input
+                type="text"
+                id="ingredients"
+                name="ingredients"
+                value={formData.ingredients}
+                onChange={handleChange}
+                placeholder="Ingredients"
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+              />
             </div>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="Price"
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            />
           </div>
 
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <CameraIcon className="h-5 w-5 text-purple-500" />
+          <div>
+            <label
+              htmlFor="food_type"
+              className="block text-sm font-medium text-green-900 mb-1"
+            >
+              Food Type
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <TagIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <select
+                id="food_type"
+                name="food_type"
+                value={formData.food_type}
+                onChange={handleChange}
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 bg-white appearance-none transition-colors duration-300"
+                required
+              >
+                <option value="">Select Food Type</option>
+                <option value="veg">Veg</option>
+                <option value="non_veg">Non-Veg</option>
+                <option value="vegan">Vegan</option>
+                <option value="fast_food">Fast Food</option>
+              </select>
             </div>
-            <input
-              type="url"
-              name="thumbnails"
-              value={formData.thumbnails}
-              onChange={handleChange}
-              placeholder="Thumbnail URL"
-              className="block w-full pl-10 pr-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="quantity"
+              className="block text-sm font-medium text-green-900 mb-1"
+            >
+              Quantity
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <ScaleIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+                placeholder="Quantity"
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="quantity_unit"
+              className="block text-sm font-medium text-green-900 mb-1"
+            >
+              Quantity Unit
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <ScaleIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <input
+                type="text"
+                id="quantity_unit"
+                name="quantity_unit"
+                value={formData.quantity_unit}
+                onChange={handleChange}
+                placeholder="Quantity Unit (e.g., grams)"
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+              />
+            </div>
+          </div>
+
+          {/* <div>
+            <label htmlFor="posted_at" className="block text-sm font-medium text-green-900 mb-1">
+              Posted At
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <CalendarIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <input
+                type="datetime-local"
+                id="posted_at"
+                name="posted_at"
+                value={formData.posted_at}
+                onChange={handleChange}
+                placeholder="Posted At"
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+              />
+            </div>
+          </div> */}
+
+          <div>
+            <label
+              htmlFor="expires_at"
+              className="block text-sm font-medium text-green-900 mb-1"
+            >
+              Expires At
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <CalendarIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <input
+                type="datetime-local"
+                id="expires_at"
+                name="expires_at"
+                value={formData.expires_at}
+                onChange={handleChange}
+                placeholder="Expires At"
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="notes"
+              className="block text-sm font-medium text-green-900 mb-1"
+            >
+              Notes
+            </label>
+            <div className="relative">
+              <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
+                <AnnotationIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <textarea
+                id="notes"
+                name="notes"
+                value={formData.notes}
+                onChange={handleChange}
+                placeholder="Notes (e.g., Contains dairy and nuts)"
+                rows={3}
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+              />
+            </div>
+          </div>
+
+          {/* <div>
+            <label htmlFor="status" className="block text-sm font-medium text-green-900 mb-1">
+              Status
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <CheckCircleIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <select
+                id="status"
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 bg-white appearance-none transition-colors duration-300"
+                required
+              >
+                <option value="available">Available</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Failed</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div> */}
+          {/* </div> */}
+
+          <div>
+            <label
+              htmlFor="thumbnails"
+              className="block text-sm font-medium text-green-900 mb-1"
+            >
+              Thumbnail Image
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <CameraIcon className="h-5 w-5 text-green-600" />
+              </div>
+              <input
+                type="file"
+                id="thumbnails"
+                name="thumbnails"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
+              />
+            </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+            disabled={isSubmitting}
+            className={`w-full py-3 px-4 rounded-lg text-white font-semibold transition-colors duration-300 ${
+              isSubmitting
+                ? "bg-green-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-200 focus:ring-offset-2"
+            }`}
           >
-            Add Food Item
+            {isSubmitting ? (
+              <svg
+                className="animate-spin h-5 w-5 mr-2 inline-block text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+            ) : null}
+            {isSubmitting ? "Submitting..." : "Add Food Item"}
           </button>
         </form>
       </div>
@@ -213,127 +478,4 @@ function App({params}:any) {
   );
 }
 
-export default App;
-
-
-// "use client";
-// import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
-// import { useForm, useWatch, Control } from "react-hook-form";
-// import { useRef, useState } from "react";
-// import ImagePreview from "@components/common/Imagepreview";
-// import CustomFileSelector from "@components/common/FileSelctor";
-
-
-// function Error({ message }: { message: string }) {
-//     return (
-//         <div className="rounded  border border-red-600 bg-red-50 p-1 text-red-600">
-//             {message}
-//         </div>
-//     );
-// }
-
-// export default function AddBusinessMenu({ params }: any) {
-
-//   const { data: session } = useSession();
-//   const user = session?.user;
-//   const router = useRouter();
-//   const {id} = params;
-  
-//   // console.log(params);
-//   const { register, handleSubmit, watch, formState: {errors} } = useForm<any>();
-//   const [images, setImages] = useState<File[]>([]);
-//   const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files) {
-//       //convert `FileList` to `File[]`
-//       const _files = Array.from(e.target.files);
-//       // do the upload here to AWS S3
-//       // upload these files to AWS S3 after getting signe durl for upload 
-//       setImages(_files);
-//     }
-//   };
-
-//   const onSubmit = (data: any) => {
-//     console.log(data)
-//   }
-
-//   // list of businesses
-//   return (
-//     <>  <div
-//     className=" h-screen w-full items-center ">
-//     <form onSubmit={handleSubmit(onSubmit)} className="flex w-2/3 flex-col gap-2 rounded-lg  p-8 shadow">
-//         <label htmlFor="email">Business Name</label>
-//         <input
-//             className="rounded border border-neutral-200  p-1"
-//             type="name"
-//             id="name"
-//             name="name"
-//             {...register("name", {
-//               required: { value: true, message: 'name Required' },
-//             })}
-            
-//         />
-//          {errors.name && <Error message={errors.name.message!} />}
-
-
-//         <label htmlFor="rest-desc">Business Desc</label>
-//         <input
-//             className="rounded border border-neutral-200  p-1"
-//             type="text"
-//             id="desc"
-//             name="desc"
-//             {...register("description", {
-//               required: { value: true, message: 'desc Required' },
-//             })}
-//         />
-//          {errors.description && <Error message={errors.description.message!} />}
-
-//          <CustomFileSelector
-//         accept="image/png, image/jpeg"
-//         onChange={handleFileSelected}
-//       />
-//       <ImagePreview images={images} />
-
-//         <label htmlFor="business-logo">Business Logo</label>
-//         <input
-//             className="rounded border border-neutral-200  p-1"
-//             type="text"
-//             id="logo"
-//             name="logo"
-//             {...register("logo", {
-//               required: { value: true, message: 'logo Required' },
-//             })}
-//         />
-//         {errors.logo && <Error message={errors.logo.message!} />}
-
-
-//         <label htmlFor="Type">Business Type</label>
-//         <input
-//             className="rounded border border-neutral-200  p-1"
-//             type="text"
-//             id="type"
-//             name="type"
-//             placeholder="business type"
-//             {...register("type", {
-//               required: { value: true, message: 'type Required' },
-//             })}
-//         />
-//          {errors.type && <Error message={errors.type.message!} />}
-
-
-//         <label htmlFor="cost for two">cost For Two</label>
-//         <input
-//             className="rounded border border-neutral-200  p-1"
-//             type="text"
-//             id="costfortwo"
-//             name="costfortwo"
-//             {...register("cost_for_two")}
-//         />
-//         <button className="mt-5 rounded bg-green-500 p-2 text-neutral-50    ">
-//             Submit
-//         </button>
-//     </form>
-// </div> </>
-//   );
-// }
-
+export default AddFoodItemForm;

@@ -1,6 +1,13 @@
-import React from 'react';
-import { XIcon, MapIcon, PhoneIcon, GlobeAltIcon, StarIcon, CurrencyDollarIcon } from "@heroicons/react/outline";
-import type { Restaurant } from './business';
+import React from "react";
+import {
+  XIcon,
+  MapIcon,
+  PhoneIcon,
+  GlobeAltIcon,
+  StarIcon,
+  CurrencyDollarIcon,
+} from "@heroicons/react/outline";
+import type { Restaurant } from "./business";
 
 interface RestaurantPopupProps {
   restaurant: Restaurant;
@@ -8,7 +15,11 @@ interface RestaurantPopupProps {
   isOpen: boolean;
 }
 
-export function RestaurantPopup({ restaurant, onClose, isOpen }: RestaurantPopupProps) {
+export function RestaurantPopup({
+  restaurant,
+  onClose,
+  isOpen,
+}: RestaurantPopupProps) {
   if (!isOpen) return null;
 
   return (
@@ -31,19 +42,25 @@ export function RestaurantPopup({ restaurant, onClose, isOpen }: RestaurantPopup
         <div className="p-6">
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">{restaurant.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {restaurant.name}
+              </h2>
               <p className="text-gray-600">{restaurant.description}</p>
             </div>
             <div className="flex items-center space-x-2">
               {restaurant.average_rating && (
                 <div className="flex items-center bg-green-100 px-2 py-1 rounded">
                   <StarIcon className="w-4 h-4 text-green-600 mr-1" />
-                  <span className="text-green-600 font-medium">{restaurant.average_rating}</span>
+                  <span className="text-green-600 font-medium">
+                    {restaurant.average_rating}
+                  </span>
                 </div>
               )}
               <div className="flex items-center bg-blue-100 px-2 py-1 rounded">
                 <CurrencyDollarIcon className="w-4 h-4 text-blue-600 mr-1" />
-                <span className="text-blue-600 font-medium">${restaurant.average_price}</span>
+                <span className="text-blue-600 font-medium">
+                  ${restaurant.average_price}
+                </span>
               </div>
             </div>
           </div>
@@ -75,7 +92,12 @@ export function RestaurantPopup({ restaurant, onClose, isOpen }: RestaurantPopup
                   <GlobeAltIcon className="w-5 h-5 text-gray-500" />
                   <div>
                     <h3 className="font-medium text-gray-900">Website</h3>
-                    <a href={restaurant.website_url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={restaurant.website_url}
+                      className="text-blue-600 hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Visit Website
                     </a>
                   </div>
@@ -85,8 +107,12 @@ export function RestaurantPopup({ restaurant, onClose, isOpen }: RestaurantPopup
               <div>
                 <h3 className="font-medium text-gray-900 mb-2">Services</h3>
                 <div className="space-y-1">
-                  <p className="text-gray-600">Delivery: {restaurant.delivery_options}</p>
-                  <p className="text-gray-600">Pickup: {restaurant.pickup_options}</p>
+                  <p className="text-gray-600">
+                    Delivery: {restaurant.delivery_options}
+                  </p>
+                  <p className="text-gray-600">
+                    Pickup: {restaurant.pickup_options}
+                  </p>
                 </div>
               </div>
             </div>

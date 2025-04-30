@@ -48,7 +48,7 @@ export async function POST(request: Request) {
         latitude: formData.latitude,
         longitude: formData.longitude,
         contact_no: formData.contact_no,
-        banner: "https://gogole.com/banner.png",
+        banner: formData.banner,
         delivery_options: formData.delivery_options,
         pickup_options: formData.pickup_options,
         opens_at: formData.opens_at,

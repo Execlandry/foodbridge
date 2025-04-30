@@ -22,7 +22,7 @@ import {
   selectedUserAddressSelector,
 } from "../../redux/user/user.slice";
 import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
-import { PlaceOrder,fetchOrderItems } from '../../redux/order/order.slice';
+import { PlaceOrder, fetchOrderItems } from "../../redux/order/order.slice";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutCredit from "./checkout-credit";
 import { Divider } from "@chakra-ui/react";
@@ -149,31 +149,29 @@ function Checkout() {
   };
 
   const OrderPlace = () => {
-    menuItem.forEach(function(value:any,index:any)
-    {
-      console.log(value,"\n",index);
+    menuItem.forEach(function (value: any, index: any) {
+      console.log(value, "\n", index);
       console.log(addresses[0]);
       console.log(requestfordriver[index]);
-      dispatch(PlaceOrder({
-        business:value.business,
-        driver_id:"",
-        driver:{},
-        address:addresses[0],
-        request_for_driver:requestfordriver[index],
-        amount:"10",
-        menu_items:value.menu_items
-      }))
-      updatestatus(value.menu_items)
+      dispatch(
+        PlaceOrder({
+          business: value.business,
+          driver_id: "",
+          driver: {},
+          address: addresses[0],
+          request_for_driver: requestfordriver[index],
+          amount: "10",
+          menu_items: value.menu_items,
+        })
+      );
+      updatestatus(value.menu_items);
     });
   };
 
-  const updatestatus=(menuitem:any)=>
-  {
-    for(const item of menuitem)
-    {
-      
+  const updatestatus = (menuitem: any) => {
+    for (const item of menuitem) {
     }
-  }
+  };
   const HandleDriverUpdate =
     (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const updatedArray = [...requestfordriver];
@@ -275,13 +273,13 @@ function Checkout() {
   }, [user, dispatch]);
 
   useEffect(() => {
-      addNFalseValues(menuItem.length);
-      const address = addresses?.[0];
-      if (address) {
-        setsrclat(address.lat);
-        setsrclong(address.long);
-      }  
-  }, [menuItem,addresses]);
+    addNFalseValues(menuItem.length);
+    const address = addresses?.[0];
+    if (address) {
+      setsrclat(address.lat);
+      setsrclong(address.long);
+    }
+  }, [menuItem, addresses]);
 
   return (
     <>

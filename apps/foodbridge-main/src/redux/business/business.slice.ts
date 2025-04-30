@@ -11,14 +11,18 @@ export interface BusinessState {
 const axiosConfig = {
   headers: {
     Accept: "*/*",
-    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MjFmODRmYi0zZTU5LTRmZDMtOGU4NS02YzhkYjJhMjA5NWMiLCJlbWFpbCI6InBlZG5la2FycHJhc2hhbnQzOTlAZ21haWwuY29tIiwiaWF0IjoxNzQzNjA0ODIxLCJleHAiOjE3NDM2OTEyMjF9.wp3zv-DrJ4T_AL8LI2SAIDZDJ36Tcm5_MeoX0Vpgtzw"
-  }
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MjFmODRmYi0zZTU5LTRmZDMtOGU4NS02YzhkYjJhMjA5NWMiLCJlbWFpbCI6InBlZG5la2FycHJhc2hhbnQzOTlAZ21haWwuY29tIiwiaWF0IjoxNzQzNjA0ODIxLCJleHAiOjE3NDM2OTEyMjF9.wp3zv-DrJ4T_AL8LI2SAIDZDJ36Tcm5_MeoX0Vpgtzw",
+  },
 };
 
 export const fetchBusinesses = createAsyncThunk(
   "api/fetchBusinessesData",
   async () => {
-    const { data } = await axios.get("http://localhost:3000/api/v1/business-service/businesses", axiosConfig);
+    const { data } = await axios.get(
+      "http://localhost:3000/api/v1/business-service/businesses",
+      axiosConfig
+    );
     return data;
   }
 );
@@ -133,7 +137,10 @@ export const BusinessSlice = createSlice({
         error: null,
       };
     },
-    [filteredBusinesses.fulfilled.type]: (state: BusinessState, action: any) => {
+    [filteredBusinesses.fulfilled.type]: (
+      state: BusinessState,
+      action: any
+    ) => {
       state.filteredDishes = {
         status: "resolved",
         data: action.payload,
@@ -150,7 +157,6 @@ export const BusinessSlice = createSlice({
     },
 
     [fetchBusinessById.pending.type]: (state: BusinessState, action: any) => {
-
       state.selectedBusiness = {
         status: "pending",
         data: [],

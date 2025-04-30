@@ -19,11 +19,11 @@ import {
 import { Type as validateType } from "class-transformer";
 import { mealType, cuisineType, foodType } from "@fbe/types";
 
-enum status{
-  "available"="available",
-  "pending"="pending",
-  "failed"="failed",
-  "completed"="completed",
+enum status {
+  "available" = "available",
+  "pending" = "pending",
+  "failed" = "failed",
+  "completed" = "completed",
 }
 
 export class MenuItemBodyDto {
@@ -109,7 +109,6 @@ export class MenuItemBodyDto {
   @IsEnum(foodType)
   public food_type!: string;
 
-  
   @ApiProperty({
     description: "status",
     required: true,
@@ -176,9 +175,9 @@ export class CreateCartMenuItemBodyDto {
       // category: "category",
       // ingredients: "ingredients",
       food_type: "vegan",
-      status:"available",
-      ingredients:"ingredient",
-      quantity:"10",
+      status: "available",
+      ingredients: "ingredient",
+      quantity: "10",
       // count: 1,
       // price: 500,
       thumbnails: "https://google.com/banner.png",

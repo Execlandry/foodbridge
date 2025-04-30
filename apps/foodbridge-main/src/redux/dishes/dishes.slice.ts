@@ -11,34 +11,33 @@ export const fetchDishesForLandingPage = createAsyncThunk(
   // make these apis in external service
   // we are hitting proxy
   async () => {
-    const data  = await axios.get(
+    const data = await axios.get(
       `http://localhost:3000/api/v1/business-service/dishes?&page=1&limit=50`
     );
     // console.log(data);
 
     const foodData = data.data.map((item: any) => {
-      if(item.status==="available")
-      {
+      if (item.status === "available") {
         return {
-        id: item.id,
-        dish_id: item.id,
-        name: item.name,
-        quantitity:item.quantity,
-        description: item.description,
-        thumbnails: item.thumbnails,
-        ingredients:item.ingredients,
-        quantity:item.quantity,
-        // food_image: item.thumbnails,
-        // cuisine_type: item.cuisine_type,
-        food_type: item.food_type,
-        // meal_type: item.meal_type,
-        // price: item.price,
-        // menu_id: item.category,
-        business_id: item.business.id,
-        business: item.business,
-        status: item.status,
-      };
-    }
+          id: item.id,
+          dish_id: item.id,
+          name: item.name,
+          quantitity: item.quantity,
+          description: item.description,
+          thumbnails: item.thumbnails,
+          ingredients: item.ingredients,
+          quantity: item.quantity,
+          // food_image: item.thumbnails,
+          // cuisine_type: item.cuisine_type,
+          food_type: item.food_type,
+          // meal_type: item.meal_type,
+          // price: item.price,
+          // menu_id: item.category,
+          business_id: item.business.id,
+          business: item.business,
+          status: item.status,
+        };
+      }
     });
     // console.log(foodData)
     // duplicates removal
@@ -83,7 +82,7 @@ export const DishMenuItemSlice = createSlice({
     changeFoodCategorySelection: (state: BusinessState, action: any) => {
       const data = state.dishes.data;
       const menu = action.payload;
-      const food=data;
+      const food = data;
       // apply filter based ons selected category
       // const food = data.food.filter((i: any) => menu.id === i.menu_id);
       state.dishes = {

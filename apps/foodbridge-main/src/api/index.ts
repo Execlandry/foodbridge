@@ -14,12 +14,12 @@ export class ExternalApis {
     const url = `${this.url}/cart-service/cart`;
     // cookies have token
     const response = await axios.get(url);
-    console.log(response)
+    console.log(response);
     return response.data;
   }
   static async addCartItems(payload: any) {
     const url = `${this.url}/cart-service/cart`;
-    console.log("payload : ",payload);
+    console.log("payload : ", payload);
     const response = await axios.post(url, payload);
     return response.data;
   }
@@ -69,9 +69,8 @@ export class ExternalApis {
     return response.data;
   }
 
-  static async createOrder(data: any) 
-  {
-    console.log("order",data);
+  static async createOrder(data: any) {
+    console.log("order", data);
     const response = await axios.post("/api/v1/order-service/order", data);
     console.log(response.data);
     return response.data;

@@ -43,10 +43,11 @@ export class UserAddressService {
       ...body,
       user,
     };
-    
-    const Address=await this.userAddressRepo.findOne({ where: { id: apiUser.userId } });
-    if(!Address)
-    {
+
+    const Address = await this.userAddressRepo.findOne({
+      where: { id: apiUser.userId },
+    });
+    if (!Address) {
       const saveEntity = {
         ...body,
         user,
@@ -56,17 +57,15 @@ export class UserAddressService {
         `address created successfully ${JSON.stringify(createdAddress)}`
       );
       return createdAddress;
-    }
-    else
-    {
-      Address.city=body.city;
-      Address.lat=body.lat;
-      Address.long=body.long;
-      Address.country=body.country;
-      Address.street=body.street;
-      Address.state=body.state;
-      Address.name=body.name;
-      Address.pincode=body.pincode;
+    } else {
+      Address.city = body.city;
+      Address.lat = body.lat;
+      Address.long = body.long;
+      Address.country = body.country;
+      Address.street = body.street;
+      Address.state = body.state;
+      Address.name = body.name;
+      Address.pincode = body.pincode;
       Address.save();
       this.logger.log(
         `address created successfully ${JSON.stringify(Address)}`

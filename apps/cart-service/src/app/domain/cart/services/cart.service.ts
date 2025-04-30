@@ -63,7 +63,7 @@ export class CartService {
     } else {
       // payload.menu_item.count = 1;
       existingItems.push(payload.menu_item);
-       await this.cartRepo.save({
+      await this.cartRepo.save({
         user_id: user.userId,
         business_id: business_id,
         menu_items: existingItems,
@@ -96,7 +96,7 @@ export class CartService {
       existingCart.menu_items = existingCart.menu_items.filter(
         (item) => item.id !== menu_item.id
       );
-         // const updatedMenuItems = existingCart.menu_items
+      // const updatedMenuItems = existingCart.menu_items
       //   .map((i) => {
       //     if (i.id === menu_item.id) {
       //       i.count = i.count - 1;

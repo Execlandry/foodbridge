@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "foodbridge-storage.s3.amazonaws.com",
+        pathname: "/**", // Matches all paths under the domain
+      },
+    ],
+  },
   experimental: {
     appDir: true,
     serverComponentsExternalPackages: ["@prisma/client", "bcryptjs"],

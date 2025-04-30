@@ -8,22 +8,47 @@ export default function Header({
   linkUrl = "#",
 }: any) {
   return (
-    <div className="mb-10 mt-8">
+    <div className="px-6 sm:px-8">
       <div className="flex justify-center">
-        <img
-          alt=""
-          className="h-14 w-14"
-          src="https://ik.imagekit.io/pibjyepn7p9/Lilac_Navy_Simple_Line_Business_Logo_CGktk8RHK.png?ik-sdk-version=javascript-1.4.3&updatedAt=1649962071315"
-        />
+        <svg
+          className="h-16 w-48 sm:h-20 sm:w-56 transition-transform duration-300 hover:scale-105"
+          viewBox="0 0 200 80"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <text
+            x="100"
+            y="50"
+            textAnchor="middle"
+            fontSize="36"
+            fontWeight="700"
+            fill="#166534"
+            fontFamily="'Inter', sans-serif"
+            letterSpacing="-0.5"
+          >
+            FoodBridge
+          </text>
+          <path
+            d="M60 60 C80 50, 120 50, 140 60"
+            stroke="#22C55E"
+            strokeWidth="4"
+            strokeLinecap="round"
+            opacity="0.8"
+          />
+          <circle cx="60" cy="60" r="4" fill="#22C55E" />
+          <circle cx="140" cy="60" r="4" fill="#22C55E" />
+        </svg>
       </div>
-      <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+
+      <h2 className="mt-6 text-center text-3xl sm:text-4xl md:text-5xl font-bold text-green-900 tracking-tight">
         {heading}
       </h2>
-      <p className="mt-2 text-center text-sm text-gray-600 mt-5">
+
+      <p className="mt-4 text-center text-base sm:text-lg md:text-xl text-green-700/80 max-w-2xl mx-auto leading-relaxed">
         {paragraph}{" "}
         <a
           href={linkUrl}
-          className="font-medium text-purple-600 hover:text-purple-500"
+          className="font-medium text-green-800 hover:text-green-600 underline underline-offset-8 transition-colors duration-300"
         >
           {linkName}
         </a>

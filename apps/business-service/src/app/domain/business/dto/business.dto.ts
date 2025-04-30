@@ -152,13 +152,13 @@ export class CreateBusinessBodyDto {
   @IsOptional()
   public description!: string;
 
-  @ApiProperty({
-    description: "average_price",
-    example: "1200",
-    required: true,
-  })
-  @IsOptional()
-  public average_price!: string;
+  // @ApiProperty({
+  //   description: "average_price",
+  //   example: "1200",
+  //   required: true,
+  // })
+  // @IsOptional()
+  // public average_price!: string;
 
   @ApiProperty({
     description: "latitude",
@@ -197,23 +197,23 @@ export class CreateBusinessBodyDto {
   @IsUrl()
   public banner!: string;
 
-  @ApiProperty({
-    description: "delivery_options",
-    example: "all",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public delivery_options!: string;
+  // @ApiProperty({
+  //   description: "delivery_options",
+  //   example: "all",
+  //   required: true,
+  // })
+  // @IsOptional()
+  // @IsString()
+  // public delivery_options!: string;
 
-  @ApiProperty({
-    description: "pickup_options",
-    example: "all",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public pickup_options!: string;
+  // @ApiProperty({
+  //   description: "pickup_options",
+  //   example: "all",
+  //   required: true,
+  // })
+  // @IsOptional()
+  // @IsString()
+  // public pickup_options!: string;
 
   @ApiProperty({
     description: "opens_at",

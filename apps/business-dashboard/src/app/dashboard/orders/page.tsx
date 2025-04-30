@@ -7,5 +7,5 @@ export default function Index() {
   const user = session?.user;
   const router = useRouter();
 
-  return (<>Order</>)
+  return <>Order</>;
 }

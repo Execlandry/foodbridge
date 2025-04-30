@@ -6,7 +6,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   JoinColumn,
-  OneToOne,
   ManyToOne,
 } from "typeorm";
 import { BusinessEntity } from "./business.entity";
@@ -36,6 +35,18 @@ export class BusinessDishEntity extends BaseEntity {
 
   @Column({ type: "integer", default: null })
   public quantity!: number;
+
+  @Column({ type: "varchar", default: null })
+  public quantity_unit!: string;
+
+  @Column({ type: "timestamptz", nullable: true })
+  public posted_at!: Date;
+
+  @Column({ type: "timestamptz", nullable: true })
+  public expires_at!: Date;
+
+  @Column({ type: "text", nullable: true })
+  public notes!: string;
 
   @ManyToOne(() => BusinessEntity, (event) => event.dishes)
   @JoinColumn({ name: "business_id", referencedColumnName: "id" })

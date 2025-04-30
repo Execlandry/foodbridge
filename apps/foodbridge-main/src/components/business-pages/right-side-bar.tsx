@@ -1,7 +1,11 @@
-import React, { useContext, useEffect ,useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { BellIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline";
+import {
+  BellIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/outline";
 import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
 import useAuth from "../../hooks/use-auth";
 import { UserContext, UserContextType } from "../../hooks/user-context";
@@ -26,7 +30,7 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
 
   // Mini Navbar UI
   function MiniNavBar() {
-    console.log("cart data",data)
+    console.log("cart data", data);
     return (
       <div className="p-4 bg-white border-b border-gray-100 sticky top-0 z-10">
         <div className="flex items-center justify-between">
@@ -41,7 +45,9 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
               viewBox="0 0 24 24"
               strokeWidth="2"
               stroke="currentColor"
-              className={`w-5 h-5 text-gray-600 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+              className={`w-5 h-5 text-gray-600 transition-transform duration-300 ${
+                isOpen ? "rotate-180" : ""
+              }`}
             >
               <path
                 strokeLinecap="round"
@@ -54,7 +60,9 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
             <div className="relative group">
               <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 relative">
                 <BellIcon className="h-5 w-5 text-gray-600" />
-                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-medium rounded-full h-4 w-4 flex items-center justify-center ring-2 ring-white transition-transform group-hover:scale-110">4</span>
+                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-medium rounded-full h-4 w-4 flex items-center justify-center ring-2 ring-white transition-transform group-hover:scale-110">
+                  4
+                </span>
               </button>
             </div>
             {user && (
@@ -63,7 +71,9 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
                   {user.name?.charAt(0)}
                 </div>
                 <div className="hidden md:flex flex-col">
-                  <span className="text-sm font-medium text-gray-900 truncate max-w-[120px]">{user.email}</span>
+                  <span className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
+                    {user.email}
+                  </span>
                   <span className="text-xs text-gray-500">{user.name}</span>
                 </div>
                 <ChevronDownIcon className="h-4 w-4 text-gray-500 group-hover:text-green-600 transition-colors duration-200" />
@@ -81,15 +91,17 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
       <div className="bg-white rounded-xl p-4 flex items-center justify-between border border-gray-100 hover:border-green-100 transition-all duration-300 group">
         <div className="flex items-center space-x-4 flex-1">
           <div className="w-12 h-12 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-            <img 
-              src={cart_item?.thumbnails} 
-              alt={cart_item?.name} 
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+            <img
+              src={cart_item?.thumbnails}
+              alt={cart_item?.name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{cart_item?.name}</p>
+            <p className="text-sm font-medium text-gray-900 truncate">
+              {cart_item?.name}
+            </p>
             {/* <p className="text-xs text-gray-500 mt-1">
               {cart_item?.count} <span className="text-green-600">×</span> ${Number(cart_item?.price).toFixed(2)}
             </p> */}
@@ -111,30 +123,29 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
           </button> */}
         </div>
         <div className="space-y-3">
-
-  {data?.length > 0 ? (
-    data.map((item: any, idx: number) =>
-      item.menu_items?.map((cart_item: any, index: number) => (
-        <CartCard key={`${idx}-${index}`} cart_item={cart_item} />
-      ))
-    )
-  ) : (
-    <div className="text-center py-8 text-gray-500 text-sm">
-      Your cart is empty
-    </div>
-  )}
-</div>
-
+          {data?.length > 0 ? (
+            data.map((item: any, idx: number) =>
+              item.menu_items?.map((cart_item: any, index: number) => (
+                <CartCard key={`${idx}-${index}`} cart_item={cart_item} />
+              ))
+            )
+          ) : (
+            <div className="text-center py-8 text-gray-500 text-sm">
+              Your cart is empty
+            </div>
+          )}
+        </div>
       </div>
     );
   }
 
   // Message/Bill Details UI
   function Message() {
-    const total = data?.menu_items?.reduce(
-      (acc: number, val: any) => acc + val.price * val.count,
-      0
-    ) || 0;
+    const total =
+      data?.menu_items?.reduce(
+        (acc: number, val: any) => acc + val.price * val.count,
+        0
+      ) || 0;
 
     return (
       <div className="p-4 bg-gray-50 border-t border-gray-100 sticky bottom-0">

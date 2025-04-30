@@ -52,7 +52,9 @@ export default function Signup() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
+        const errorData = await response
+          .json()
+          .catch(() => ({ message: "Unknown error" }));
         throw new Error(errorData.message || "Signup failed");
       }
 
@@ -60,7 +62,7 @@ export default function Signup() {
       console.log("User registered successfully:", userData);
 
       await authenticateUser();
-      router.push("/dashboard");
+      router.push("/dashboard/businesses");
     } catch (error: any) {
       setError(error.message);
       console.error("Signup error:", error.message);
@@ -70,13 +72,17 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg">
-        <h2 className="text-2xl font-semibold text-gray-700 text-center">Create an Account</h2>
+    <div className="flex items-center justify-center">
+      <div className="w-full max-w-md rounded-lg">
+        <h2 className="text-2xl font-semibold text-gray-700 text-center">
+          Create an Account
+        </h2>
 
-        {error && <p className="mt-4 text-red-600 text-sm text-center">{error}</p>}
+        {error && (
+          <p className="mt-4 text-red-600 text-sm text-center">{error}</p>
+        )}
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           {fields.map((field) => (
             <Input
               key={field.id}
@@ -92,15 +98,18 @@ export default function Signup() {
             />
           ))}
 
-          <FormAction handleSubmit={handleSubmit} text={loading ? "Signing up..." : "Signup"} />
+          <FormAction
+            handleSubmit={handleSubmit}
+            text={loading ? "Signing up..." : "Signup"}
+          />
         </form>
 
-        <p className="mt-4 text-gray-600 text-sm text-center">
+        {/* <p className="mt-4 text-gray-600 text-sm text-center">
           Already have an account?{" "}
           <a href="/login" className="text-blue-500 hover:underline">
             Log in
           </a>
-        </p>
+        </p> */}
       </div>
     </div>
   );

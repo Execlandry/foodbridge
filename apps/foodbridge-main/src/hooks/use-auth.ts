@@ -42,7 +42,8 @@ export default function useAuth() {
       navigate("/fbe/business");
       return response.data;
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || "Signup failed";
+      const errorMessage =
+        err.response?.data?.message || err.message || "Signup failed";
       setError(errorMessage);
       console.error("Signup failed:", err.response?.data || err);
       throw new Error(errorMessage);

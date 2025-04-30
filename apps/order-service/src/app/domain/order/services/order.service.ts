@@ -50,15 +50,15 @@ export class OrderService implements OnModuleInit {
       user_id: user.userId,
       address: payload.address,
       business: payload.business,
-      amount:payload.amount,
-      driver:payload.driver,
+      amount: payload.amount,
+      driver: payload.driver,
       // address_id: payload.address_id,
       // business_id: payload.business_id,
       menu_items: payload.menu_items,
       order_status: "initiated",
       payment_status: "in_progress",
-      driver_id:payload.driver_id,
-      request_for_driver:payload.request_for_driver
+      driver_id: payload.driver_id,
+      request_for_driver: payload.request_for_driver,
     });
   }
 
@@ -90,7 +90,9 @@ export class OrderService implements OnModuleInit {
     // update payment status to success or feailed for order Id
     order.payment_status = query.status;
     order.order_status =
-      query.status === PaymentStatus.success ? "payment_processed" : "payment_failed";
+      query.status === PaymentStatus.success
+        ? "payment_processed"
+        : "payment_failed";
     const savedOrder = await order.save();
 
     if (PaymentStatus.success === query.status) {

@@ -1,20 +1,20 @@
-import { BrowserRouter, Route, Routes, Outlet } from 'react-router-dom';
-import { useState } from 'react';
-import Home from './routes/home';
-import Header from './components/landing-page/navbar';
-import SignIn from './routes/signin';
-import SignUp from './routes/signup';
-import Search from './routes/search';
-import CheckoutPage from './routes/checkout';
-import LandingPage from './routes/landing';
-import BusinessPage from './routes/business';
-import TrackOrderPage from './components/track-order/track-order';
-import LeftSideBar from './components/business-pages/left-side-bar';
-import RightSideBar from './components/business-pages/right-side-bar';
-import './styles/index.css';
-import './styles/tailwind.css';
-import { UserContext } from './hooks/user-context';
-import FetchUser from './hooks/fetch-user';
+import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
+import { useState } from "react";
+import Home from "./routes/home";
+import Header from "./components/landing-page/navbar";
+import SignIn from "./routes/signin";
+import SignUp from "./routes/signup";
+import Search from "./routes/search";
+import CheckoutPage from "./routes/checkout";
+import LandingPage from "./routes/landing";
+import BusinessPage from "./routes/business";
+import TrackOrderPage from "./components/track-order/track-order";
+import LeftSideBar from "./components/business-pages/left-side-bar";
+import RightSideBar from "./components/business-pages/right-side-bar";
+import "./styles/index.css";
+import "./styles/tailwind.css";
+import { UserContext } from "./hooks/user-context";
+import FetchUser from "./hooks/fetch-user";
 
 function Layout() {
   return (
@@ -58,7 +58,11 @@ function AppLayout() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d={isRightSideBarOpen ? "M6 18L18 6M6 6l12 12" : "M3 12h18M3 6h18M3 18h18"}
+                d={
+                  isRightSideBarOpen
+                    ? "M6 18L18 6M6 6l12 12"
+                    : "M3 12h18M3 6h18M3 18h18"
+                }
               />
             </svg>
           </button>
@@ -67,7 +71,10 @@ function AppLayout() {
       </div>
 
       {/* Right Sidebar */}
-      <RightSideBar isOpen={isRightSideBarOpen} toggleSidebar={toggleRightSideBar} />
+      <RightSideBar
+        isOpen={isRightSideBarOpen}
+        toggleSidebar={toggleRightSideBar}
+      />
     </div>
   );
 }

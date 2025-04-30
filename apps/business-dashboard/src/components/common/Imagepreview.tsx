@@ -14,7 +14,13 @@ const ImagePreview = ({ images }: Props) => {
           const src = URL.createObjectURL(image);
           return (
             <div className="col-span-4" key={image.name}>
-              <Image height={100} width={100} src={src} alt={image.name} className="object-cover" />
+              <Image
+                height={100}
+                width={100}
+                src={src}
+                alt={image.name}
+                className="object-cover"
+              />
             </div>
           );
         })}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -6,12 +6,11 @@ import { loginFields } from "../constants/formFields";
 import FormAction from "./FormAction";
 import FormExtra from "./FormExtra";
 import Input from "./Input";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const fields = loginFields;
 let fieldsState = {} as any;
 fields.forEach((field) => (fieldsState[field.id] = ""));
-
 
 export default function Login() {
   const { data: session } = useSession();
@@ -23,10 +22,10 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if(user){
-      router.push("/dashboard")
+    if (user) {
+      router.push("/dashboard/businesses");
     }
-  },[user])
+  }, [user]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -39,12 +38,12 @@ export default function Login() {
       redirect: false,
       email: loginState.email,
       password: loginState.password,
-      callbackUrl : `${window.location.origin}/dashboard`,
+      callbackUrl: `${window.location.origin}/dashboard/businesses`,
     });
   };
 
   return (
-    <form className="mt-16 space-y-6" onSubmit={handleSubmit}>
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <div className="-space-y-px">
         {fields.map((field) => (
           <Input
@@ -63,7 +62,7 @@ export default function Login() {
         ))}
       </div>
 
-      <FormExtra />
+      {/* <FormExtra /> */}
       <FormAction handleSubmit={handleSubmit} text="Login" />
     </form>
   );

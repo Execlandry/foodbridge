@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { signupUser ,loginUser} = useAuth(); // Uncommented and assuming it exists
+  const { signupUser, loginUser } = useAuth(); // Uncommented and assuming it exists
   const { user } = useContext(UserContext) as UserContextType;
-  
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,10 +24,10 @@ export default function Signup() {
     e.preventDefault();
     try {
       await signupUser({
-        email:email,
+        email: email,
         first_name: firstName,
         last_name: lastName,
-        password:password
+        password: password,
       });
       loginUser({ email, password });
       // navigate("/"); // Navigate to home page on successful signup
@@ -38,7 +38,10 @@ export default function Signup() {
   };
 
   const GoogleSignup = () => {
-    window.open(`http://localhost:3001/api/v1/auth-service/auth/google`, "_self");
+    window.open(
+      `http://localhost:3001/api/v1/auth-service/auth/google`,
+      "_self"
+    );
   };
 
   return (
@@ -46,8 +49,12 @@ export default function Signup() {
       <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-lg transform transition-all hover:shadow-xl duration-300">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-green-600 tracking-tight">Join FoodBridge</h2>
-          <p className="text-gray-600 mt-2 text-sm">Create your account to get started</p>
+          <h2 className="text-3xl font-bold text-green-600 tracking-tight">
+            Join FoodBridge
+          </h2>
+          <p className="text-gray-600 mt-2 text-sm">
+            Create your account to get started
+          </p>
         </div>
 
         {/* Form */}

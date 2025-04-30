@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine';
+import React, { useEffect, useRef } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine";
 
 interface MapProps {
   start: { lat: number; lng: number };
@@ -22,26 +22,31 @@ const MapComponent: React.FC<MapProps> = ({ start, end }) => {
     }
 
     // Initialize map
-    mapInstance.current = L.map(mapRef.current).setView([start.lat, start.lng], 10);
+    mapInstance.current = L.map(mapRef.current).setView(
+      [start.lat, start.lng],
+      10
+    );
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
     }).addTo(mapInstance.current);
 
     // Add Start Marker
     L.marker([start.lat, start.lng], {
-      icon: L.icon({ 
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', 
-        iconSize: [25, 41] 
-      })
+      icon: L.icon({
+        iconUrl:
+          "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+        iconSize: [25, 41],
+      }),
     }).addTo(mapInstance.current);
 
     // Add End Marker
     L.marker([end.lat, end.lng], {
-      icon: L.icon({ 
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png', 
-        iconSize: [25, 41] 
-      })
+      icon: L.icon({
+        iconUrl:
+          "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+        iconSize: [25, 41],
+      }),
     }).addTo(mapInstance.current);
 
     // Remove previous routing control if exists
@@ -49,7 +54,7 @@ const MapComponent: React.FC<MapProps> = ({ start, end }) => {
       try {
         mapInstance.current.removeControl(routingControl.current);
       } catch (error) {
-        console.warn('Error removing routing control:', error);
+        console.warn("Error removing routing control:", error);
       }
       routingControl.current = null;
     }
@@ -62,12 +67,12 @@ const MapComponent: React.FC<MapProps> = ({ start, end }) => {
       fitSelectedRoutes: true,
       show: false,
       createMarker: () => null, // Prevent default markers
-      lineOptions: { styles: [{ color: 'blue', weight: 4 }] },
+      lineOptions: { styles: [{ color: "blue", weight: 4 }] },
     }).addTo(mapInstance.current);
 
     // Ensure the directions panel is hidden
     setTimeout(() => {
-      document.querySelector('.leaflet-routing-container')?.remove();
+      document.querySelector(".leaflet-routing-container")?.remove();
     }, 100);
 
     return () => {
@@ -79,9 +84,15 @@ const MapComponent: React.FC<MapProps> = ({ start, end }) => {
   }, [start, end]);
 
   return (
-    <div 
-      ref={mapRef} 
-      style={{ height: '500px', width: '100%', marginTop: '20px', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }} 
+    <div
+      ref={mapRef}
+      style={{
+        height: "500px",
+        width: "100%",
+        marginTop: "20px",
+        borderRadius: "10px",
+        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+      }}
     />
   );
 };

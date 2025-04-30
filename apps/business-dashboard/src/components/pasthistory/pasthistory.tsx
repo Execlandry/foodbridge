@@ -47,11 +47,31 @@ const foodData: FoodItem[] = [
 
 const columns = [
   { header: "ID", accessor: "id" },
-  { header: "Charity Name", accessor: "charityName", className: "hidden md:table-cell" },
-  { header: "Food Name", accessor: "foodName", className: "hidden md:table-cell" },
-  { header: "Quantity", accessor: "quantity", className: "hidden md:table-cell" },
-  { header: "Delivery Date", accessor: "deliveryDate", className: "hidden lg:table-cell" },
-  { header: "Delivery Time", accessor: "deliveryTime", className: "hidden lg:table-cell" },
+  {
+    header: "Charity Name",
+    accessor: "charityName",
+    className: "hidden md:table-cell",
+  },
+  {
+    header: "Food Name",
+    accessor: "foodName",
+    className: "hidden md:table-cell",
+  },
+  {
+    header: "Quantity",
+    accessor: "quantity",
+    className: "hidden md:table-cell",
+  },
+  {
+    header: "Delivery Date",
+    accessor: "deliveryDate",
+    className: "hidden lg:table-cell",
+  },
+  {
+    header: "Delivery Time",
+    accessor: "deliveryTime",
+    className: "hidden lg:table-cell",
+  },
 ];
 
 const Table = ({
@@ -68,7 +88,9 @@ const Table = ({
       <thead>
         <tr className="text-left text-gray-500 text-sm">
           {columns.map((col) => (
-            <th key={col.accessor} className={col.className}>{col.header}</th>
+            <th key={col.accessor} className={col.className}>
+              {col.header}
+            </th>
           ))}
         </tr>
       </thead>
@@ -142,7 +164,11 @@ const PastHistory = () => {
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i + 1}
-              className={`px-2 rounded-full ${currentPage === i + 1 ? "bg-purple-500 text-center text-gray-800" : ""}`}
+              className={`px-2 rounded-full ${
+                currentPage === i + 1
+                  ? "bg-purple-500 text-center text-gray-800"
+                  : ""
+              }`}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}
@@ -150,7 +176,9 @@ const PastHistory = () => {
           ))}
         </div>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
           className="py-2 px-4 rounded-md bg-slate-200 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >

@@ -20,11 +20,13 @@ export default function Login() {
   const signIn = (e: React.FormEvent) => {
     e.preventDefault();
     loginUser({ email, password });
-    
   };
 
   const Google = () => {
-    window.open(`http://localhost:3001/api/v1/auth-service/auth/google`, "_self");
+    window.open(
+      `http://localhost:3001/api/v1/auth-service/auth/google`,
+      "_self"
+    );
   };
 
   return (
@@ -33,14 +35,20 @@ export default function Login() {
         {/* Error Message */}
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6 animate-fade-in">
-            <p className="text-sm font-medium">Invalid credentials. Please check your email and password.</p>
+            <p className="text-sm font-medium">
+              Invalid credentials. Please check your email and password.
+            </p>
           </div>
         )}
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-green-600 tracking-tight">FoodBridge</h2>
-          <p className="text-gray-600 mt-2 text-sm">Sign in to connect food with purpose</p>
+          <h2 className="text-3xl font-bold text-green-600 tracking-tight">
+            FoodBridge
+          </h2>
+          <p className="text-gray-600 mt-2 text-sm">
+            Sign in to connect food with purpose
+          </p>
         </div>
 
         {/* Form */}

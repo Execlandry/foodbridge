@@ -21,7 +21,7 @@ export const fetchOrderItems = createAsyncThunk(
 
 export const PlaceOrder = createAsyncThunk(
   "fetch/creatOrder",
-  async (payload:any) => {
+  async (payload: any) => {
     return ExternalApis.createOrder(payload);
   }
 );

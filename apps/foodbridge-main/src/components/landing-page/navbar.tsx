@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { MdLogin, MdLogout, MdMenu, MdClose } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
-import { UserContext, UserContextType } from '../../hooks/user-context';
-import useAuth from '../../hooks/use-auth';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { MdLogin, MdLogout, MdMenu, MdClose } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { UserContext, UserContextType } from "../../hooks/user-context";
+import useAuth from "../../hooks/use-auth";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
@@ -21,7 +21,7 @@ function Navbar() {
   const handleLogout = () => {
     setNav(false);
     logoutUser();
-    navigate('/signin');
+    navigate("/signin");
   };
 
   useEffect(() => {
@@ -32,9 +32,9 @@ function Navbar() {
       }
     };
     // Attach the event listener to the document
-    document.addEventListener('click', handleClickOutside, true);
+    document.addEventListener("click", handleClickOutside, true);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener("click", handleClickOutside, true);
     };
   }, []);
 
@@ -46,7 +46,7 @@ function Navbar() {
           <div className="flex-shrink-0">
             <h2
               className="text-2xl font-extrabold text-green-600 tracking-tight cursor-pointer hover:text-green-700 transition-colors duration-300 ease-in-out"
-              onClick={() => navigate('/')}
+              onClick={() => navigate("/")}
             >
               Foodbridge
             </h2>
@@ -54,7 +54,7 @@ function Navbar() {
 
           {/* Right Section */}
           <div className="flex items-center space-x-6 md:flex hidden">
-            {user && user.permissions != 'business-admin' ? (
+            {user && user.permissions != "business-admin" ? (
               <>
                 {/* Cart */}
                 <button
@@ -92,17 +92,17 @@ function Navbar() {
                     </div> */}
                     <div className="ml-3">
                       <p className="text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors duration-300">
-                        {user.name?.substring(0, 10) || 'User'}
+                        {user.name?.substring(0, 10) || "User"}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {user.email?.substring(0, 15) || 'Email'}
+                        {user.email?.substring(0, 15) || "Email"}
                       </p>
                     </div>
                   </div>
 
                   {/* Dashboard Button */}
                   <button
-                    onClick={() => navigate('/fbe/business')}
+                    onClick={() => navigate("/fbe/business")}
                     className="inline-flex items-center px-4 py-1.5 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-lg shadow-md hover:from-green-800 hover:to-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5"
                   >
                     Dashboard
@@ -121,14 +121,16 @@ function Navbar() {
             ) : (
               <div className="flex space-x-4">
                 <button
-                  onClick={() => navigate('/signin?role=agency')}
+                  onClick={() => navigate("/signin?role=agency")}
                   className="inline-flex items-center px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
                   <MdLogin className="w-5 h-5 mr-2" />
                   Sign In as Agency
                 </button>
                 <button
-                  onClick={() => (window.location.href = 'http://localhost:3007/signin')}
+                  onClick={() =>
+                    (window.location.href = "http://localhost:3007/signin")
+                  }
                   className="inline-flex items-center px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
                   <MdLogin className="w-5 h-5 mr-2" />
@@ -160,7 +162,7 @@ function Navbar() {
           {user ? (
             <div className="flex flex-col space-y-4 py-4 px-6">
               <button
-                onClick={() => navigate('/fbe/business')}
+                onClick={() => navigate("/fbe/business")}
                 className="px-4 py-2 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-lg shadow-md hover:from-green-800 hover:to-green-900 focus:outline-none"
               >
                 Dashboard
@@ -176,13 +178,15 @@ function Navbar() {
           ) : (
             <div className="flex flex-col space-y-4 py-4 px-6">
               <button
-                onClick={() => navigate('/signin?role=agency')}
+                onClick={() => navigate("/signin?role=agency")}
                 className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none"
               >
                 Sign In as Agency
               </button>
               <button
-                onClick={() => (window.location.href = 'http://localhost:3007/signin')}
+                onClick={() =>
+                  (window.location.href = "http://localhost:3007/signin")
+                }
                 className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none"
               >
                 Sign In as Business
