@@ -1,4 +1,4 @@
-import { MenuItemBodyDto } from '../../../../../../order-service/src/app/domain/order/dto/order.dto';
+// import { MenuItemBodyDto } from '../../../../../../order-service/src/app/domain/order/dto/order.dto';
 import {
   BaseEntity,
   Column,
@@ -30,7 +30,7 @@ export class PayoutEntity extends BaseEntity {
   public amount!: number;
 
   @Column({ type: "jsonb", default: null })
-  public menu_items!: MenuItemBodyDto[];
+  public menu_items!: any;
 
   @CreateDateColumn({
     type: "timestamptz",
