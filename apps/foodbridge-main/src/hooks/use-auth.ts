@@ -12,17 +12,24 @@ export default function useAuth() {
     email: string;
     first_name: string;
     last_name: string;
+    name:string,
     password: string;
+    picture_url:string,
+    mobno:string,
   }) => {
-    const { email, first_name, last_name, password } = data;
+    const { email,name, first_name, last_name, password,picture_url,mobno } = data;
+    console.log(data);
     try {
       const response = await axios.post(
         "/api/v1/auth-service/users",
         {
+          name,
           email,
           first_name,
           last_name,
           password,
+          picture_url,
+          mobno
         },
         {
           headers: {
@@ -39,7 +46,7 @@ export default function useAuth() {
       //   created_at: response.data.created_at,
       //   updated_at: response.data.updated_at,
       // });
-      navigate("/fbe/business");
+      // navigate("/fbe/business");
       return response.data;
     } catch (err: any) {
       const errorMessage =

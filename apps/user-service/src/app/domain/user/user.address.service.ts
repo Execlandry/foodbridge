@@ -30,10 +30,11 @@ export class UserAddressService {
   ) {}
 
   async create(
+    param:UpdateUserByIdDto,
     body: CreateAddressDto,
     apiUser: UserMetaData
   ): Promise<UserAddressEntity> {
-    const user = await this.userRepo.findOne({ where: { id: apiUser.userId } });
+    const user = await this.userRepo.findOne({ where: { id: param.id } });
 
     if (!user) {
       throw new NotFoundException(`user not found`);
@@ -44,40 +45,49 @@ export class UserAddressService {
       user,
     };
 
-    const Address = await this.userAddressRepo.findOne({
-      where: { id: apiUser.userId },
+    const existingAddress = await this.userAddressRepo.findOne({
+      where: { user: { id: param.id } },
+      relations: ['user'],
     });
-    if (!Address) {
-      const saveEntity = {
+  
+    if (!existingAddress) {
+      // Create new address
+      const newAddress = this.userAddressRepo.create({
         ...body,
         user,
-      };
-      const createdAddress = await this.userAddressRepo.save(saveEntity);
+      });
+  
+      const createdAddress = await this.userAddressRepo.save(newAddress);
       this.logger.log(
-        `address created successfully ${JSON.stringify(createdAddress)}`
+        `Address created successfully: ${JSON.stringify(createdAddress)}`
       );
       return createdAddress;
-    } else {
-      Address.city = body.city;
-      Address.lat = body.lat;
-      Address.long = body.long;
-      Address.country = body.country;
-      Address.street = body.street;
-      Address.state = body.state;
-      Address.name = body.name;
-      Address.pincode = body.pincode;
-      Address.save();
+    }
+     else {
+      existingAddress.city = body.city;
+      existingAddress.lat = body.lat;
+      existingAddress.long = body.long;
+      existingAddress.country = body.country;
+      existingAddress.street = body.street;
+      existingAddress.state = body.state;
+      existingAddress.name = body.name;
+      existingAddress.pincode = body.pincode;
+      this.userAddressRepo.merge(existingAddress, {
+        ...body,
+      });
+      const updatedAddress = await this.userAddressRepo.save(existingAddress);
+
       this.logger.log(
-        `address created successfully ${JSON.stringify(Address)}`
+        `address created successfully ${JSON.stringify(updatedAddress)}`
       );
-      return Address;
+      return updatedAddress;
     }
   }
 
-  async fetchAllAddress(apiUser: UserMetaData) {
+  async fetchAllAddress(param:UpdateUserByIdDto,apiUser: UserMetaData) {
     return await this.userAddressRepo.find({
       where: {
-        user: { id: apiUser.userId },
+        user: { id: param.id },
       },
     });
   }

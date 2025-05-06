@@ -3,14 +3,22 @@ import React, { useContext, useEffect, useState } from "react";
 import useAuth from "../hooks/use-auth";
 import { UserContext, UserContextType } from "../hooks/user-context";
 import { Link } from "react-router-dom";
+import { ExternalApis } from "../api";
 
 export default function Signup() {
   const navigate = useNavigate();
   const { signupUser, loginUser } = useAuth(); // Uncommented and assuming it exists
   const { user } = useContext(UserContext) as UserContextType;
-
+  const [profile, setProfile] = useState<File | string>("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [name, setname] = useState("");
+  const [mobno, setmobno] = useState("");
+  const [street, setstreet] = useState("");
+  const [city, setcity] = useState("");
+  const [state, setstate] = useState("");
+  const [country, setcountry] = useState("");
+  const [pincode, setpincode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,29 +28,130 @@ export default function Signup() {
     }
   }, [user, navigate]);
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await signupUser({
-        email: email,
-        first_name: firstName,
-        last_name: lastName,
-        password: password,
-      });
-      loginUser({ email, password });
-      // navigate("/"); // Navigate to home page on successful signup
-    } catch (error) {
-      console.error("Signup failed:", error);
-      // Add error handling UI here if needed
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
+  // const handleSignup = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     await signupUser({
+  //       email: email,
+  //       first_name: firstName,
+  //       last_name: lastName,
+  //       password: password,
+  //     });
+  //     loginUser({ email, password });
+  //     // navigate("/"); // Navigate to home page on successful signup
+  //   } catch (error) {
+  //     console.error("Signup failed:", error);
+  //     // Add error handling UI here if needed
+  //   }
+  // };
+
+  // const handleSignup = (e: any) => {
+  //   e.preventDefault();
+  //   setShowAddressForm(true);
+  // };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setProfile(file);
     }
   };
-
+  
   const GoogleSignup = () => {
     window.open(
       `http://localhost:3001/api/v1/auth-service/auth/google`,
       "_self"
     );
   };
+
+  const handleAddressSubmit = async(e: any) => {
+    e.preventDefault();
+
+    // const coords = await Coordinates({name,street,city,state,country,pincode});
+    // console.log("coords",coords);
+    let bannerUrl = "";
+    if (profile instanceof File) {
+      bannerUrl = await ExternalApis.uploadImage(profile);
+    } else if (typeof profile === "string") {
+      bannerUrl = profile;
+    } else {
+      throw new Error("No valid banner image provided");
+    }
+
+    const fullData = {
+      firstName,
+      lastName,
+      email,
+      mobno,
+      password,
+      name,
+      address: {
+        street,
+        city,
+        state,
+        country,
+        pincode,
+      },
+    };
+    const updatedFormData = {
+      ...fullData,
+      // latitude: coords?.lat ,
+      // longitude: coords?.long,
+      picture_url: bannerUrl,
+    };
+
+    console.log("Updated form data:", updatedFormData);
+    // console.log(coords?.lat ,coords?.long)
+
+
+    setFirstName("")
+    setEmail("")
+      setLastName("")
+      setPassword("")
+      setProfile("")
+      setcity("")
+      setcountry("")
+      setpincode("")
+      setname("")
+      setstate("")
+      setstreet("")
+      setmobno("");
+          console.log("Submitted Data:", fullData);
+
+    await sendData(updatedFormData);
+
+    // Submit this to backend
+  };
+
+  const sendData=async(Data:any)=>
+  {
+    const address={
+      name:Data.address.name,
+      street:Data.address.street,
+      city:Data.address.city,
+      state:Data.address.state,
+      country:Data.address.country,
+      pincode:Data.address.pincode,
+      lat:String(Data.latitude),
+      long:String(Data.longitude),
+    }
+    await signupUser({
+            email: Data.email,
+            first_name: Data.firstName,
+            last_name: Data.lastName,
+            password: Data.password,
+            name:Data.name,
+            picture_url:Data.picture_url,
+            mobno:Data.mobno,
+          });
+    await loginUser({ email:Data.email, password:Data.password });
+    // await ExternalApis.createAddress(address);
+    navigate("/fbe/business"); 
+  }
+
+ 
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-green-100 to-green-200 p-4">
@@ -58,7 +167,7 @@ export default function Signup() {
         </div>
 
         {/* Form */}
-        <form className="space-y-6" onSubmit={handleSignup}>
+        {/* <form className="space-y-6" onSubmit={handleSignup}>
           <div className="space-y-5">
             <div className="relative">
               <input
@@ -123,7 +232,232 @@ export default function Signup() {
           >
             Sign Up
           </button>
-        </form>
+        </form> */}
+
+        <div className="relative w-full max-w-md mx-auto ">
+          <form
+            className={`w-fit space-y-6 bg-white p-6 rounded-lg shadow flex transition-transform duration-500 ${
+              showAddressForm ? "bloack" : "block"
+            }`}
+            onSubmit={handleAddressSubmit}
+          >
+            <div className="space-y-5 bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-semibold">Sign Up</h2>
+
+              <div className="relative">
+                <input
+                  value={name}
+                  onChange={(e) => setname(e.target.value)}
+                  type="text"
+                  placeholder="Charity Name"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Charity Name
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  type="text"
+                  placeholder="First Name"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  First Name
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  type="text"
+                  placeholder="Last Name"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Last Name
+                </label>
+              </div>
+              <input
+                      type="file"
+                      id="banner"
+                      name="Profile Pic"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="pl-10 block w-full rounded-md border-gray-300 focus:border-green-500 focus:ring-green-500"
+                      required
+                    />
+
+              <div className="relative">
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  placeholder="Email"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Email
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={mobno}
+                  onChange={(e) => setmobno(e.target.value)}
+                  type="text"
+                  placeholder="Mobile Number"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Mobile Number
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  placeholder="Password"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Password
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
+              >
+                Submit
+              </button>
+
+              <div className="text-center mt-4">
+                <Link
+                  to="/signin"
+                  className="text-sm text-green-600 hover:text-green-700"
+                >
+                  Already have an account? Sign in
+                </Link>
+              </div>
+            </div>
+          </form>
+
+          {/* Step 2: Address Form */}
+          {/* <form
+            className={`space-y-6  w-full ${
+              showAddressForm ? "block" : "hidden"
+            }`}
+            onSubmit={handleAddressSubmit}
+          >
+            <div className="space-y-5 bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-semibold">Address Details</h2>
+
+              <div className="relative">
+                <input
+                  value={name}
+                  onChange={(e) => setname(e.target.value)}
+                  type="text"
+                  placeholder="Landmark"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Landmark
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={street}
+                  onChange={(e) => setstreet(e.target.value)}
+                  type="text"
+                  placeholder="Street"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Street
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={city}
+                  onChange={(e) => setcity(e.target.value)}
+                  type="text"
+                  placeholder="City"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  City
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={state}
+                  onChange={(e) => setstate(e.target.value)}
+                  type="text"
+                  placeholder="State"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  State
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={country}
+                  onChange={(e) => setcountry(e.target.value)}
+                  type="text"
+                  placeholder="Country"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Country
+                </label>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={pincode}
+                  onChange={(e) => setpincode(e.target.value)}
+                  type="text"
+                  placeholder="Pincode"
+                  required
+                  className="peer w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <label className="absolute left-4 -top-2 text-xs bg-white px-1 text-gray-500 peer-focus:text-green-500">
+                  Pincode
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
+              >
+                Complete Signup
+              </button>
+            </div>
+          </form> */}
+        </div>
 
         {/* Signin Link */}
         <div className="text-center mt-4">
@@ -136,17 +470,17 @@ export default function Signup() {
         </div>
 
         {/* Divider */}
-        <div className="relative my-6">
+        {/* <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-200"></div>
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-white text-gray-500">OR</span>
           </div>
-        </div>
+        </div> */}
 
         {/* Google Sign Up */}
-        <button
+        {/* <button
           onClick={GoogleSignup}
           className="w-full flex items-center justify-center py-3 bg-white border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-50 focus:ring-4 focus:ring-green-200 focus:outline-none transition-all duration-200"
         >
@@ -169,7 +503,7 @@ export default function Signup() {
             />
           </svg>
           Sign up with Google
-        </button>
+        </button> */}
       </div>
     </main>
   );

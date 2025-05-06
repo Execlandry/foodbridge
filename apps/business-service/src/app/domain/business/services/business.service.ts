@@ -45,7 +45,7 @@ export class BusinessService {
 
   public async fetchAllMyBusiness() {
     return await this.businessRepo.find({
-      relations: ["dishes"],
+      relations: ["dishes","address"],
     });
   }
 

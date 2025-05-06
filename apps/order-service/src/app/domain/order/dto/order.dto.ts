@@ -130,7 +130,7 @@ export class CreatePaymentBodyDto {
   // })
   // @IsUUID()
   // public business_id!: string;
-
+    
   @ApiProperty({
     description: "business",
     example: {
@@ -150,11 +150,23 @@ export class CreatePaymentBodyDto {
       banner: "https://gogole.com/banner.png",
       delivery_options: "all",
       pickup_options: "all",
+      address:{}
     },
     required: true,
   })
   @IsObject()
   public business!: any;
+
+  @ApiProperty({
+    description: "business",
+    example: {
+      id: "dee90081-616b-4744-b2fd-7ee11f38070a",
+      name: "Kanha Veg Business",
+    },
+    required: true,
+  })
+  @IsObject()
+  public user!: any;
 
   @ApiProperty({
     description: "driver_id",

@@ -40,7 +40,7 @@ export class UserAddressEntity extends BaseEntity {
   @Column({ type: "varchar", length: 255, default: null })
   public state!: string;
 
-  @OneToOne(() => UserEntity, (event) => event.addresses)
+  @ManyToOne(() => UserEntity, (event) => event.addresses)
   @JoinColumn({ name: "user_id", referencedColumnName: "id" })
   user: UserEntity;
 

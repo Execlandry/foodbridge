@@ -48,7 +48,16 @@ export class OrderService implements OnModuleInit {
     // });
     return this.orderRepo.save({
       user_id: user.userId,
-      address: payload.address,
+      address: {
+        ...payload.address,
+        user:{
+          name:payload.user.name,
+          id:payload.user.id,
+          email:payload.user.email,
+          first_name:payload.user.first_name,
+          last_name:payload.user.lastname
+        }
+      },
       business: payload.business,
       amount: payload.amount,
       driver: payload.driver,

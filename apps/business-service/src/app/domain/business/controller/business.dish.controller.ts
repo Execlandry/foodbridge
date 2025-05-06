@@ -101,8 +101,8 @@ export class BusinessDishController {
   @ApiCreatedResponse({
     description: "dish for business created successfully",
   })
-  @RoleAllowed(UserRoles["business-admin"])
-  @UseGuards(AccessTokenGuard, RolesGuard)
+  // @RoleAllowed(UserRoles["business-admin"])
+  // @UseGuards(AccessTokenGuard)
   @Put("/:id/dish/:dish_id")
   public async updateDish(
     @User() user: UserMetaData,

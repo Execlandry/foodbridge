@@ -21,11 +21,13 @@ import {
   selectAddress,
   selectedUserAddressSelector,
 } from "../../redux/user/user.slice";
-import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
+import { CartItemsSelector, EmptyCart, fetchCartItems } from "../../redux/cart/cart.slice";
 import { PlaceOrder, fetchOrderItems } from "../../redux/order/order.slice";
+import { UpdateDishStatus } from "../../redux/dishes/dishes.slice";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutCredit from "./checkout-credit";
 import { Divider } from "@chakra-ui/react";
+import { divIcon } from "leaflet";
 
 interface MenuItems {
   description: string;
@@ -153,23 +155,30 @@ function Checkout() {
       console.log(value, "\n", index);
       console.log(addresses[0]);
       console.log(requestfordriver[index]);
-      dispatch(
-        PlaceOrder({
-          business: value.business,
-          driver_id: "",
-          driver: {},
-          address: addresses[0],
-          request_for_driver: requestfordriver[index],
-          amount: "10",
-          menu_items: value.menu_items,
-        })
-      );
-      updatestatus(value.menu_items);
+      if(value?.menu_items)
+      {
+        dispatch(
+          PlaceOrder({
+            user:user,
+            business: value.business,
+            driver_id: "",
+            driver: {},
+            address: addresses[0],
+            request_for_driver: requestfordriver[index],
+            amount: "10",
+            menu_items: value.menu_items,
+          })
+        );
+      }
+      if(value?.menu_items)
+      updatestatus(value.business.id,value.menu_items);
     });
+    dispatch(EmptyCart());
   };
 
-  const updatestatus = (menuitem: any) => {
+  const updatestatus = (id:any,menuitem: any) => {
     for (const item of menuitem) {
+      dispatch(UpdateDishStatus({id,item}))
     }
   };
   const HandleDriverUpdate =
@@ -179,8 +188,8 @@ function Checkout() {
       setrequestfordriver(updatedArray);
       console.log("address  ", addresses);
       console.log("menuitem : ", menuItem);
-      setsrclat(addresses[0].lat);
-      setsrclong(addresses[0].long);
+      // setsrclat(addresses[0].lat);
+      // setsrclong(addresses[0].long);
     };
 
   async function Coordinates(addressObj: any) {
@@ -232,11 +241,11 @@ function Checkout() {
     }
   }
 
-  const selectUserAddress = (address: any) => {
-    dispatch(selectAddress(address));
-    console.log(menuItem);
-    console.log(selectedAddress);
-  };
+  // const selectUserAddress = (address: any) => {
+  //   dispatch(selectAddress(address));
+  //   console.log(menuItem);
+  //   console.log(selectedAddress);
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -255,8 +264,8 @@ function Checkout() {
     }
 
     console.log(updatedFormData);
-    dispatch(createAddress(updatedFormData));
-    dispatch(fetchAddress());
+    await dispatch(createAddress({id:user.id,formdata:updatedFormData}));
+    await dispatch(fetchAddress(user.id));
     setShowModal(false);
   };
 
@@ -267,9 +276,10 @@ function Checkout() {
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchAddress());
+      dispatch(fetchAddress(user.id));
       dispatch(fetchCartItems());
     }
+    console.log(user);
   }, [user, dispatch]);
 
   useEffect(() => {
@@ -278,6 +288,7 @@ function Checkout() {
     if (address) {
       setsrclat(address.lat);
       setsrclong(address.long);
+      console.log(address);
     }
   }, [menuItem, addresses]);
 
@@ -349,73 +360,86 @@ function Checkout() {
                     <div>
                       {/* Existing Addresses */}
                       <div className="space-y-4 w-full">
-                        {addresses?.map((address: any) => (
-                          <div
-                            key={address.id}
-                            className={`p-4 rounded-lg border-2 ${
-                              selectedAddress?.id === address.id
-                                ? "border-green-500 bg-green-50"
-                                : "border-gray-200 hover:border-gray-300"
-                            } transition-colors`}
-                          >
-                            <div className="flex items-start gap-3">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-6 h-6 text-gray-500 mt-1"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                                />
-                              </svg>
-                              <div className="flex-1">
-                                <h3 className="text-lg font-semibold text-gray-900">
-                                  {address.name}
-                                </h3>
-                                <p className="text-gray-600 text-sm mt-1">
-                                  {address.street}, {address.city},{" "}
-                                  {address.state} {address.pincode},{" "}
-                                  {address.country}
-                                </p>
-                                <button
-                                  // onClick={() => selectUserAddress(address)}
-                                  onClick={() => setShowModal(true)}
-                                  className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                        {addresses && addresses.length > 0 ? (
+                          addresses.map((address: any) => (
+                            <div
+                              key={address.id}
+                              className={`p-4 rounded-lg border-2 ${
+                                selectedAddress?.id === address.id
+                                  ? "border-green-500 bg-green-50"
+                                  : "border-gray-200 hover:border-gray-300"
+                              } transition-colors`}
+                            >
+                              <div className="flex items-start gap-3">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  className="w-6 h-6 text-gray-500 mt-1"
                                 >
-                                  Change Address
-                                </button>
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                                  />
+                                </svg>
+                                <div className="flex-1">
+                                  <h3 className="text-lg font-semibold text-gray-900">
+                                    {address.name}
+                                  </h3>
+                                  <p className="text-gray-600 text-sm mt-1">
+                                    {address.street}, {address.city},{" "}
+                                    {address.state} {address.pincode},{" "}
+                                    {address.country}
+                                  </p>
+                                  <button
+                                    // onClick={() => selectUserAddress(address)}
+                                    onClick={() => setShowModal(true)}
+                                    className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                                  >
+                                    Change Address
+                                  </button>
+                                </div>
                               </div>
+
+                              {address.lat && address.long && (
+                                <div className="mt-4 w-full h-64">
+                                  <iframe
+                                    title="Address Location"
+                                    width="100%"
+                                    height="100%"
+                                    frameBorder="0"
+                                    scrolling="no"
+                                    marginHeight={0}
+                                    marginWidth={0}
+                                    src={`https://www.openstreetmap.org/export/embed.html?bbox=${
+                                      parseFloat(address.long) - 0.01
+                                    }%2C${parseFloat(address.lat) - 0.01}%2C${
+                                      parseFloat(address.long) + 0.01
+                                    }%2C${
+                                      parseFloat(address.lat) + 0.01
+                                    }&layer=mapnik&marker=${parseFloat(
+                                      address.lat
+                                    )}%2C${parseFloat(address.long)}`}
+                                    className="rounded-lg border"
+                                  />
+                                </div>
+                              )}
                             </div>
-                            {address.lat && address.long && (
-                              <div className="mt-4 w-full h-64">
-                                <iframe
-                                  title="Address Location"
-                                  width="100%"
-                                  height="100%"
-                                  frameBorder="0"
-                                  scrolling="no"
-                                  marginHeight={0}
-                                  marginWidth={0}
-                                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-                                    parseFloat(address.long) - 0.01
-                                  }%2C${parseFloat(address.lat) - 0.01}%2C${
-                                    parseFloat(address.long) + 0.01
-                                  }%2C${
-                                    parseFloat(address.lat) + 0.01
-                                  }&layer=mapnik&marker=${parseFloat(
-                                    address.lat
-                                  )}%2C${parseFloat(address.long)}`}
-                                  className="rounded-lg border"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        ))}
+                          ))
+                        ) : !addresses ? (
+                          <div>no address found</div>
+                        ) : (
+                          <button
+                            // onClick={() => selectUserAddress(address)}
+                            onClick={() => setShowModal(true)}
+                            className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                          >
+                            Create Address
+                          </button>
+                        )}
                       </div>
 
                       {/* Add New Address */}

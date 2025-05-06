@@ -68,8 +68,9 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
             {user && (
               <div className="flex items-center space-x-2 group cursor-pointer">
                 <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-medium">
-                  {user.name?.charAt(0)}
+                  {user?.name}
                 </div>
+                {/* <img src={user.picture_url} alt="" /> */}
                 <div className="hidden md:flex flex-col">
                   <span className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
                     {user.email}

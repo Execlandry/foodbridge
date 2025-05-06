@@ -1,10 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { ExternalApis } from "../../api";
 // use ExternalApis -- refactor code
 export interface BusinessState {
   dishes?: any;
 }
 // we will add types in @fbe/types package
+
+
+export const UpdateDishStatus = createAsyncThunk(
+  "api/UpdateDishStatus",
+  async (data:any) => {
+    return await ExternalApis.UpdateDishStatus({business:data.id,dish:data.item.id,status:"pending"})
+  }
+);
 
 export const fetchDishesForLandingPage = createAsyncThunk(
   "api/fetchDishesForLandingPage",

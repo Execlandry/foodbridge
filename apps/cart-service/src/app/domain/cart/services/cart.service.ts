@@ -118,11 +118,12 @@ export class CartService {
 
   async clearCartMenuItem(user: UserMetaData) {
     const { userId } = user;
-    const item = await this.cartRepo.findOne({
+    const items = await this.cartRepo.find({
       where: {
         user_id: userId,
       },
     });
+    for(const item of items)
     await this.cartRepo.delete({ id: item.id });
     return null;
   }

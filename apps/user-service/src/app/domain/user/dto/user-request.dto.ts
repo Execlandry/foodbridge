@@ -119,6 +119,15 @@ export class UserSignupDto {
   public email!: string;
 
   @ApiProperty({
+    description: "Charity Name",
+    example: "Helping Hands",
+    required: true,
+  })
+  @IsString()
+  public name!: string;
+  
+
+  @ApiProperty({
     description: "firstName",
     example: "john",
     required: false,
@@ -135,6 +144,24 @@ export class UserSignupDto {
   @IsOptional()
   @IsString()
   public last_name!: string;
+
+  @ApiProperty({
+    description: "http:123",
+    example: "http:123",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  public picture_url!: string;
+
+  @ApiProperty({
+    description: "12312",
+    example: "123123123",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  public mobno!: string;
 
   @ApiProperty({
     description: "password",
