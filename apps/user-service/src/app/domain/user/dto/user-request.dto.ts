@@ -1,19 +1,109 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import {
+  IsBoolean,
   IsDefined,
   IsEmail,
   IsEnum,
+  IsNumberString,
   IsObject,
   IsOptional,
   IsString,
   IsUUID,
+  Length,
+  Matches,
   MinLength,
   ValidateNested,
 } from "class-validator";
 import { Type as validateType } from "class-transformer";
 import { UserRoles } from "@fbe/types";
+import { UserSignupResponseDto } from "./user-response.dto";
 
-export class GetPartnerbyId {
+export class PartnerResponseDto extends UserSignupResponseDto {
+  @ApiProperty({ example: true })
+  availability: boolean;
+}
+
+export class UserNestedDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  permissions: string;
+}
+
+export class FullPartnerDetailsDto {
+  // @ApiProperty()
+  // partnerId: string;
+
+  // @ApiProperty()
+  // availability: boolean;
+
+  @ApiProperty()
+  ratings: string;
+
+  @ApiProperty()
+  mobno: string;
+
+  @ApiProperty()
+  created_at: Date;
+
+  @ApiProperty()
+  updated_at: Date;
+
+  @ApiProperty({ type: UserNestedDto })
+  user: UserNestedDto;
+}
+
+export class DeliveryPartnerSignupDto{
+  @ApiProperty({
+    description: "username",
+    example: "john",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  public name!: string;
+
+  @ApiProperty({
+    description: "email",
+    example: "user@gmail.com",
+    required: true,
+  })
+  @IsDefined()
+  @IsString()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    description: 'Mobile number of the user',
+    example: '9876543210',
+    type: String, 
+  })
+  @IsNumberString()
+  @Length(10, 15)
+  @Matches(/^\+?[1-9]\d{9,14}$/)
+  mobno: string;
+
+  @ApiProperty({
+    description: "password",
+    example: "letmeinplease",
+    required: true,
+  })
+  @IsDefined()
+  @IsString()
+  @MinLength(8)
+  public password!: string;
+
+
+}
+
+export class GetDeliveryPartnerbyId {
   @ApiProperty({
     description: "id",
     example: "id",
@@ -24,19 +114,19 @@ export class GetPartnerbyId {
   public id!: string;
 }
 
-export class GetPartnerAvailabulity {
+export class GetDeliveryPartnerAvailability {
   @ApiProperty({
-    description: "availability",
-    example: "availability",
-    required: true,
+    description: "Partner availability status",
+    example: true,
+    required: true
   })
-  @IsString()
+  @IsBoolean()
   public availability!: boolean;
 }
 export class CreateAddressDto {
   @ApiProperty({
     description: "city",
-    example: "delhi",
+    example: "Candolim",
     required: true,
   })
   @IsDefined()
@@ -45,7 +135,7 @@ export class CreateAddressDto {
 
   @ApiProperty({
     description: "state",
-    example: "delhi",
+    example: "Goa",
     required: true,
   })
   @IsDefined()
@@ -54,7 +144,7 @@ export class CreateAddressDto {
 
   @ApiProperty({
     description: "lat",
-    example: "12",
+    example: "15.501107",
     required: true,
   })
   @IsOptional()
@@ -63,7 +153,7 @@ export class CreateAddressDto {
 
   @ApiProperty({
     description: "long",
-    example: "11",
+    example: "73.769915",
     required: true,
   })
   @IsOptional()
@@ -81,7 +171,7 @@ export class CreateAddressDto {
 
   @ApiProperty({
     description: "pin_code",
-    example: "6789876",
+    example: "403515",
     required: true,
   })
   @IsDefined()
@@ -90,7 +180,7 @@ export class CreateAddressDto {
 
   @ApiProperty({
     description: "street",
-    example: "street",
+    example: "Bamon Vaddo",
     required: true,
   })
   @IsDefined()
@@ -99,7 +189,7 @@ export class CreateAddressDto {
 
   @ApiProperty({
     description: "full address",
-    example: "full address",
+    example: "Aguada Road",
     required: true,
   })
   @IsDefined()

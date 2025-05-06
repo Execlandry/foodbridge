@@ -6,11 +6,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
+  Index,
 } from "typeorm";
 import { MenuItemBodyDto } from "../dto/order.dto";
 
 @Entity("orders")
 export class OrderEntity extends BaseEntity {
+  //id,user_id,driver_id,driver{},business{},address{},req:bool
+  // ,payment_stat,payment_method,order_status,amount,menu{}
+
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
@@ -32,17 +36,33 @@ export class OrderEntity extends BaseEntity {
   // @Column({ type: "uuid", select: true, default: null })
   // public address_id!: string;
 
+
   @Column({ type: "jsonb", select: true, default: null })
   public address!: any;
 
   @Column({ type: "boolean", default: false })
   public request_for_driver!: boolean;
 
-  @Column({ type: "varchar", default: "draft", select: true })
+  @Column({ 
+    type: "varchar", 
+    default: "pending",
+    enum: ["pending", "success", "failed"]
+  })
   public payment_status!: string;
 
-  @Column({ type: "varchar", default: "draft", select: true })
-  public order_status!: string;
+  @Column({ 
+    type: "varchar", 
+    enum: ["upi", "cod"],
+    default: "cod"
+  })
+  public payment_method!: "upi" | "cod";
+
+  @Column({ 
+    type: "varchar",
+    default: 'pending',
+    enum: ['pending', 'accepted', 'in_transit', 'delivered']
+  })
+  public order_status: string;
 
   @Column({ type: "varchar", select: true, default: 0 })
   public amount!: string;

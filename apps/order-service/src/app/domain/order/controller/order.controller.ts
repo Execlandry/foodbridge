@@ -46,6 +46,9 @@ import {
 } from "../dto/order.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { AccessTokenGuard } from "../../auth/guards/access_token.guard";
+import { UserRoles } from "@fbe/types";
+import { RoleAllowed } from "../../auth/guards/role-decorator";
+import { RolesGuard } from "../../auth/guards/role-guard";
 
 @ApiBearerAuth("authorization")
 @Controller("order")
@@ -87,8 +90,25 @@ export class OrderController {
   @UseGuards(AccessTokenGuard)
   @Get("/")
   public async getLastProcessedOrder(@User() user: UserMetaData) {
-    return await this.service.getLasProcessedOrder(user);
+    return await this.service.getLastPaymentProcessedOrder(user);
   }
+
+  // @HttpCode(HttpStatus.OK)
+  // @ApiConsumes("application/json")
+  // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  // @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  // @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  // @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  // @UseGuards(AccessTokenGuard)
+  // @Patch("/:id")
+  // public async confirmOrder(
+  //   @User() user: UserMetaData,
+  //   @Param() param: UpdateByIdDto,
+  //   @Query() query: UpdateByIdQueryDto
+  // ) {
+  //   console.log(user);
+  //   return await this.service.confirmOrder(user, param, query);
+  // }
 
   @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")
@@ -104,18 +124,19 @@ export class OrderController {
     @Query() query: UpdateByIdQueryDto
   ) {
     console.log(user);
-    return await this.service.confirmOrder(user, param, query);
+    // return await this.service.confirmOrderPayment(user, param, query);
   }
 
-  @HttpCode(HttpStatus.OK)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Get("/test")
-  public async testRMQ(@User() user: UserMetaData) {
-    return await this.service.testRMQ();
-  }
+  // @HttpCode(HttpStatus.OK)
+  // @ApiConsumes("application/json")
+  // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  // @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  // @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  // @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  // @UseGuards(AccessTokenGuard)
+  // @Get("/test")
+  // public async testRMQ(@User() user: UserMetaData) {
+  //   return await this.service.testRMQ();
+  // }
+
 }

@@ -1,33 +1,20 @@
-import { CacheModule, CacheStore, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { TerminusModule } from "@nestjs/terminus";
-import { mainModule } from "process";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { DBModule } from "@fbe/database";
-import { DeliveryEntity } from "./domain/delivery.entity";
-import { DeliveryService } from "./domain/delivery.service";
-import { DeliveryController } from "./delivery.controller";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ScheduleModule } from "@nestjs/schedule";
-import { DeliveryEventService } from "./domain/delivery-event.service";
-import HttpClientService from "./lib/http.client.service";
-import { UserProxyService } from "./domain/user.http.service";
+
+
+import { AppLoggerModule } from "@fbe/logger";
+import { DomainModule } from "./app/domain/domain.module";
 @Module({
   imports: [
+    DomainModule,
     TerminusModule,
-    ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([DeliveryEntity]),
-    DBModule.forRoot({
-      entities: [DeliveryEntity],
-    }),
+    AppLoggerModule,
   ],
-  controllers: [AppController, DeliveryController],
+  controllers: [AppController],
   providers: [
     AppService,
-    DeliveryService,
-    DeliveryEventService,
-    UserProxyService,
-    HttpClientService,
   ],
 })
 export class AppModule {}

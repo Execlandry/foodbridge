@@ -7,7 +7,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@fbe/config";
 import { UserService } from "../user/user.service";
-import { UserSigInDto } from "./dto/auth-request.dto";
+import { UserSignInDto } from "./dto/auth-request.dto";
 import * as bcrypt from "bcrypt";
 import { JwtPayload } from "jsonwebtoken";
 import { JwtService } from "@nestjs/jwt";
@@ -24,7 +24,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUserByPassword(payload: UserSigInDto) {
+  async validateUserByPassword(payload: UserSignInDto) {
     const { email, password } = payload;
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {

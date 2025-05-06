@@ -24,6 +24,15 @@ import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
 import useAuth from "../../hooks/use-auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
+interface Address {
+  id: string;
+  name: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  pincode: string;
+}
 interface Business {
   id: string | number;
   name: string;
@@ -47,15 +56,6 @@ interface Dish {
   business_id?: string | number;
 }
 
-interface Address {
-  id: string;
-  name: string;
-  street: string;
-  city: string;
-  state: string;
-  country: string;
-  pincode: string;
-}
 
 interface GroupedDishes {
   [key: string]: {

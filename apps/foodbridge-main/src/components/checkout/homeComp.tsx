@@ -28,10 +28,7 @@ import {
 } from "../../redux/cart/cart.slice";
 import { PlaceOrder, fetchOrderItems } from "../../redux/order/order.slice";
 import { UpdateDishStatus } from "../../redux/dishes/dishes.slice";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckoutCredit from "./checkout-credit";
-import { Divider } from "@chakra-ui/react";
-import { divIcon } from "leaflet";
+
 
 interface MenuItems {
   description: string;

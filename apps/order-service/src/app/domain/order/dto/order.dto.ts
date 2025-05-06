@@ -123,13 +123,6 @@ export class MenuItemBodyDto {
 }
 
 export class CreatePaymentBodyDto {
-  // @ApiProperty({
-  //   description: "business_id",
-  //   example: "5272ec36-d9db-11ed-afa1-0242ac120002",
-  //   required: true,
-  // })
-  // @IsUUID()
-  // public business_id!: string;
 
   @ApiProperty({
     description: "business",
@@ -191,28 +184,20 @@ export class CreatePaymentBodyDto {
   @ApiProperty({
     description: "address obj",
     example: {
-      id: "3bd5a21a-3410-48f6-84ff-138dc8dd30db",
-      name: "Aguada Road",
-      city: "Candolim",
-      lat: "15.501107",
-      long: "73.769915",
-      street: "Bamon Vaddo",
-      pincode: "403515",
-      country: "INDIA",
-      state: "Goa",
+      // id: "3bd5a21a-3410-48f6-84ff-138dc8dd30db",
+      // name: "Aguada Road",
+      // city: "Candolim",
+      // lat: "15.501107",
+      // long: "73.769915",
+      // street: "Bamon Vaddo",
+      // pincode: "403515",
+      // country: "INDIA",
+      // state: "Goa",
     },
     required: true,
   })
   @IsObject()
   public address!: any;
-
-  // @ApiProperty({
-  //   description: "address_id",
-  //   example: "5272ec36-d9db-11ed-afa1-0242ac120002",
-  //   required: true,
-  // })
-  // @IsUUID()
-  // public address_id!: string;
 
   @ApiProperty({
     description: "Request for driver",
@@ -228,6 +213,15 @@ export class CreatePaymentBodyDto {
     required: true,
   })
   public amount!: string;
+
+  @ApiProperty({
+    description: "Payment method (UPI or COD)",
+    example: "cod",
+    enum: ["upi", "cod"],
+    required: true,
+  })
+  @IsEnum(["upi", "cod"])
+  public payment_method: "upi" | "cod";
 
   @ApiProperty({
     description: "menu_item object",

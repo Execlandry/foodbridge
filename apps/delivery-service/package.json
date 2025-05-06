@@ -39,6 +39,8 @@
     "db:sync": "npm run typeorm:cli schema:sync"
   },
   "dependencies": {
+    "stripe": "^13.10.0",
+    "cookie-parser": "^1.4.6",
     "@fbe/config": "*",
     "@fbe/database": "*",
     "@fbe/logger": "1.0.0",
