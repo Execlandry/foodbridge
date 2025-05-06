@@ -7,11 +7,14 @@ export interface BusinessState {
 }
 // we will add types in @fbe/types package
 
-
 export const UpdateDishStatus = createAsyncThunk(
   "api/UpdateDishStatus",
-  async (data:any) => {
-    return await ExternalApis.UpdateDishStatus({business:data.id,dish:data.item.id,status:"pending"})
+  async (data: any) => {
+    return await ExternalApis.UpdateDishStatus({
+      business: data.id,
+      dish: data.item.id,
+      status: "pending",
+    });
   }
 );
 

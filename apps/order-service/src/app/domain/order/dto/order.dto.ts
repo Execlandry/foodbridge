@@ -130,7 +130,7 @@ export class CreatePaymentBodyDto {
   // })
   // @IsUUID()
   // public business_id!: string;
-    
+
   @ApiProperty({
     description: "business",
     example: {
@@ -150,7 +150,7 @@ export class CreatePaymentBodyDto {
       banner: "https://gogole.com/banner.png",
       delivery_options: "all",
       pickup_options: "all",
-      address:{}
+      address: {},
     },
     required: true,
   })

@@ -31,12 +31,9 @@ export const removeCartItems = createAsyncThunk(
   }
 );
 
-export const EmptyCart = createAsyncThunk(
-  "fetch/removeCartItem",
-  async () => {
-    return ExternalApis.EmptyCart();
-  }
-);
+export const EmptyCart = createAsyncThunk("fetch/removeCartItem", async () => {
+  return ExternalApis.EmptyCart();
+});
 
 const initialState = {
   cart: {

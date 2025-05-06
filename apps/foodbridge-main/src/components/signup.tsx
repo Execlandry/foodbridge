@@ -58,7 +58,7 @@ export default function Signup() {
       setProfile(file);
     }
   };
-  
+
   const GoogleSignup = () => {
     window.open(
       `http://localhost:3001/api/v1/auth-service/auth/google`,
@@ -66,7 +66,7 @@ export default function Signup() {
     );
   };
 
-  const handleAddressSubmit = async(e: any) => {
+  const handleAddressSubmit = async (e: any) => {
     e.preventDefault();
 
     // const coords = await Coordinates({name,street,city,state,country,pincode});
@@ -105,53 +105,49 @@ export default function Signup() {
     console.log("Updated form data:", updatedFormData);
     // console.log(coords?.lat ,coords?.long)
 
-
-    setFirstName("")
-    setEmail("")
-      setLastName("")
-      setPassword("")
-      setProfile("")
-      setcity("")
-      setcountry("")
-      setpincode("")
-      setname("")
-      setstate("")
-      setstreet("")
-      setmobno("");
-          console.log("Submitted Data:", fullData);
+    setFirstName("");
+    setEmail("");
+    setLastName("");
+    setPassword("");
+    setProfile("");
+    setcity("");
+    setcountry("");
+    setpincode("");
+    setname("");
+    setstate("");
+    setstreet("");
+    setmobno("");
+    console.log("Submitted Data:", fullData);
 
     await sendData(updatedFormData);
 
     // Submit this to backend
   };
 
-  const sendData=async(Data:any)=>
-  {
-    const address={
-      name:Data.address.name,
-      street:Data.address.street,
-      city:Data.address.city,
-      state:Data.address.state,
-      country:Data.address.country,
-      pincode:Data.address.pincode,
-      lat:String(Data.latitude),
-      long:String(Data.longitude),
-    }
+  const sendData = async (Data: any) => {
+    const address = {
+      name: Data.address.name,
+      street: Data.address.street,
+      city: Data.address.city,
+      state: Data.address.state,
+      country: Data.address.country,
+      pincode: Data.address.pincode,
+      lat: String(Data.latitude),
+      long: String(Data.longitude),
+    };
     await signupUser({
-            email: Data.email,
-            first_name: Data.firstName,
-            last_name: Data.lastName,
-            password: Data.password,
-            name:Data.name,
-            picture_url:Data.picture_url,
-            mobno:Data.mobno,
-          });
-    await loginUser({ email:Data.email, password:Data.password });
+      email: Data.email,
+      first_name: Data.firstName,
+      last_name: Data.lastName,
+      password: Data.password,
+      name: Data.name,
+      picture_url: Data.picture_url,
+      mobno: Data.mobno,
+    });
+    await loginUser({ email: Data.email, password: Data.password });
     // await ExternalApis.createAddress(address);
-    navigate("/fbe/business"); 
-  }
-
- 
+    navigate("/fbe/business");
+  };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-green-100 to-green-200 p-4">
@@ -286,14 +282,14 @@ export default function Signup() {
                 </label>
               </div>
               <input
-                      type="file"
-                      id="banner"
-                      name="Profile Pic"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="pl-10 block w-full rounded-md border-gray-300 focus:border-green-500 focus:ring-green-500"
-                      required
-                    />
+                type="file"
+                id="banner"
+                name="Profile Pic"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="pl-10 block w-full rounded-md border-gray-300 focus:border-green-500 focus:ring-green-500"
+                required
+              />
 
               <div className="relative">
                 <input

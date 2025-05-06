@@ -12,12 +12,13 @@ export default function useAuth() {
     email: string;
     first_name: string;
     last_name: string;
-    name:string,
+    name: string;
     password: string;
-    picture_url:string,
-    mobno:string,
+    picture_url: string;
+    mobno: string;
   }) => {
-    const { email,name, first_name, last_name, password,picture_url,mobno } = data;
+    const { email, name, first_name, last_name, password, picture_url, mobno } =
+      data;
     console.log(data);
     try {
       const response = await axios.post(
@@ -29,7 +30,7 @@ export default function useAuth() {
           last_name,
           password,
           picture_url,
-          mobno
+          mobno,
         },
         {
           headers: {

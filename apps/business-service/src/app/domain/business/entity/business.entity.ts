@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
-  JoinColumn
+  JoinColumn,
 } from "typeorm";
 import { BusinessDishEntity } from "./business.dish.entity";
 import { BusinessAddressEntity } from "./business.address.entity";
@@ -71,7 +71,7 @@ export class BusinessEntity extends BaseEntity {
   @OneToMany(() => BusinessDishEntity, (event) => event.business)
   public dishes!: BusinessDishEntity[];
 
-  @OneToOne(() => BusinessAddressEntity,(event) => event.business)
+  @OneToOne(() => BusinessAddressEntity, (event) => event.business)
   public address: BusinessAddressEntity;
 
   @CreateDateColumn({

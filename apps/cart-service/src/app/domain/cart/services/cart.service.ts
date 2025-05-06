@@ -123,8 +123,7 @@ export class CartService {
         user_id: userId,
       },
     });
-    for(const item of items)
-    await this.cartRepo.delete({ id: item.id });
+    for (const item of items) await this.cartRepo.delete({ id: item.id });
     return null;
   }
 

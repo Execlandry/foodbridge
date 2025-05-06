@@ -121,11 +121,11 @@ export class UserSignupDto {
   @ApiProperty({
     description: "Charity Name",
     example: "Helping Hands",
-    required: true,
+    required: false,
   })
+  @IsOptional()
   @IsString()
   public name!: string;
-  
 
   @ApiProperty({
     description: "firstName",

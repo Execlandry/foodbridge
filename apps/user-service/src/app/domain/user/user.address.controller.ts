@@ -23,7 +23,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
-import { CreateAddressDto,UpdateUserByIdDto } from "./dto/user-request.dto";
+import { CreateAddressDto, UpdateUserByIdDto } from "./dto/user-request.dto";
 import { UserSignupResponseDto } from "./dto/user-response.dto";
 import { UserAddressService } from "./user.address.service";
 import { User, UserMetaData } from "../auth/guards/user";
@@ -54,7 +54,7 @@ export class UserAddressController {
     @Param() param: UpdateUserByIdDto,
     @User() user: UserMetaData
   ) {
-    return this.service.create(param,body,user);
+    return this.service.create(param, body, user);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -62,7 +62,10 @@ export class UserAddressController {
   @ApiOperation({ description: "address list api" })
   @ApiConsumes("application/json")
   @Get("/address/:id")
-  public async fetchAllAddress(@Param() param: UpdateUserByIdDto,@User() user: UserMetaData) {
-    return this.service.fetchAllAddress(param,user);
+  public async fetchAllAddress(
+    @Param() param: UpdateUserByIdDto,
+    @User() user: UserMetaData
+  ) {
+    return this.service.fetchAllAddress(param, user);
   }
 }

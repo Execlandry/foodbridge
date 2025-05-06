@@ -24,7 +24,7 @@ export class ExternalApis {
     return response.data;
   }
 
-  static async  uploadImage(file: File): Promise<string> {
+  static async uploadImage(file: File): Promise<string> {
     const formData = new FormData();
     formData.append("filename", file);
     try {
@@ -35,17 +35,17 @@ export class ExternalApis {
         },
         body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error(`Image upload failed! status: ${response.status}`);
       }
-  
+
       const data = await response.json();
       console.log("data:", data);
       if (!data[0].url) {
         throw new Error("No URL returned from image upload");
       }
-  
+
       return data[0].url;
     } catch (error: any) {
       throw new Error(`Error uploading image: ${error.message}`);
@@ -57,21 +57,21 @@ export class ExternalApis {
     const response = await axios.put(url, payload);
     return response.data;
   }
-  
+
   static async EmptyCart() {
     const url = `${this.url}/cart-service/cart/clear`;
     const response = await axios.delete(url);
-    console.log("Cart Emptied",response.data);
+    console.log("Cart Emptied", response.data);
     return response.data;
   }
 
-  static async fetchAddress(id:any) {
+  static async fetchAddress(id: any) {
     const url = `/api/v1/auth-service/users/address/${id}`;
     const response = await axios.get(url);
     return response.data;
   }
 
-  static async createAddress(id:any,payload: any) {
+  static async createAddress(id: any, payload: any) {
     const url = `/api/v1/auth-service/users/address/${id}`;
     const response = await axios.post(url, payload);
     return response.data;
@@ -114,8 +114,11 @@ export class ExternalApis {
   }
 
   static async UpdateDishStatus(data: any) {
-    const status={status:data.status}
-    const response = await axios.put(`/api/v1/business-service/businesses/${data.business}/dish/${data.dish}`,status);
+    const status = { status: data.status };
+    const response = await axios.put(
+      `/api/v1/business-service/businesses/${data.business}/dish/${data.dish}`,
+      status
+    );
     console.log(response.data);
     return response.data;
   }

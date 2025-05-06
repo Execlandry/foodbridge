@@ -199,8 +199,8 @@ export class UserService {
       first_name: userInput?.first_name?.toLowerCase(),
       last_name: userInput?.last_name?.toLowerCase(),
       picture_url: userInput?.picture_url,
-      mobno:userInput?.mobno,
-      name:userInput?.name,
+      mobno: userInput?.mobno,
+      name: userInput?.name,
       email: userInput?.email.toLowerCase(),
     };
 

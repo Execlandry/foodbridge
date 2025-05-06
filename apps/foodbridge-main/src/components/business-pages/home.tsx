@@ -30,7 +30,7 @@ interface Business {
   thumbnails?: string;
   category?: string;
   avg_price?: number;
-  address?:Address;
+  address?: Address;
 }
 
 interface Dish {
@@ -47,15 +47,14 @@ interface Dish {
   business_id?: string | number;
 }
 
-interface Address
-{
-  id:string,
-  name:string,
-  street:string,
-  city:string,
-  state:string,
-  country:string,
-  pincode:string,
+interface Address {
+  id: string;
+  name: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  pincode: string;
 }
 
 interface GroupedDishes {
@@ -93,12 +92,12 @@ function Home() {
     data?.foodHolder?.forEach((dish: Dish) => {
       const businessId = dish?.business_id || "unknown";
       if (!grouped[businessId] && dish?.business) {
-        grouped[businessId] = { business: dish.business, dishes: []};
+        grouped[businessId] = { business: dish.business, dishes: [] };
       }
       if (dish?.business) grouped[businessId].dishes.push(dish);
     });
-    console.log("grouped Dishes :g",grouped);
-    console.log("Data Dishes :g",data.foodHolder);
+    console.log("grouped Dishes :g", grouped);
+    console.log("Data Dishes :g", data.foodHolder);
 
     return grouped;
   };
@@ -237,7 +236,7 @@ function Home() {
               <p className="text-sm text-gray-500">
                 {business?.category || "Cuisine"}
               </p>
-              
+
               <span className="text-green-600 font-medium text-base">
                 {/* Avg: ${business?.avg_price?.toFixed(2) || "N/A"} */}
               </span>
@@ -273,7 +272,7 @@ function Home() {
                 />
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-medium text-gray-900 truncate">
-                    {dish?.name} 
+                    {dish?.name}
                   </h4>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-green-600 font-medium text-sm">

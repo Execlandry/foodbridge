@@ -162,7 +162,9 @@ export class BusinessDishService {
     const { dish_id, id } = param;
 
     // await this.validateAuthorization(user, param);
-    this.logger.log(`value printed : ${JSON.stringify(param)} ${JSON.stringify(payload)}`);
+    this.logger.log(
+      `value printed : ${JSON.stringify(param)} ${JSON.stringify(payload)}`
+    );
     const dish = await this.findDishById(dish_id);
     return await this.businessDishRepo.save({
       id: dish.id,

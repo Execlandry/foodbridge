@@ -30,7 +30,7 @@ export class UserAddressService {
   ) {}
 
   async create(
-    param:UpdateUserByIdDto,
+    param: UpdateUserByIdDto,
     body: CreateAddressDto,
     apiUser: UserMetaData
   ): Promise<UserAddressEntity> {
@@ -47,23 +47,22 @@ export class UserAddressService {
 
     const existingAddress = await this.userAddressRepo.findOne({
       where: { user: { id: param.id } },
-      relations: ['user'],
+      relations: ["user"],
     });
-  
+
     if (!existingAddress) {
       // Create new address
       const newAddress = this.userAddressRepo.create({
         ...body,
         user,
       });
-  
+
       const createdAddress = await this.userAddressRepo.save(newAddress);
       this.logger.log(
         `Address created successfully: ${JSON.stringify(createdAddress)}`
       );
       return createdAddress;
-    }
-     else {
+    } else {
       existingAddress.city = body.city;
       existingAddress.lat = body.lat;
       existingAddress.long = body.long;
@@ -84,7 +83,7 @@ export class UserAddressService {
     }
   }
 
-  async fetchAllAddress(param:UpdateUserByIdDto,apiUser: UserMetaData) {
+  async fetchAllAddress(param: UpdateUserByIdDto, apiUser: UserMetaData) {
     return await this.userAddressRepo.find({
       where: {
         user: { id: param.id },

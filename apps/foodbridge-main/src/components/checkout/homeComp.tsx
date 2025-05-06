@@ -21,7 +21,11 @@ import {
   selectAddress,
   selectedUserAddressSelector,
 } from "../../redux/user/user.slice";
-import { CartItemsSelector, EmptyCart, fetchCartItems } from "../../redux/cart/cart.slice";
+import {
+  CartItemsSelector,
+  EmptyCart,
+  fetchCartItems,
+} from "../../redux/cart/cart.slice";
 import { PlaceOrder, fetchOrderItems } from "../../redux/order/order.slice";
 import { UpdateDishStatus } from "../../redux/dishes/dishes.slice";
 import { Elements } from "@stripe/react-stripe-js";
@@ -155,11 +159,10 @@ function Checkout() {
       console.log(value, "\n", index);
       console.log(addresses[0]);
       console.log(requestfordriver[index]);
-      if(value?.menu_items)
-      {
+      if (value?.menu_items) {
         dispatch(
           PlaceOrder({
-            user:user,
+            user: user,
             business: value.business,
             driver_id: "",
             driver: {},
@@ -170,15 +173,14 @@ function Checkout() {
           })
         );
       }
-      if(value?.menu_items)
-      updatestatus(value.business.id,value.menu_items);
+      if (value?.menu_items) updatestatus(value.business.id, value.menu_items);
     });
     dispatch(EmptyCart());
   };
 
-  const updatestatus = (id:any,menuitem: any) => {
+  const updatestatus = (id: any, menuitem: any) => {
     for (const item of menuitem) {
-      dispatch(UpdateDishStatus({id,item}))
+      dispatch(UpdateDishStatus({ id, item }));
     }
   };
   const HandleDriverUpdate =
@@ -264,7 +266,7 @@ function Checkout() {
     }
 
     console.log(updatedFormData);
-    await dispatch(createAddress({id:user.id,formdata:updatedFormData}));
+    await dispatch(createAddress({ id: user.id, formdata: updatedFormData }));
     await dispatch(fetchAddress(user.id));
     setShowModal(false);
   };
