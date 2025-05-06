@@ -45,6 +45,8 @@ export default function MapComponent({
   }, [onClose]);
 
   useEffect(() => {
+    console.log("orderCoodinates ",orderCoordinates);
+    console.log("geocoords",geocodedCoords);
     if (!mapRef.current || !orderCoordinates) return;
 
     if (!mapInstance.current) {

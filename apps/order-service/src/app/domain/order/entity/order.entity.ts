@@ -52,10 +52,10 @@ export class OrderEntity extends BaseEntity {
 
   @Column({ 
     type: "varchar", 
+    default: "upi",
     enum: ["upi", "cod"],
-    default: "cod"
   })
-  public payment_method!: "upi" | "cod";
+  public payment_method!: string;
 
   @Column({ 
     type: "varchar",

@@ -61,17 +61,18 @@ export class OrderService implements OnModuleInit {
       driver: payload.driver,
       // address_id: payload.address_id,
       // business_id: payload.business_id,
-      // menu_items: payload.menu_items, 
+      menu_items: payload.menu_items, 
       order_status: "pending",
       payment_status: "pending",
-      // driver_id: payload.driver_id,
-      // request_for_driver: payload.request_for_driver,
+      payment_method:"upi",
+      driver_id: payload.driver_id,
+      request_for_driver: payload.request_for_driver,
     });
     const savedOrder = await this.orderRepo.save(order);
 
-    if (savedOrder.request_for_driver) {
-      this.client.emit("order_processed_success", savedOrder);
-    }
+    // if (savedOrder.request_for_driver) {
+    //   this.client.emit("order_processed_success", savedOrder);
+    // }
     console.log(savedOrder);
     return savedOrder;
   }

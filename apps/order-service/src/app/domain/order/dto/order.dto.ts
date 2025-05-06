@@ -21,6 +21,14 @@ import {
 import { Type as validateType } from "class-transformer";
 import { mealType, cuisineType, foodType } from "@fbe/types";
 
+
+export enum status {
+  "available" = "available",
+  "pending" = "pending",
+  "failed" = "failed",
+  "completed" = "completed",
+}
+
 export class MenuItemBodyDto {
   @ApiProperty({
     description: "id",
@@ -103,6 +111,14 @@ export class MenuItemBodyDto {
   @IsString()
   public quantity!: string;
 
+    @ApiProperty({
+      description: "status",
+      required: true,
+      enum: status,
+      example: status.available,
+    })
+    @IsEnum(status)
+    public status!: string;
   // @ApiProperty({
   //   description: "number of items",
   //   example: 2,
@@ -115,7 +131,7 @@ export class MenuItemBodyDto {
   @ApiProperty({
     description: "thumbnails",
     example: "https://google.com/banner.png",
-    required: true,
+    // required: true,
   })
   @IsOptional()
   @IsString()
@@ -151,7 +167,7 @@ export class CreatePaymentBodyDto {
   public business!: any;
 
   @ApiProperty({
-    description: "business",
+    description: "User",
     example: {
       id: "dee90081-616b-4744-b2fd-7ee11f38070a",
       name: "Kanha Veg Business",
@@ -184,15 +200,15 @@ export class CreatePaymentBodyDto {
   @ApiProperty({
     description: "address obj",
     example: {
-      // id: "3bd5a21a-3410-48f6-84ff-138dc8dd30db",
-      // name: "Aguada Road",
-      // city: "Candolim",
-      // lat: "15.501107",
-      // long: "73.769915",
-      // street: "Bamon Vaddo",
-      // pincode: "403515",
-      // country: "INDIA",
-      // state: "Goa",
+      id: "3bd5a21a-3410-48f6-84ff-138dc8dd30db",
+      name: "Aguada Road",
+      city: "Candolim",
+      lat: "15.501107",
+      long: "73.769915",
+      street: "Bamon Vaddo",
+      pincode: "403515",
+      country: "INDIA",
+      state: "Goa",
     },
     required: true,
   })
@@ -214,14 +230,14 @@ export class CreatePaymentBodyDto {
   })
   public amount!: string;
 
-  @ApiProperty({
-    description: "Payment method (UPI or COD)",
-    example: "cod",
-    enum: ["upi", "cod"],
-    required: true,
-  })
-  @IsEnum(["upi", "cod"])
-  public payment_method: "upi" | "cod";
+  // @ApiProperty({
+  //   description: "Payment method (UPI or COD)",
+  //   example: "cod",
+  //   enum: ["upi", "cod"],
+  //   required: true,
+  // })
+  // @IsEnum(["upi", "cod"])
+  // public payment_method: "upi" | "cod";
 
   @ApiProperty({
     description: "menu_item object",
