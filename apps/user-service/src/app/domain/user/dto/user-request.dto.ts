@@ -41,8 +41,8 @@ export class FullPartnerDetailsDto {
   // @ApiProperty()
   // partnerId: string;
 
-  // @ApiProperty()
-  // availability: boolean;
+  @ApiProperty()
+  availability: boolean;
 
   @ApiProperty()
   ratings: string;

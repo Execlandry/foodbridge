@@ -70,14 +70,14 @@ export class OrderService implements OnModuleInit {
     });
     const savedOrder = await this.orderRepo.save(order);
 
-    // if (savedOrder.request_for_driver) {
-    //   this.client.emit("order_processed_success", savedOrder);
-    // }
+    if (savedOrder.request_for_driver) {
+      this.client.emit("order_processed_success", savedOrder);
+    }
     console.log(savedOrder);
     return savedOrder;
   }
 
-  // async getAvailableOrdersForDelivery() {
+  // async getAvailableOrdersForDelivery() { 
   //   return this.orderRepo.find({
   //     where: {
   //       driver_id: null,

@@ -191,7 +191,7 @@ export class UserService {
   
     return {
       // partnerId: partner.id,
-      // availability: partner.availability,
+      availability: partner.availability,
       ratings: partner.ratings,
       mobno: partner.mobno,
       created_at: partner.created_at,
