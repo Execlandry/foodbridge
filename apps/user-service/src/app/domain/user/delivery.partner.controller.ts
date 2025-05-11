@@ -66,30 +66,35 @@ export class DeliveryPartnerController {
   ) {}
 
   @Post("register")
-  @ApiOperation({ summary: 'Register delivery partners',description: "Register a new delivery partner" })
+  @ApiOperation({
+    summary: "Register delivery partners",
+    description: "Register a new delivery partner",
+  })
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
-  description: "Delivery partner registered successfully",
-  type: PartnerResponseDto,
+    description: "Delivery partner registered successfully",
+    type: PartnerResponseDto,
   })
-  @ApiBadRequestResponse({ description: 'Invalid partner data' })
-  @ApiConflictResponse({ description: 'Partner already exists' })
-  @ApiInternalServerErrorResponse({ description: 'Server error' })
-
+  @ApiBadRequestResponse({ description: "Invalid partner data" })
+  @ApiConflictResponse({ description: "Partner already exists" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
   public async registerDeliveryPartner(@Body() body: DeliveryPartnerSignupDto) {
-  return this.service.registerDeliveryPartner(body);
-}
-
+    return this.service.registerDeliveryPartner(body);
+  }
 
   // @UseGuards(AccessTokenGuard, RolesGuard)
   // @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: FullPartnerDetailsDto, description: "" })
-  @ApiOperation({ summary: 'Get current available partner',description: "return available delivery partner" })
+  @ApiOperation({
+    summary: "Get current available partner",
+    description: "return available delivery partner",
+  })
   @ApiConsumes("application/json")
   @Get(":id")
-  public async fetchRequestedPartnerDetails(@Param() param:GetDeliveryPartnerbyId) {
-    
+  public async fetchRequestedPartnerDetails(
+    @Param() param: GetDeliveryPartnerbyId
+  ) {
     return this.service.fetchRequestedPartnerDetails(param);
   }
 
@@ -100,9 +105,9 @@ export class DeliveryPartnerController {
     description: "Partner availability updated successfully",
   })
   @ApiParam({
-    name: 'id',
-    description: 'User ID of the delivery partner',
-    type: 'string',
+    name: "id",
+    description: "User ID of the delivery partner",
+    type: "string",
     required: true,
   })
   public async updatePartnerAvailability(
@@ -112,10 +117,11 @@ export class DeliveryPartnerController {
     return this.service.updatePartnerAvailability(param, body);
   }
 
-
-  @Put(':id/release')
-  @ApiOperation({ summary: 'Release partner for new orders' })
+  @Put(":id/release")
+  @ApiOperation({ summary: "Release partner for new orders" })
   async releasePartner(@Param() param: GetDeliveryPartnerbyId) {
-  return this.service.updatePartnerAvailability(param, { availability: true });
-}
+    return this.service.updatePartnerAvailability(param, {
+      availability: true,
+    });
+  }
 }
