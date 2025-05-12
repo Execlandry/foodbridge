@@ -25,15 +25,15 @@ import { ClientProxy } from "@nestjs/microservices";
 @Injectable()
 export class OrderService implements OnModuleInit {
   constructor(
-    @Inject("ORDER_LISTENER_SERVICE") 
+    @Inject("ORDER_LISTENER_SERVICE")
     private readonly client: ClientProxy,
-    
+
     private readonly logger: Logger,
-    private readonly connection:Connection,
+    private readonly connection: Connection,
     @InjectRepository(OrderEntity)
-    private orderRepo: Repository<OrderEntity>,
+    private orderRepo: Repository<OrderEntity>
   ) {}
-  
+
   async onModuleInit() {
     try {
       await this.client.connect();
@@ -41,7 +41,7 @@ export class OrderService implements OnModuleInit {
       console.log(err);
     }
   }
-  
+
   async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
     const order = this.orderRepo.create({
       user_id: user.userId,
@@ -61,10 +61,10 @@ export class OrderService implements OnModuleInit {
       driver: payload.driver,
       // address_id: payload.address_id,
       // business_id: payload.business_id,
-      menu_items: payload.menu_items, 
+      menu_items: payload.menu_items,
       order_status: "pending",
       payment_status: "pending",
-      payment_method:"upi",
+      payment_method: "upi",
       driver_id: payload.driver_id,
       request_for_driver: payload.request_for_driver,
     });
@@ -77,7 +77,7 @@ export class OrderService implements OnModuleInit {
     return savedOrder;
   }
 
-  // async getAvailableOrdersForDelivery() { 
+  // async getAvailableOrdersForDelivery() {
   //   return this.orderRepo.find({
   //     where: {
   //       driver_id: null,
@@ -87,19 +87,17 @@ export class OrderService implements OnModuleInit {
   //   });
   // }
 
-
   //for payment history
-    async getLastPaymentProcessedOrder(user: UserMetaData) {
-      // fetch last processed order for tracking and delivery
-      const order = await this.orderRepo.findOne({
-        where: {
-          order_status: "payment_processed",
-          user_id: user.userId,
-        },
-      });
-      return order;
-    }
-
+  async getLastPaymentProcessedOrder(user: UserMetaData) {
+    // fetch last processed order for tracking and delivery
+    const order = await this.orderRepo.findOne({
+      where: {
+        order_status: "payment_processed",
+        user_id: user.userId,
+      },
+    });
+    return order;
+  }
 
   // async confirmOrderPayment(
   //   user: UserMetaData,
@@ -162,13 +160,9 @@ export class OrderService implements OnModuleInit {
   //   }
   // }
 
-
-
-
-
   // async processPayment(orderId: string, payload: ProcessPaymentDto) {
   //   const queryRunner = this.connection.createQueryRunner();
-    
+
   //   try {
   //     await queryRunner.connect();
   //     await queryRunner.startTransaction();
@@ -190,7 +184,7 @@ export class OrderService implements OnModuleInit {
   //     });
 
   //     await queryRunner.commitTransaction();
-      
+
   //     this.client.emit(
   //       `payment_${payload.success ? "success" : "failed"}`,
   //       updatedOrder
@@ -235,8 +229,6 @@ export class OrderService implements OnModuleInit {
   //   }
   //   return savedOrder;
   // }
-
-
 
   // async testRMQ() {
   //   // TESTING ONLY

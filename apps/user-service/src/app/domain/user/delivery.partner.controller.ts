@@ -2,6 +2,7 @@
 /* eslint-disable no-useless-escape */
 
 // Package.
+import { Request, Response } from "express";
 import {
   Body,
   Controller,
@@ -12,7 +13,9 @@ import {
   Param,
   Patch,
   Post,
+  BadRequestException,
   Put,
+  RawBodyRequest,
   Query,
   Req,
   Res,
@@ -20,6 +23,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
+import Stripe from "stripe";
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -124,4 +128,29 @@ export class DeliveryPartnerController {
       availability: true,
     });
   }
+
+  @Post('webhook')
+  @HttpCode(HttpStatus.OK)
+  async handleWebhook(@Req() req: Request, @Res() res: Response) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2023-08-16" });
+    const signature = req.headers['stripe-signature'] as string;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const rawBody = (req as any).rawBody;
+
+    if (!rawBody) {
+      return res.status(400).send('Raw body missing');
+    }
+
+    try {
+      const event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+      // ... call your service
+      await this.service.handleStripeWebhook(event);
+      res.send({ received: true });
+    } catch (err) {
+      this.logger.error(`Webhook Error: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  }
+
 }
+

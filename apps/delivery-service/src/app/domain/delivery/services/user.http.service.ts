@@ -16,11 +16,11 @@ export class UserProxyService {
   ) {
     this.baseURL = this.configService.get().userServiceUrl;
 
-    console.log('User Service Base URL from constructor:', this.baseURL);
+    console.log("User Service Base URL from constructor:", this.baseURL);
   }
   async fetchDeliveryPartnerDetails(partnerId: string) {
-    console.log('Fetching partner details from user-service:', this.baseURL);
-  
+    console.log("Fetching partner details from user-service:", this.baseURL);
+
     try {
       const { data } = await this.httpClientService.send({
         url: `partners/${partnerId}`,
@@ -32,18 +32,23 @@ export class UserProxyService {
       throw err;
     }
   }
-  
+
   // @Cron(CronExpression.EVERY_10_SECONDS)
-  async markDeliveryPartnerAssigned(payload: { orderId: string; partnerId: string }) {
-    console.log('Calling user service from markdeliverypartnerassigned:', this.baseURL);
+  async markDeliveryPartnerAssigned(payload: {
+    orderId: string;
+    partnerId: string;
+  }) {
+    console.log(
+      "Calling user service from markdeliverypartnerassigned:",
+      this.baseURL
+    );
 
     try {
       const { data } = await this.httpClientService.send({
-        
         url: `partners/${payload.partnerId}/availability`,
         baseURL: this.baseURL,
         method: "PUT",
-        data: { availability:false },
+        data: { availability: false },
       });
       return data;
     } catch (err) {
@@ -51,21 +56,25 @@ export class UserProxyService {
     }
   }
 
-  async markDeliveryPartnerUnassigned(payload: { orderId: string; partnerId: string }) {
-    console.log('Calling user service from markdeliverypartnerassigned:', this.baseURL);
+  async markDeliveryPartnerUnassigned(payload: {
+    orderId: string;
+    partnerId: string;
+  }) {
+    console.log(
+      "Calling user service from markdeliverypartnerassigned:",
+      this.baseURL
+    );
 
     try {
       const { data } = await this.httpClientService.send({
-        
         url: `partners/${payload.partnerId}/availability`,
         baseURL: this.baseURL,
         method: "PUT",
-        data: { availability:true },
+        data: { availability: true },
       });
       return data;
     } catch (err) {
       throw err;
     }
   }
-  
 }

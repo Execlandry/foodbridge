@@ -28,10 +28,13 @@ import { UserProxyService } from "./delivery/services/user.http.service";
     ConfigModule,
   ],
   controllers: [DeliveryController],
-  providers: [DeliveryService,DeliveryService,
+  providers: [
+    DeliveryService,
+    DeliveryService,
     DeliveryEventService,
     UserProxyService,
-    HttpClientService,],
+    HttpClientService,
+  ],
   exports: [DeliveryService],
 })
 export class DomainModule {}

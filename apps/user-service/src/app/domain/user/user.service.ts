@@ -120,6 +120,28 @@ export class UserService {
     });
   }
 
+  async createConnectedAccount(userId: string): Promise<{ url: string, accountId: string }> {
+    // 1. Create Express account
+    const account = await this.stripe.accounts.create({
+      type: 'express',
+      metadata: { userId },
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+    });
+
+    // 2. Create account link (onboarding)
+    const accountLink = await this.stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: 'https://localhost:3000/',
+      return_url: 'https://localhost:3000/',
+      type: 'account_onboarding',
+    });
+
+    return { url: accountLink.url, accountId: account.id };
+  }
+
   async registerDeliveryPartner(dto: DeliveryPartnerSignupDto) {
     const { email, password, name, mobno } = dto;
 
@@ -143,37 +165,45 @@ export class UserService {
 
     await this.userRepo.save(user);
 
-    // ✅ 4. Create Stripe connected account (Express type for testing)
-    const account = await this.stripe.accounts.create({
-      type: "express",
-      email: "pednekarprashant399@gmail.com",
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true },
-      },
-    });
-
-    console.log("Stripe account created:", account);
+    // ✅ 4. Create Stripe connected account and get onboarding URL
+    const { url, accountId } = await this.createConnectedAccount(user.id);
 
     // ✅ 5. Create and save DeliveryPartnerEntity
     const partner = this.partnerRepo.create({
       user,
       mobno,
       availability: true,
-      stripe_id: account.id,
-      onboarded: true, // Set to false for testing; set to true after onboarding
+      stripe_id: accountId,
+      onboarded: false,
     });
 
     await this.partnerRepo.save(partner);
 
-    // ✅ 6. Optionally return both user and partner info
+    // ✅ 6. Return partner info and onboarding URL
     return {
       message: "Delivery partner registered successfully",
       partnerId: partner.id,
-      stripeAccountId: account.id,
+      stripeAccountId: accountId,
+      onboardingUrl: url,
     };
   }
-
+async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
+    try {
+      if (event.type === 'account.updated') {
+        const account = event.data.object as Stripe.Account;
+        const partner = await this.partnerRepo.findOne({ where: { stripe_id: account.id } });
+        if (partner && account.details_submitted) {
+          partner.onboarded = true;
+          await this.partnerRepo.save(partner);
+          this.logger.log(`Partner ${partner.id} onboarded successfully for Stripe account ${account.id}`);
+        }
+      }
+      return { received: true };
+    } catch (error) {
+      this.logger.error(`Webhook error: ${error.message}`);
+      throw new BadRequestException('Webhook processing failed');
+    }
+  }
   async updatePartnerAvailability(
     param: GetDeliveryPartnerbyId,
     body: GetDeliveryPartnerAvailability
@@ -261,7 +291,7 @@ export class UserService {
 
     return this.userRepo.save(user);
   }
-
+  
   async create(userInput: UserSignupDto): Promise<UserEntity> {
     const { email } = userInput;
 
