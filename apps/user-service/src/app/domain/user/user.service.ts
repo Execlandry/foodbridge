@@ -232,6 +232,36 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
     };
   }
 
+  async updateReleasePartnerAvailability(
+    param: GetDeliveryPartnerbyId,
+    body: GetDeliveryPartnerAvailability
+  ): Promise<PartnerResponseDto> {
+    const { id } = param;
+    const { availability } = body;
+
+    const partner = await this.partnerRepo.findOne({
+      where: {
+        user: {
+          id: id,
+          permissions: UserRoles["delivery-partner"],
+        },
+      },
+      relations: ["user"],
+    });
+
+    if (!partner) throw new NotFoundException();
+
+    partner.availability = availability;
+    await this.partnerRepo.save(partner);
+    return {
+      id: partner.id,
+      email: partner.user.email,
+      availability: partner.availability,
+    };
+  }
+
+  
+
   async fetchRequestedPartnerDetails(
     param: GetDeliveryPartnerbyId
   ): Promise<FullPartnerDetailsDto> {
@@ -256,6 +286,8 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
       availability: partner.availability,
       ratings: partner.ratings,
       mobno: partner.mobno,
+      stripe_id:partner.stripe_id,
+      onboarded:partner.onboarded,
       created_at: partner.created_at,
       updated_at: partner.updated_at,
       user: {

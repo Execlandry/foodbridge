@@ -38,18 +38,22 @@ export class UserNestedDto {
 }
 
 export class FullPartnerDetailsDto {
-  // @ApiProperty()
-  // partnerId: string;
-
+  
   @ApiProperty()
   availability: boolean;
-
+  
   @ApiProperty()
   ratings: string;
-
+  
   @ApiProperty()
   mobno: string;
+  
+  @ApiProperty()
+  stripe_id: string;
 
+  @ApiProperty()
+  onboarded:boolean;
+  
   @ApiProperty()
   created_at: Date;
 

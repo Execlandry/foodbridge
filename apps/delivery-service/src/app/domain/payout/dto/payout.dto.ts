@@ -16,7 +16,6 @@ import {
   MinLength,
   ValidateNested,
 } from "class-validator";
-import { Type as validateType } from "class-transformer";
 import { mealType, cuisineType, foodType } from "@fbe/types";
 
 export class MenuItemBodyDto {

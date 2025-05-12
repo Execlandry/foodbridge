@@ -691,9 +691,6 @@ importers:
 
   apps/file-service:
     dependencies:
-      '@fbe/aws-s3':
-        specifier: workspace:^
-        version: link:../../packages/aws-s3
       '@fbe/aws-s3-dynamic':
         specifier: workspace:^
         version: link:../../packages/aws-s3-dynamic
@@ -1472,64 +1469,6 @@ importers:
       typescript:
         specifier: ~4.7.4
         version: 4.7.4
-
-  packages/aws-s3:
-    dependencies:
-      '@fbe/config':
-        specifier: ^1.0.3
-        version: link:../config
-      '@fbe/logger':
-        specifier: ^1.0.0
-        version: link:../logger
-    devDependencies:
-      '@nestjs/common':
-        specifier: 9.0.0
-        version: 9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      '@nestjs/config':
-        specifier: 2.3.1
-        version: 2.3.1(@nestjs/common@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      '@nestjs/core':
-        specifier: 9.0.0
-        version: 9.0.0(@nestjs/common@9.0.0)(@nestjs/microservices@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      '@nestjs/testing':
-        specifier: ^9.0.0
-        version: 9.4.3(@nestjs/common@9.0.0)(@nestjs/core@9.0.0)(@nestjs/microservices@9.0.0)
-      '@nestjs/typeorm':
-        specifier: ^9.0.1
-        version: 9.0.1(@nestjs/common@9.0.0)(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)(typeorm@0.3.17)
-      '@types/express':
-        specifier: ^4.17.19
-        version: 4.17.19
-      '@types/jest':
-        specifier: 27.0.2
-        version: 27.0.2
-      '@types/node':
-        specifier: ^17.0.45
-        version: 17.0.45
-      '@types/uuid':
-        specifier: ^8.3.4
-        version: 8.3.4
-      aws-sdk:
-        specifier: ^2.1473.0
-        version: 2.1473.0
-      express:
-        specifier: ^4.18.2
-        version: 4.18.2
-      reflect-metadata:
-        specifier: ^0.1.13
-        version: 0.1.13
-      rxjs:
-        specifier: ^7.8.1
-        version: 7.8.1
-      tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
-      typeorm:
-        specifier: ^0.3.17
-        version: 0.3.17(ts-node@10.9.1)
-      typescript:
-        specifier: ^4.9.5
-        version: 4.9.5
 
   packages/aws-s3-dynamic:
     dependencies:
@@ -13493,7 +13432,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@types/node@16.18.58)(typescript@4.9.5)
+      ts-node: 10.9.1(@types/node@20.5.1)(typescript@4.9.5)
     transitivePeerDependencies:
       - bufferutil
       - canvas

@@ -9,13 +9,14 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { DeliveryEntity } from "src/app/domain/delivery/entity/delivery.entity";
 import { DeliveryController } from "src/app/domain/delivery/controller/delivery.controller";
 import { ScheduleModule } from "@nestjs/schedule";
-import { DeliveryEventService } from "src/app/domain/delivery/services/delivery-event.service";
 import HttpClientService from "src/lib/http.client.service";
 import { DeliveryService } from "./delivery/services/delivery.service";
 import { UserProxyService } from "./delivery/services/user.http.service";
+import { LocationModule } from "./location/location.module";
 
 @Module({
   imports: [
+    LocationModule,
     AuthModule,
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
@@ -28,10 +29,7 @@ import { UserProxyService } from "./delivery/services/user.http.service";
     ConfigModule,
   ],
   controllers: [DeliveryController],
-  providers: [
-    DeliveryService,
-    DeliveryService,
-    DeliveryEventService,
+  providers: [DeliveryService,DeliveryService,
     UserProxyService,
     HttpClientService,
   ],

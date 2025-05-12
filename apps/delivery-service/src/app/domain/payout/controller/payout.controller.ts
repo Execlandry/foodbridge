@@ -32,7 +32,6 @@ import {
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
 
-import { Type } from "class-transformer";
 
 import { User, UserMetaData } from "../../auth/guards/user";
 import { AccessTokenGuard } from "../../auth/guards/access_token.guard";

@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import axios, { AxiosRequestConfig } from "axios";
 import debug from "debug";
 import { ConfigService } from "@fbe/config";
-import { Request } from "express";
 
 const verbose = debug("rfx:verbose:handler");
 

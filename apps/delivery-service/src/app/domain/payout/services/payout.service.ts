@@ -44,7 +44,7 @@ export class PayoutService implements OnModuleInit {
       },
     });
     // update Payout status to success or feailed for order Id
-    Payout.status = payload.status;
+    // Payout.status = payload.status;
     /* this.client.emit<any>("Payout_status_updated", {
       order_id: payload.order_id,
       status: payload.status,
@@ -68,7 +68,7 @@ export class PayoutService implements OnModuleInit {
       throw new NotFoundException();
     }
     // update Payout status to success or feailed for order Id
-    Payout.status = query.status;
+    // Payout.status = query.status;
     return await Payout.save();
   }
 
