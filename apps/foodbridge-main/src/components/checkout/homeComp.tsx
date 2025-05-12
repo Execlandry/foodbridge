@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
 import { loadStripe } from "@stripe/stripe-js";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import "leaflet-routing-machine";
 import { SearchIcon } from "@heroicons/react/outline";
 // import L from "leaflet";
 // import 'leaflet/dist/leaflet.css';
@@ -143,6 +145,8 @@ function Checkout() {
 
   const [requestfordriver, setrequestfordriver] = useState<boolean[]>([]);
 
+  const [CalculateDistance, setCalculateDistance] = useState<any[]>([]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -151,8 +155,82 @@ function Checkout() {
     }));
   };
 
+function getRouteDistance(fromLatLng: [number, number], toLatLng: [number, number]): Promise<number> {
+  return new Promise((resolve, reject) => {
+    // Create a hidden container for the map if it doesn't exist
+    let mapContainer = document.getElementById('hidden-map-container');
+    if (!mapContainer) {
+      mapContainer = document.createElement('div');
+      mapContainer.id = 'hidden-map-container';
+      mapContainer.style.width = '0';
+      mapContainer.style.height = '0';
+      mapContainer.style.visibility = 'hidden';
+      document.body.appendChild(mapContainer);
+    }
+
+    // Create the Leaflet map if not already initialized
+    const tempMap = L.map(mapContainer).setView([fromLatLng[0], fromLatLng[1]], 13);
+
+    // Add OpenStreetMap tile layer (required by Leaflet)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(tempMap);
+
+    // OSRM routing service
+    const osrmRouter = L.Routing.osrmv1({
+      serviceUrl: "https://router.project-osrm.org/route/v1",
+      profile: "car",
+      useHints: false,
+    });
+
+    // Create routing control
+    const control = L.Routing.control({
+      waypoints: [
+        L.latLng(fromLatLng[0], fromLatLng[1]),
+        L.latLng(toLatLng[0], toLatLng[1]),
+      ],
+      routeWhileDragging: false,
+      addWaypoints: false,
+      fitSelectedRoutes: false,
+      show: false,
+      createMarker: () => null,
+      router: osrmRouter,
+    }).addTo(tempMap);
+
+    // Handle successful route
+    control.on("routesfound", function (e) {
+      const routes = e.routes;
+      if (!routes || routes.length === 0) {
+        reject(new Error("No routes found"));
+        control.remove();
+        tempMap.remove();
+        return;
+      }
+
+      const shortest = routes.reduce((prev:any, curr:any) =>
+        curr.summary.totalDistance < prev.summary.totalDistance ? curr : prev
+      );
+
+      resolve(shortest.summary.totalDistance);
+      control.remove();
+      tempMap.remove(); // Clean up map after route is found
+    });
+
+    // Handle errors
+    control.on("routingerror", function (err) {
+      console.error("Routing error:", err);
+      reject(err);
+      control.remove();
+      tempMap.remove();
+    });
+  });
+}
+
+
+
   const OrderPlace = () => {
-    menuItem.forEach(function (value: any, index: any) {
+    const temp=menuItem;
+    temp.forEach(function (value: any, index: any) {
       console.log(value, "\n", index);
       console.log(addresses[0]);
       console.log(requestfordriver[index]);
@@ -270,7 +348,9 @@ function Checkout() {
 
   const addNFalseValues = (n: number) => {
     const newValues = new Array(n).fill(false);
+    const newDistance = new Array(n).fill(0);
     setrequestfordriver((prev) => [...prev, ...newValues]);
+    setrequestfordriver((prev) => [...prev, ...newDistance]);
   };
 
   useEffect(() => {
@@ -289,7 +369,17 @@ function Checkout() {
       setsrclong(address.long);
       console.log(address);
     }
+    AddDistance(menuItem);
   }, [menuItem, addresses]);
+
+
+  const AddDistance=(menuItem:any)=>
+  {
+    for(const item of menuItem)
+    {
+      
+    }
+  };
 
   return (
     <>

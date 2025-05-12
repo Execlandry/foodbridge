@@ -13,25 +13,28 @@ import { DeliveryEventService } from "src/app/domain/delivery/services/delivery-
 import HttpClientService from "src/lib/http.client.service";
 import { DeliveryService } from "./delivery/services/delivery.service";
 import { UserProxyService } from "./delivery/services/user.http.service";
+import {PayoutEntity} from "./payout/entity/payout.entity";
+import {PayoutService} from "./payout/services/payout.service";
+import {PayoutController } from "./payout/controller/payout.controller";
 
 @Module({
   imports: [
     AuthModule,
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([DeliveryEntity]),
+    TypeOrmModule.forFeature([DeliveryEntity,PayoutEntity]),
     DBModule.forRoot({
-      entities: [DeliveryEntity],
+      entities: [DeliveryEntity,PayoutEntity],
     }),
     TerminusModule,
     AppLoggerModule,
     ConfigModule,
   ],
-  controllers: [DeliveryController],
+  controllers: [DeliveryController,PayoutController],
   providers: [DeliveryService,DeliveryService,
     DeliveryEventService,
     UserProxyService,
-    HttpClientService,],
-  exports: [DeliveryService],
+    HttpClientService,PayoutService],
+  exports: [DeliveryService,PayoutService],
 })
 export class DomainModule {}

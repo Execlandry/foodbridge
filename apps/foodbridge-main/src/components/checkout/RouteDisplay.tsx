@@ -67,18 +67,14 @@ export default function MapComponent({
     if (mapInstance.current) {
       const orderIcon = L.icon({
         iconUrl:
-          "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-        shadowUrl:
-          "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+          "./images/marker-icon-2x-red.png",
         iconSize: [25, 41],
         iconAnchor: [12, 41],
       });
 
       const geoIcon = L.icon({
         iconUrl:
-          "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
-        shadowUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+          "./images/marker-icon-2x-blue.png",
         iconSize: [25, 41],
         iconAnchor: [12, 41],
       });
@@ -101,26 +97,41 @@ export default function MapComponent({
 
         // Add new route
 
-        routingControl.current = L.Routing.control({
-          waypoints: [
-            L.latLng(orderCoordinates.lat, orderCoordinates.lng),
-            L.latLng(geocodedCoords.lat, geocodedCoords.lng),
-          ],
-          routeWhileDragging: false,
-          addWaypoints: false, // Prevent user interaction
-          fitSelectedRoutes: true, // Ensure the route fits in view
-          show: false, // Hide route details
-          lineOptions: {
-            styles: [{ color: "blue", weight: 2 }],
-            extendToWaypoints: true,
-            missingRouteTolerance: 10,
-          },
-        }).addTo(mapInstance.current);
+      routingControl.current = L.Routing.control({
+  waypoints: [
+    L.latLng(orderCoordinates.lat, orderCoordinates.lng),
+    L.latLng(geocodedCoords.lat, geocodedCoords.lng),
+  ],
+  router: L.Routing.osrmv1({
+    serviceUrl: "https://router.project-osrm.org/route/v1",
+    profile: "car",
+    alternatives: true, // 👈 This enables multiple routes
+  }),
+  routeWhileDragging: false,
+  addWaypoints: false,
+  fitSelectedRoutes: true,
+  show: false,
+  lineOptions: {
+    styles: [{ color: "blue", weight: 2 }],
+    extendToWaypoints: true,
+    missingRouteTolerance: 10,
+  },
+}).addTo(mapInstance.current);
+
 
         routingControl.current.on("routesfound", function (e: any) {
-          const route = e.routes[0];
-          const distanceKm = route.summary.totalDistance / 1000;
-          setDistance(distanceKm);
+        const routes = e.routes;
+
+// Find the route with the shortest totalDistance
+let shortestRoute = routes[0];
+for (let i = 1; i < routes.length; i++) {
+  if (routes[i].summary.totalDistance < shortestRoute.summary.totalDistance) {
+    shortestRoute = routes[i];
+  }
+}
+
+const distanceKm = shortestRoute.summary.totalDistance / 1000;
+setDistance(distanceKm);
         });
 
         // Remove the unwanted control panel from the DOM
