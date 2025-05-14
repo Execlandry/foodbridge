@@ -120,10 +120,12 @@ export class UserService {
     });
   }
 
-  async createConnectedAccount(userId: string): Promise<{ url: string, accountId: string }> {
+  async createConnectedAccount(
+    userId: string
+  ): Promise<{ url: string; accountId: string }> {
     // 1. Create Express account
     const account = await this.stripe.accounts.create({
-      type: 'express',
+      type: "express",
       metadata: { userId },
       capabilities: {
         card_payments: { requested: true },
@@ -134,9 +136,9 @@ export class UserService {
     // 2. Create account link (onboarding)
     const accountLink = await this.stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'https://localhost:3000/',
-      return_url: 'https://localhost:3000/',
-      type: 'account_onboarding',
+      refresh_url: "https://localhost:3000/",
+      return_url: "https://localhost:3000/",
+      type: "account_onboarding",
     });
 
     return { url: accountLink.url, accountId: account.id };
@@ -187,21 +189,28 @@ export class UserService {
       onboardingUrl: url,
     };
   }
-async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
+  async handleStripeWebhook(
+    event: Stripe.Event
+  ): Promise<{ received: boolean }> {
     try {
-      if (event.type === 'account.updated') {
+      if (event.type === "account.updated") {
+        console.log("Account updated:");
         const account = event.data.object as Stripe.Account;
-        const partner = await this.partnerRepo.findOne({ where: { stripe_id: account.id } });
+        const partner = await this.partnerRepo.findOne({
+          where: { stripe_id: account.id },
+        });
         if (partner && account.details_submitted) {
           partner.onboarded = true;
           await this.partnerRepo.save(partner);
-          this.logger.log(`Partner ${partner.id} onboarded successfully for Stripe account ${account.id}`);
+          this.logger.log(
+            `Partner ${partner.id} onboarded successfully for Stripe account ${account.id}`
+          );
         }
       }
       return { received: true };
     } catch (error) {
       this.logger.error(`Webhook error: ${error.message}`);
-      throw new BadRequestException('Webhook processing failed');
+      throw new BadRequestException("Webhook processing failed");
     }
   }
   async updatePartnerAvailability(
@@ -260,8 +269,6 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
     };
   }
 
-  
-
   async fetchRequestedPartnerDetails(
     param: GetDeliveryPartnerbyId
   ): Promise<FullPartnerDetailsDto> {
@@ -286,8 +293,8 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
       availability: partner.availability,
       ratings: partner.ratings,
       mobno: partner.mobno,
-      stripe_id:partner.stripe_id,
-      onboarded:partner.onboarded,
+      stripe_id: partner.stripe_id,
+      onboarded: partner.onboarded,
       created_at: partner.created_at,
       updated_at: partner.updated_at,
       user: {
@@ -323,7 +330,7 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
 
     return this.userRepo.save(user);
   }
-  
+
   async create(userInput: UserSignupDto): Promise<UserEntity> {
     const { email } = userInput;
 

@@ -1,5 +1,11 @@
-import { IsNotEmpty, IsNumber, IsObject, IsString, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsString,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
 
 class GeoPosition {
   @IsNumber()

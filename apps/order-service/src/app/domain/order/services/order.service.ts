@@ -30,8 +30,7 @@ export class OrderService implements OnModuleInit {
     private readonly logger: Logger,
     private readonly connection: Connection,
     @InjectRepository(OrderEntity)
-    private orderRepo: Repository<OrderEntity>,
-  
+    private orderRepo: Repository<OrderEntity>
   ) {}
 
   async onModuleInit() {
@@ -43,23 +42,21 @@ export class OrderService implements OnModuleInit {
   }
 
   private generateOtp(length = 6): string {
-    const digits = '0123456789';
-    let otp = '';
+    const digits = "0123456789";
+    let otp = "";
     for (let i = 0; i < length; i++) {
       otp += digits.charAt(Math.floor(Math.random() * digits.length));
     }
     return otp;
   }
 
-  
-  
   async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
     const queryRunner = this.connection.createQueryRunner();
-    
+
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
-    try{
+    try {
       const otp = await this.generateOtp();
       const order = this.orderRepo.create({
         user_id: user.userId,
@@ -72,7 +69,7 @@ export class OrderService implements OnModuleInit {
             first_name: payload.user.first_name,
             last_name: payload.user.last_name,
             mobno: payload.user.mobno,
-            picture_url: payload.user.picture_url
+            picture_url: payload.user.picture_url,
           },
         },
         business: payload.business,
@@ -80,7 +77,7 @@ export class OrderService implements OnModuleInit {
         // driver: payload.driver,
         // address_id: payload.address_id,
         // business_id: payload.business_id,
-        menu_items: payload.menu_items, 
+        menu_items: payload.menu_items,
         // order_status: "pending",
         // payment_status: "pending",
         // payment_method:"upi",
@@ -90,41 +87,39 @@ export class OrderService implements OnModuleInit {
       });
       const savedOrder = await this.orderRepo.save(order);
       await queryRunner.commitTransaction();
-  
+
       if (savedOrder.request_for_driver) {
         this.client.emit("order_processed_success", savedOrder);
       }
       return savedOrder;
-
-    }catch (error) {
+    } catch (error) {
       await queryRunner.rollbackTransaction();
       this.logger.error(`Order creation failed: ${error.message}`);
 
       if (error instanceof ConflictException) {
         throw error;
       }
-      throw new InternalServerErrorException('Failed to create order');
+      throw new InternalServerErrorException("Failed to create order");
     } finally {
       await queryRunner.release();
     }
   }
 
-
-  async getOrderOtp(param:UpdateByIdDto){
-    return this.orderRepo.findOne({ where: { id:param.id }, select: ['otp'] });
+  async getOrderOtp(param: UpdateByIdDto) {
+    return this.orderRepo.findOne({ where: { id: param.id }, select: ["otp"] });
   }
 
   //for payment history
-    // async getLastPaymentProcessedOrder(user: UserMetaData) {
-    // fetch last processed order for tracking and delivery
-    //   const order = await this.orderRepo.findOne({
-    //     where: {
-    //       order_status: "payment_processed",
-    //       user_id: user.userId,
-    //     },
-    //   });
-    //   return order;
-    // }
+  // async getLastPaymentProcessedOrder(user: UserMetaData) {
+  // fetch last processed order for tracking and delivery
+  //   const order = await this.orderRepo.findOne({
+  //     where: {
+  //       order_status: "payment_processed",
+  //       user_id: user.userId,
+  //     },
+  //   });
+  //   return order;
+  // }
 
   // async confirmOrderPayment(
   //   user: UserMetaData,
@@ -156,11 +151,6 @@ export class OrderService implements OnModuleInit {
   //   }
   //   return savedOrder;
   // }
-
-
-
-
-
 
   // async processPayment(orderId: string, payload: ProcessPaymentDto) {
   //   const queryRunner = this.connection.createQueryRunner();

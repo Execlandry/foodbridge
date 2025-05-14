@@ -5,12 +5,11 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Like, Repository, QueryRunner, Connection, Not } from 'typeorm';
-import { Logger } from '@fbe/logger';
+import { Like, Repository, QueryRunner, Connection, Not } from "typeorm";
+import { Logger } from "@fbe/logger";
 import { DeliveryEntity } from "../entity/delivery.entity";
 import { UserProxyService } from "./user.http.service";
-import { LocationDto} from "../dto/update-current-location.dto";
-
+import { LocationDto } from "../dto/update-current-location.dto";
 
 @Injectable()
 export class DeliveryService {
@@ -19,43 +18,58 @@ export class DeliveryService {
     private deliveryRepo: Repository<DeliveryEntity>,
     private readonly logger: Logger,
     private readonly userProxyService: UserProxyService,
-    private readonly connection:Connection
-    
+    private readonly connection: Connection
   ) {}
 
-  
-  async updateCurrentLocation(partnerId: string, location:LocationDto) {
-    const delivery = await this.deliveryRepo.findOneBy({ delivery_partner_id: partnerId,partner_assigned:true});
-    if (!delivery) throw new NotFoundException('Delivery partner not found');
+  async updateCurrentLocation(partnerId: string, location: LocationDto) {
+    const delivery = await this.deliveryRepo.findOneBy({
+      delivery_partner_id: partnerId,
+      partner_assigned: true,
+    });
+    if (!delivery) throw new NotFoundException("Delivery partner not found");
     delivery.current_location = location;
     await this.deliveryRepo.save(delivery);
-    return {currentLocation:delivery.current_location};
-  }
-  
-  async getDeliveryOrdersHistory(partnerId:string){
-    const getCurrentOrders= await this.deliveryRepo.findOne({
-      where:{delivery_partner_id:partnerId,partner_assigned:true,order_status:'delivered'},
-    });
-    if (!getCurrentOrders) {
-    return { CurrentOrder: null, orderStatus: null };
-  }
-    return {CurrentOrder:getCurrentOrders.order,orderStatus:getCurrentOrders.order_status};
+    return { currentLocation: delivery.current_location };
   }
 
-  async getCurrentOrdersForDeliveryPartner(partnerId:string){
-    const getCurrentOrders= await this.deliveryRepo.findOne({
-      where:{delivery_partner_id:partnerId,partner_assigned:true,order_status:Not('delivered')},
+  async getDeliveryOrdersHistory(partnerId: string) {
+    const getCurrentOrders = await this.deliveryRepo.findOne({
+      where: {
+        delivery_partner_id: partnerId,
+        partner_assigned: true,
+        order_status: "delivered",
+      },
     });
     if (!getCurrentOrders) {
-    return { CurrentOrder: null, orderStatus: null };
-  }
-    return {CurrentOrder:getCurrentOrders.order,orderStatus:getCurrentOrders.order_status};
+      return { CurrentOrder: null, orderStatus: null };
+    }
+    return {
+      CurrentOrder: getCurrentOrders.order,
+      orderStatus: getCurrentOrders.order_status,
+    };
   }
 
-  async getAvailableOrdersForDelivery(){
-    const availableOrders= await this.deliveryRepo.find({
-      where:{partner_assigned:false},
-      order:{created_at:'ASC'}
+  async getCurrentOrdersForDeliveryPartner(partnerId: string) {
+    const getCurrentOrders = await this.deliveryRepo.findOne({
+      where: {
+        delivery_partner_id: partnerId,
+        partner_assigned: true,
+        order_status: Not("delivered"),
+      },
+    });
+    if (!getCurrentOrders) {
+      return { CurrentOrder: null, orderStatus: null };
+    }
+    return {
+      CurrentOrder: getCurrentOrders.order,
+      orderStatus: getCurrentOrders.order_status,
+    };
+  }
+
+  async getAvailableOrdersForDelivery() {
+    const availableOrders = await this.deliveryRepo.find({
+      where: { partner_assigned: false },
+      order: { created_at: "ASC" },
     });
     return availableOrders;
   }
@@ -123,33 +137,27 @@ export class DeliveryService {
       await queryRunner.release();
     }
   }
-  
 
-  async confirmDelivery(orderId:string,deliveryPartnerId:string){
-    try{
-      const deliveredOrder=await this.deliveryRepo.findOne({
-        where:{order_id:orderId}
+  async confirmDelivery(orderId: string, deliveryPartnerId: string) {
+    try {
+      const deliveredOrder = await this.deliveryRepo.findOne({
+        where: { order_id: orderId },
       });
 
       if (!deliveredOrder) {
         throw new NotFoundException(`Order ${orderId} not found`);
       }
 
-      deliveredOrder.order_status="delivered";
+      deliveredOrder.order_status = "delivered";
 
       await this.userProxyService.markDeliveryPartnerUnassigned({
         orderId,
-        partnerId:deliveryPartnerId,
+        partnerId: deliveryPartnerId,
       });
 
-      return this.deliveryRepo.save(deliveredOrder)
-
-    }
-    catch(e){
-
-    }
+      return this.deliveryRepo.save(deliveredOrder);
+    } catch (e) {}
   }
-
 
   private mapError(error: unknown) {
     if (error instanceof NotFoundException) return error;

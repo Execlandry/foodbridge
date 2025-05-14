@@ -29,7 +29,6 @@ import {
 import { PlaceOrder, fetchOrderItems } from "../../redux/order/order.slice";
 import { UpdateDishStatus } from "../../redux/dishes/dishes.slice";
 
-
 interface MenuItems {
   description: string;
   food_type: string;

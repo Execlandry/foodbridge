@@ -12,8 +12,6 @@ import { MenuItemBodyDto } from "../dto/order.dto";
 
 @Entity("orders")
 export class OrderEntity extends BaseEntity {
-
-
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
@@ -32,11 +30,11 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "varchar", select: true, default: 0 })
   public amount!: string;
 
-  @Column({ type: 'varchar', length: 6, nullable: true })
+  @Column({ type: "varchar", length: 6, nullable: true })
   public otp?: string;
 
   //TODO::implement this for navigate pickup view
-  @Column({ type: 'boolean',  default: false })
+  @Column({ type: "boolean", default: false })
   public is_otp_verified?: string;
 
   @Column({ type: "jsonb", select: true, default: null })

@@ -109,9 +109,9 @@ export class DeliveryPartnerController {
     description: "Partner availability updated to true successfully",
   })
   @ApiParam({
-    name: 'delivery_partner_id',
-    description: 'User ID of the delivery partner',
-    type: 'string',
+    name: "delivery_partner_id",
+    description: "User ID of the delivery partner",
+    type: "string",
     required: true,
   })
   public async updatePartnerAvailability(
@@ -121,7 +121,6 @@ export class DeliveryPartnerController {
     return this.service.updatePartnerAvailability(param, body);
   }
 
-
   @Put(":id/release")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({
@@ -129,12 +128,44 @@ export class DeliveryPartnerController {
     description: "Partner availability updated to false successfully",
   })
   @ApiParam({
-    name: 'delivery_partner_id',
-    description: 'User ID of the delivery partner',
-    type: 'string',
+    name: "delivery_partner_id",
+    description: "User ID of the delivery partner",
+    type: "string",
     required: true,
   })
-  async updateReleasePartnerAvailability(@Param() param: GetDeliveryPartnerbyId, @Body() body: GetDeliveryPartnerAvailability) {
-  return this.service.updateReleasePartnerAvailability(param, body);
-}
+  async updateReleasePartnerAvailability(
+    @Param() param: GetDeliveryPartnerbyId,
+    @Body() body: GetDeliveryPartnerAvailability
+  ) {
+    return this.service.updateReleasePartnerAvailability(param, body);
+  }
+
+  @Post("webhook")
+  @HttpCode(HttpStatus.OK)
+  async handleWebhook(@Req() req: Request, @Res() res: Response) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2023-08-16",
+    });
+    const signature = req.headers["stripe-signature"] as string;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const rawBody = (req as any).rawBody;
+
+    if (!rawBody) {
+      return res.status(400).send("Raw body missing");
+    }
+
+    try {
+      const event = stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        webhookSecret
+      );
+      // ... call your service
+      await this.service.handleStripeWebhook(event);
+      res.send({ received: true });
+    } catch (err) {
+      this.logger.error(`Webhook Error: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  }
 }

@@ -9,7 +9,7 @@ import { OrderEntity } from "./order/entity/order.entity";
 import { OrderController } from "./order/controller/order.controller";
 import { OrderService } from "./order/services/order.service";
 import { ClientsModule, Transport } from "@nestjs/microservices";
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [
@@ -28,17 +28,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ]),
     AuthModule,
     EventEmitterModule.forRoot(),
-    TypeOrmModule.forFeature([OrderEntity]),//PaymentEntity
+    TypeOrmModule.forFeature([OrderEntity]), //PaymentEntity
     DBModule.forRoot({
-      entities: [OrderEntity],//PaymentEntity
+      entities: [OrderEntity], //PaymentEntity
     }),
     TerminusModule,
     AppLoggerModule,
     ConfigModule,
   ],
 
-  controllers: [OrderController],//PaymentController
-  providers: [OrderService],//PaymentService
-  exports: [OrderService]//PaymentService
+  controllers: [OrderController], //PaymentController
+  providers: [OrderService], //PaymentService
+  exports: [OrderService], //PaymentService
 })
 export class DomainModule {}

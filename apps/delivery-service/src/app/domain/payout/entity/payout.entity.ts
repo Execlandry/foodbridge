@@ -19,27 +19,32 @@ export class PayoutEntity extends BaseEntity {
 
   @Column({ type: "uuid", select: true })
   public business_id!: string;
-  
+
+  @Column({ type: "varchar", select: true })
+  public delivery_id!: string;
+
+  @Column({ type: "varchar", select: true })
+  public delivery_acc_id!: string;
+
   @Column({ type: "uuid", select: true })
   public order_id!: string;
-  
+
   @Column({ type: "int", select: true })
   public amount!: number;
-  
-  @Column({ 
-    type: "varchar", 
+
+  @Column({
+    type: "varchar",
     default: "pending",
-    enum: ["pending", "success", "failed"]
+    enum: ["pending", "success", "failed"],
   })
   public payment_status!: string;
 
-  @Column({ 
-    type: "varchar", 
+  @Column({
+    type: "varchar",
     default: "upi",
     enum: ["upi", "cod"],
   })
   public payment_method!: string;
-
 
   @Column({ type: "jsonb", default: null })
   public menu_items!: any;

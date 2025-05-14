@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import HttpClientService from "src/lib/http.client.service";
 import { ConfigService } from "@fbe/config";
 
-
 @Injectable()
 export class UserProxyService {
   baseURL: string;
@@ -52,12 +51,17 @@ export class UserProxyService {
     }
   }
 
-  async markDeliveryPartnerUnassigned(payload: { orderId: string; partnerId: string }) {
-    console.log('Calling user service from markdeliverypartnerunassigned:', this.baseURL);
+  async markDeliveryPartnerUnassigned(payload: {
+    orderId: string;
+    partnerId: string;
+  }) {
+    console.log(
+      "Calling user service from markdeliverypartnerunassigned:",
+      this.baseURL
+    );
 
     try {
       const { data } = await this.httpClientService.send({
-        
         url: `partners/${payload.partnerId}/release`,
         baseURL: this.baseURL,
         method: "PUT",

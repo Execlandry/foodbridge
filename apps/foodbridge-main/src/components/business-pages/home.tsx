@@ -56,7 +56,6 @@ interface Dish {
   business_id?: string | number;
 }
 
-
 interface GroupedDishes {
   [key: string]: {
     business: Business;

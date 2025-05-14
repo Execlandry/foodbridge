@@ -27,13 +27,13 @@ export class DeliveryEntity extends BaseEntity {
   @Column({ type: "jsonb", select: true, nullable: true })
   public delivery_partner!: any;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: "jsonb", nullable: true })
   public current_location?: { lat: number; lng: number };
 
-  @Column({ 
+  @Column({
     type: "varchar",
-    default: 'pending',
-    enum: ['in_transit', 'delivered']
+    default: "pending",
+    enum: ["in_transit", "delivered"],
   })
   public order_status: string;
 

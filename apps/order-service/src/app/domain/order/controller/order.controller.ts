@@ -37,13 +37,10 @@ import {
   NO_ENTITY_FOUND,
   UNAUTHORIZED_REQUEST,
 } from "src/app/app.constants";
-import {
-  CreatePaymentBodyDto,
-  UpdateByIdDto} from "../dto/order.dto";
+import { CreatePaymentBodyDto, UpdateByIdDto } from "../dto/order.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { AccessTokenGuard } from "../../auth/guards/access_token.guard";
 import { OrderService } from "../services/order.service";
-
 
 @ApiBearerAuth("authorization")
 @Controller("order")
@@ -86,20 +83,20 @@ export class OrderController {
   @Get(":id/otp")
   public async confirmOrder(
     @User() user: UserMetaData,
-    @Param() param: UpdateByIdDto,
+    @Param() param: UpdateByIdDto
     // @Query() query: UpdateByIdQueryDto
   ) {
     return await this.orderService.getOrderOtp(param);
     // return await this.orderService.confirmOrderPayment(user, param, query);
   }
 
-//   @Get(':id/otp')
-// async getOrderOtp(@Param('id') id: string): Promise<{ otp: string }> {
-//   const order = await this.orderService
-//   if (!order) throw new NotFoundException('Order not found');
+  //   @Get(':id/otp')
+  // async getOrderOtp(@Param('id') id: string): Promise<{ otp: string }> {
+  //   const order = await this.orderService
+  //   if (!order) throw new NotFoundException('Order not found');
 
-//   return { otp: order.otp! }; // You may want to restrict this to delivery personnel/admins only
-// }
+  //   return { otp: order.otp! }; // You may want to restrict this to delivery personnel/admins only
+  // }
 
   // @HttpCode(HttpStatus.OK)
   // @ApiConsumes("application/json")

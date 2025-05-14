@@ -1,4 +1,14 @@
-import {Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from "@nestjs/common";
 import { EventPattern } from "@nestjs/microservices";
 import {
   HealthCheck,
@@ -9,10 +19,18 @@ import { DeliveryService } from "../services/delivery.service";
 import { AccessTokenGuard } from "../../auth/guards/access_token.guard";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { RoleAllowed } from "../../auth/guards/role-decorator";
-import { UserRoles } from '@fbe/types';
-import { ApiBearerAuth, ApiBody, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { UserRoles } from "@fbe/types";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+} from "@nestjs/swagger";
 import { User, UserMetaData } from "../../auth/guards/user";
-import { LocationDto} from "../dto/update-current-location.dto";
+import { LocationDto } from "../dto/update-current-location.dto";
 
 @ApiBearerAuth("authorization")
 @Controller("delivery")
@@ -24,20 +42,22 @@ export class DeliveryController {
   ) {}
 
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @RoleAllowed(UserRoles['delivery-partner'])
-  @Patch('/current-location')
+  @RoleAllowed(UserRoles["delivery-partner"])
+  @Patch("/current-location")
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Update current location of delivery partner during pickup' })
-  @ApiOkResponse({ 
-    description: 'Successfully updated current location', 
+  @ApiOperation({
+    summary: "Update current location of delivery partner during pickup",
+  })
+  @ApiOkResponse({
+    description: "Successfully updated current location",
     schema: {
       example: {
         currentLocation: {
           lat: 15.2993,
-          lng: 74.124
-        }
-      }
-    }
+          lng: 74.124,
+        },
+      },
+    },
   })
   @ApiBody({ type: LocationDto })
   public async updateCurrentLocation(
@@ -47,13 +67,12 @@ export class DeliveryController {
     return await this.service.updateCurrentLocation(user.userId, dto);
   }
 
-
-  @UseGuards(AccessTokenGuard,RolesGuard)
-  @RoleAllowed(UserRoles['delivery-partner'])
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
-  @Get('/available-orders')
-  @ApiOperation({ summary: 'Get available orders for delivery partners' })
-  @ApiOkResponse({ description: 'Returns list of unassigned orders' })
+  @Get("/available-orders")
+  @ApiOperation({ summary: "Get available orders for delivery partners" })
+  @ApiOkResponse({ description: "Returns list of unassigned orders" })
   public async getAvailableOrdersForDelivery() {
     return await this.service.getAvailableOrdersForDelivery();
   }
@@ -61,54 +80,59 @@ export class DeliveryController {
   @UseGuards(AccessTokenGuard, RolesGuard)
   @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
-  @Get('/current-orders')
-  @ApiOperation({ summary: 'Get currently assigned orders for delivery partners' })
-  @ApiOkResponse({ description: 'Returns currently assigned orders' })
+  @Get("/current-orders")
+  @ApiOperation({
+    summary: "Get currently assigned orders for delivery partners",
+  })
+  @ApiOkResponse({ description: "Returns currently assigned orders" })
   public async getCurrentOrdersForDeliveryPartner(@User() user: UserMetaData) {
     return await this.service.getCurrentOrdersForDeliveryPartner(user.userId);
   }
 
-  @UseGuards(AccessTokenGuard,RolesGuard)
-  @RoleAllowed(UserRoles['delivery-partner'])
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
-  @Get('/order-history')
-  @ApiOperation({ summary: 'Get Delivery of orders history for delivery partners' })
-  @ApiOkResponse({ description: 'Returns orders history of delivery partner' })
+  @Get("/order-history")
+  @ApiOperation({
+    summary: "Get Delivery of orders history for delivery partners",
+  })
+  @ApiOkResponse({ description: "Returns orders history of delivery partner" })
   public async getDeliveryOrdersHistory(@User() user: UserMetaData) {
     return await this.service.getDeliveryOrdersHistory(user.userId);
   }
 
-  
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @RoleAllowed(UserRoles['delivery-partner'])
+  @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
-  @Post('/accept/:orderId')
-  @ApiOperation({ summary: 'Accept an available order manually' })
-  @ApiOkResponse({ description: 'Order successfully assigned to delivery partner' })
-  @ApiNotFoundResponse({ description: 'Order not found' })
-  @ApiForbiddenResponse({ description: 'Partner not available' })
-  @ApiInternalServerErrorResponse({ description: 'Assignment failed' })
+  @Post("/accept/:orderId")
+  @ApiOperation({ summary: "Accept an available order manually" })
+  @ApiOkResponse({
+    description: "Order successfully assigned to delivery partner",
+  })
+  @ApiNotFoundResponse({ description: "Order not found" })
+  @ApiForbiddenResponse({ description: "Partner not available" })
+  @ApiInternalServerErrorResponse({ description: "Assignment failed" })
   @ApiBearerAuth()
   public async assignOrder(
-    @Param('orderId') orderId: string,
-    @User() user: UserMetaData,
+    @Param("orderId") orderId: string,
+    @User() user: UserMetaData
   ) {
     return this.service.assignOrder(orderId, user.userId);
   }
 
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @RoleAllowed(UserRoles['delivery-partner'])
+  @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
-  @Post('/confirm-delivery/:orderId')
-  @ApiOperation({ summary: 'Confirm a delivery' })
-  @ApiOkResponse({ description: 'Order delivered success' })
-  @ApiNotFoundResponse({ description: 'Order not found' })
-  @ApiForbiddenResponse({ description: 'Partner not available' })
-  @ApiInternalServerErrorResponse({ description: 'Assignment failed' })
+  @Post("/confirm-delivery/:orderId")
+  @ApiOperation({ summary: "Confirm a delivery" })
+  @ApiOkResponse({ description: "Order delivered success" })
+  @ApiNotFoundResponse({ description: "Order not found" })
+  @ApiForbiddenResponse({ description: "Partner not available" })
+  @ApiInternalServerErrorResponse({ description: "Assignment failed" })
   @ApiBearerAuth()
   public async confirmDelivery(
-    @Param('orderId') orderId: string,
-    @User() user: UserMetaData,
+    @Param("orderId") orderId: string,
+    @User() user: UserMetaData
   ) {
     return this.service.confirmDelivery(orderId, user.userId);
   }

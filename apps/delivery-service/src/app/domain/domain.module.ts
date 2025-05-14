@@ -7,10 +7,13 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
 import { AuthModule } from "./auth/auth.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { DeliveryEntity } from "src/app/domain/delivery/entity/delivery.entity";
+import { PayoutEntity } from "src/app/domain/payout/entity/payout.entity";
 import { DeliveryController } from "src/app/domain/delivery/controller/delivery.controller";
+import { PayoutController } from "src/app/domain/payout/controller/payout.controller";
 import { ScheduleModule } from "@nestjs/schedule";
 import HttpClientService from "src/lib/http.client.service";
 import { DeliveryService } from "./delivery/services/delivery.service";
+import { PayoutService } from "./payout/services/payout.service";
 import { UserProxyService } from "./delivery/services/user.http.service";
 import { LocationModule } from "./location/location.module";
 
@@ -20,19 +23,22 @@ import { LocationModule } from "./location/location.module";
     AuthModule,
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([DeliveryEntity]),
+    TypeOrmModule.forFeature([DeliveryEntity, PayoutEntity]),
     DBModule.forRoot({
-      entities: [DeliveryEntity],
+      entities: [DeliveryEntity, PayoutEntity],
     }),
     TerminusModule,
     AppLoggerModule,
     ConfigModule,
   ],
-  controllers: [DeliveryController],
-  providers: [DeliveryService,DeliveryService,
+  controllers: [DeliveryController, PayoutController],
+  providers: [
+    DeliveryService,
+    DeliveryService,
+    PayoutService,
     UserProxyService,
     HttpClientService,
   ],
-  exports: [DeliveryService],
+  exports: [DeliveryService, PayoutService],
 })
 export class DomainModule {}

@@ -17,6 +17,8 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  Req,
+  Res,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -31,7 +33,7 @@ import {
   ApiUnprocessableEntityResponse,
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
-
+import { Request, Response } from "express";
 
 import { User, UserMetaData } from "../../auth/guards/user";
 import { AccessTokenGuard } from "../../auth/guards/access_token.guard";
@@ -48,7 +50,7 @@ import {
   NO_ENTITY_FOUND,
   UNAUTHORIZED_REQUEST,
 } from "src/app/app.constants";
-
+import { Stripe } from "stripe";
 @ApiBearerAuth("authorization")
 @Controller("Payouts")
 @UsePipes(
@@ -64,19 +66,44 @@ export class PayoutController {
     private readonly logger: Logger
   ) {}
 
-  @HttpCode(HttpStatus.CREATED)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @Post("/")
-  @UseGuards(AccessTokenGuard)
-  public async addPayouts(
-    @User() user: UserMetaData,
-    @Body() payload: CreatePaymentBodyDto
-  ) {
-    return await this.service.createPayout(user, payload);
+  @Post("/stripe-webhook")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Stripe webhook to trigger payouts" })
+  async handleStripeWebhook(@Req() req: Request, @Res() res: Response) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2023-08-16",
+    });
+
+    const signature = req.headers["stripe-signature"] as string;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const rawBody = (req as any).rawBody;
+
+    if (!rawBody) {
+      this.logger.warn("Missing raw body for Stripe webhook verification");
+      return res.status(400).send("Raw body missing");
+    }
+
+    try {
+      const event = stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        webhookSecret
+      );
+
+      // Handle only specific event types
+      if (event.type === "payment_intent.succeeded") {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const metadata = paymentIntent.metadata;
+
+        // ✅ Trigger your payout logic here
+        await this.service.createPayout(paymentIntent, metadata); // You can pass extra data if needed
+      }
+
+      return res.send({ status: "success" });
+    } catch (err) {
+      this.logger.error(`Stripe webhook error: ${err.message}`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
   }
   @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")
@@ -107,5 +134,18 @@ export class PayoutController {
     @Query() query: UpdateByIdQueryDto
   ) {
     return await this.service.confirmPayout(user, param, query);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Get all delivered orders by the delivery partner" })
+  @ApiOkResponse({ description: "List of delivered orders" })
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @Get("/my-delivered-orders")
+  @UseGuards(AccessTokenGuard)
+  public async getDeliveredOrders(@User() user: UserMetaData) {
+    return await this.service.getDeliveredOrdersByDeliveryPartner(user);
   }
 }
