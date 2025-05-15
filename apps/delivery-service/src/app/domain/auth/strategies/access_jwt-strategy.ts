@@ -41,7 +41,7 @@ export class AccessTokenJwtStrategy extends PassportStrategy(Strategy) {
     if (!payload || !payload.userId || !payload.email || !payload.permissions) {
       throw new UnauthorizedException("Invalid token payload");
     }
-  
+
     return {
       userId: payload.userId,
       email: payload.email,

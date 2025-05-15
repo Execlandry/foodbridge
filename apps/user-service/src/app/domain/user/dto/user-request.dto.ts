@@ -60,7 +60,7 @@ export class FullPartnerDetailsDto {
   user: UserNestedDto;
 }
 
-export class DeliveryPartnerSignupDto{
+export class DeliveryPartnerSignupDto {
   @ApiProperty({
     description: "username",
     example: "john",
@@ -81,9 +81,9 @@ export class DeliveryPartnerSignupDto{
   email: string;
 
   @ApiProperty({
-    description: 'Mobile number of the user',
-    example: '9876543210',
-    type: String, 
+    description: "Mobile number of the user",
+    example: "9876543210",
+    type: String,
   })
   @IsNumberString()
   @Length(10, 15)
@@ -99,8 +99,6 @@ export class DeliveryPartnerSignupDto{
   @IsString()
   @MinLength(8)
   public password!: string;
-
-
 }
 
 export class GetDeliveryPartnerbyId {
@@ -118,7 +116,7 @@ export class GetDeliveryPartnerAvailability {
   @ApiProperty({
     description: "Partner availability status",
     example: true,
-    required: true
+    required: true,
   })
   @IsBoolean()
   public availability!: boolean;

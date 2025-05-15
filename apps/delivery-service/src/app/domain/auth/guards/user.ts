@@ -13,5 +13,4 @@ export interface UserMetaData {
   userId: string;
   email: string;
   permissions: string;
-  
 }

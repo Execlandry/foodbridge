@@ -2,6 +2,7 @@
 /* eslint-disable no-useless-escape */
 
 // Package.
+import { Request, Response } from "express";
 import {
   Body,
   Controller,
@@ -12,7 +13,9 @@ import {
   Param,
   Patch,
   Post,
+  BadRequestException,
   Put,
+  RawBodyRequest,
   Query,
   Req,
   Res,
@@ -20,6 +23,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
+import Stripe from "stripe";
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -66,30 +70,35 @@ export class DeliveryPartnerController {
   ) {}
 
   @Post("register")
-  @ApiOperation({ summary: 'Register delivery partners',description: "Register a new delivery partner" })
+  @ApiOperation({
+    summary: "Register delivery partners",
+    description: "Register a new delivery partner",
+  })
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
-  description: "Delivery partner registered successfully",
-  type: PartnerResponseDto,
+    description: "Delivery partner registered successfully",
+    type: PartnerResponseDto,
   })
-  @ApiBadRequestResponse({ description: 'Invalid partner data' })
-  @ApiConflictResponse({ description: 'Partner already exists' })
-  @ApiInternalServerErrorResponse({ description: 'Server error' })
-
+  @ApiBadRequestResponse({ description: "Invalid partner data" })
+  @ApiConflictResponse({ description: "Partner already exists" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
   public async registerDeliveryPartner(@Body() body: DeliveryPartnerSignupDto) {
-  return this.service.registerDeliveryPartner(body);
-}
-
+    return this.service.registerDeliveryPartner(body);
+  }
 
   // @UseGuards(AccessTokenGuard, RolesGuard)
   // @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: FullPartnerDetailsDto, description: "" })
-  @ApiOperation({ summary: 'Get current available partner',description: "return available delivery partner" })
+  @ApiOperation({
+    summary: "Get current available partner",
+    description: "return available delivery partner",
+  })
   @ApiConsumes("application/json")
   @Get(":id")
-  public async fetchRequestedPartnerDetails(@Param() param:GetDeliveryPartnerbyId) {
-    
+  public async fetchRequestedPartnerDetails(
+    @Param() param: GetDeliveryPartnerbyId
+  ) {
     return this.service.fetchRequestedPartnerDetails(param);
   }
 
@@ -100,9 +109,9 @@ export class DeliveryPartnerController {
     description: "Partner availability updated successfully",
   })
   @ApiParam({
-    name: 'id',
-    description: 'User ID of the delivery partner',
-    type: 'string',
+    name: "id",
+    description: "User ID of the delivery partner",
+    type: "string",
     required: true,
   })
   public async updatePartnerAvailability(
@@ -112,10 +121,36 @@ export class DeliveryPartnerController {
     return this.service.updatePartnerAvailability(param, body);
   }
 
-
-  @Put(':id/release')
-  @ApiOperation({ summary: 'Release partner for new orders' })
+  @Put(":id/release")
+  @ApiOperation({ summary: "Release partner for new orders" })
   async releasePartner(@Param() param: GetDeliveryPartnerbyId) {
-  return this.service.updatePartnerAvailability(param, { availability: true });
+    return this.service.updatePartnerAvailability(param, {
+      availability: true,
+    });
+  }
+
+  @Post('webhook')
+  @HttpCode(HttpStatus.OK)
+  async handleWebhook(@Req() req: Request, @Res() res: Response) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2023-08-16" });
+    const signature = req.headers['stripe-signature'] as string;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const rawBody = (req as any).rawBody;
+
+    if (!rawBody) {
+      return res.status(400).send('Raw body missing');
+    }
+
+    try {
+      const event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+      // ... call your service
+      await this.service.handleStripeWebhook(event);
+      res.send({ received: true });
+    } catch (err) {
+      this.logger.error(`Webhook Error: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  }
+
 }
-}
+

@@ -2,6 +2,7 @@
 
 import { useContext, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
 import { loadStripe } from "@stripe/stripe-js";
@@ -10,10 +11,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import { SearchIcon } from "@heroicons/react/outline";
-// import L from "leaflet";
-// import 'leaflet/dist/leaflet.css';
-// import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-// import 'leaflet-routing-machine';
 import { UserContext, UserContextType } from "../../hooks/user-context";
 import MapComponent from "./RouteDisplay";
 import {
@@ -27,10 +24,16 @@ import {
   CartItemsSelector,
   EmptyCart,
   fetchCartItems,
+  removeCartItems
 } from "../../redux/cart/cart.slice";
 import { PlaceOrder, fetchOrderItems } from "../../redux/order/order.slice";
-import { UpdateDishStatus } from "../../redux/dishes/dishes.slice";
-
+import {
+  fetchDishesForLandingPage,
+  listDishesForLandingPage,
+  UpdateDishStatus,
+} from "../../redux/dishes/dishes.slice";
+import { cartData } from "../utils/dummyData";
+// import { distance } from "framer-motion";
 
 interface MenuItems {
   description: string;
@@ -39,17 +42,14 @@ interface MenuItems {
   name: string;
   status: string;
   thumbnails: string;
+  expires_at:string;
 }
 
 interface business {
-  average_price: string;
-  average_rating: string;
   banner: string;
   closes_at: string;
   contact_no: string;
-  created_at: string;
   cuisine: string;
-  deleted_at: string;
   description: string;
   id: string;
   is_available: boolean;
@@ -126,10 +126,14 @@ function Checkout() {
   const [showModal, setShowModal] = useState(false);
   const { user } = useContext(UserContext) as UserContextType;
   const { data: addresses } = useSelector(UserAddressSelector);
+  const { data } = useSelector(listDishesForLandingPage);
   const selectedAddress = useSelector(selectedUserAddressSelector);
   const { data: menuItem } = useSelector(CartItemsSelector);
+  const amount_per_km = 10;
   const [srclat, setsrclat] = useState<any>([]);
   const [srclong, setsrclong] = useState<any>([]);
+  const [filterAvailable, setFilterAvailabele] = useState<string[]>([]);
+  
   const [selectedOrder, setSelectedOrder] = useState<cart | null>(null);
 
   const [formData, setFormData] = useState({
@@ -155,81 +159,86 @@ function Checkout() {
     }));
   };
 
-function getRouteDistance(fromLatLng: [number, number], toLatLng: [number, number]): Promise<number> {
-  return new Promise((resolve, reject) => {
-    // Create a hidden container for the map if it doesn't exist
-    let mapContainer = document.getElementById('hidden-map-container');
-    if (!mapContainer) {
-      mapContainer = document.createElement('div');
-      mapContainer.id = 'hidden-map-container';
-      mapContainer.style.width = '0';
-      mapContainer.style.height = '0';
-      mapContainer.style.visibility = 'hidden';
-      document.body.appendChild(mapContainer);
-    }
-
-    // Create the Leaflet map if not already initialized
-    const tempMap = L.map(mapContainer).setView([fromLatLng[0], fromLatLng[1]], 13);
-
-    // Add OpenStreetMap tile layer (required by Leaflet)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(tempMap);
-
-    // OSRM routing service
-    const osrmRouter = L.Routing.osrmv1({
-      serviceUrl: "https://router.project-osrm.org/route/v1",
-      profile: "car",
-      useHints: false,
-    });
-
-    // Create routing control
-    const control = L.Routing.control({
-      waypoints: [
-        L.latLng(fromLatLng[0], fromLatLng[1]),
-        L.latLng(toLatLng[0], toLatLng[1]),
-      ],
-      routeWhileDragging: false,
-      addWaypoints: false,
-      fitSelectedRoutes: false,
-      show: false,
-      createMarker: () => null,
-      router: osrmRouter,
-    }).addTo(tempMap);
-
-    // Handle successful route
-    control.on("routesfound", function (e) {
-      const routes = e.routes;
-      if (!routes || routes.length === 0) {
-        reject(new Error("No routes found"));
-        control.remove();
-        tempMap.remove();
-        return;
+  const getRouteDistance = async (
+    fromLatLng: [number, number],
+    toLatLng: [number, number]
+  ): Promise<number> => {
+    return new Promise((resolve, reject) => {
+      // Create a hidden container for the map if it doesn't exist
+      let mapContainer = document.getElementById("hidden-map-container");
+      if (!mapContainer) {
+        mapContainer = document.createElement("div");
+        mapContainer.id = "hidden-map-container";
+        mapContainer.style.width = "0";
+        mapContainer.style.height = "0";
+        mapContainer.style.visibility = "hidden";
+        document.body.appendChild(mapContainer);
       }
 
-      const shortest = routes.reduce((prev:any, curr:any) =>
-        curr.summary.totalDistance < prev.summary.totalDistance ? curr : prev
+      // Create the Leaflet map if not already initialized
+      const tempMap = L.map(mapContainer).setView(
+        [fromLatLng[0], fromLatLng[1]],
+        13
       );
 
-      resolve(shortest.summary.totalDistance);
-      control.remove();
-      tempMap.remove(); // Clean up map after route is found
+      // Add OpenStreetMap tile layer (required by Leaflet)
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(tempMap);
+
+      // OSRM routing service
+      const osrmRouter = L.Routing.osrmv1({
+        serviceUrl: "https://router.project-osrm.org/route/v1",
+        profile: "car",
+        useHints: false,
+      });
+
+      // Create routing control
+      const control = L.Routing.control({
+        waypoints: [
+          L.latLng(fromLatLng[0], fromLatLng[1]),
+          L.latLng(toLatLng[0], toLatLng[1]),
+        ],
+        routeWhileDragging: false,
+        addWaypoints: false,
+        fitSelectedRoutes: false,
+        show: false,
+        router: osrmRouter,
+      }).addTo(tempMap);
+
+      // Handle successful route
+      control.on("routesfound", function (e) {
+        const routes = e.routes;
+        if (!routes || routes.length === 0) {
+          reject(new Error("No routes found"));
+          control.remove();
+          tempMap.remove();
+          return;
+        }
+
+        const shortest = routes.reduce((prev: any, curr: any) =>
+          curr.summary.totalDistance < prev.summary.totalDistance ? curr : prev
+        );
+
+        resolve(shortest.summary.totalDistance);
+        control.remove();
+        tempMap.remove(); // Clean up map after route is found
+      });
+
+      // Handle errors
+      control.on("routingerror", function (err) {
+        console.error("Routing error:", err);
+        reject(err);
+        control.remove();
+        tempMap.remove();
+      });
     });
-
-    // Handle errors
-    control.on("routingerror", function (err) {
-      console.error("Routing error:", err);
-      reject(err);
-      control.remove();
-      tempMap.remove();
-    });
-  });
-}
-
-
+  };
 
   const OrderPlace = () => {
-    const temp=menuItem;
+    const temp = menuItem;
+    const request = requestfordriver;
+    const distance = CalculateDistance;
     temp.forEach(function (value: any, index: any) {
       console.log(value, "\n", index);
       console.log(addresses[0]);
@@ -242,8 +251,8 @@ function getRouteDistance(fromLatLng: [number, number], toLatLng: [number, numbe
             driver_id: "",
             driver: {},
             address: addresses[0],
-            request_for_driver: requestfordriver[index],
-            amount: "10",
+            request_for_driver: request[index],
+            amount: String(distance[index] * amount_per_km),
             menu_items: value.menu_items,
           })
         );
@@ -345,18 +354,19 @@ function getRouteDistance(fromLatLng: [number, number], toLatLng: [number, numbe
     await dispatch(fetchAddress(user.id));
     setShowModal(false);
   };
-
+  
   const addNFalseValues = (n: number) => {
     const newValues = new Array(n).fill(false);
     const newDistance = new Array(n).fill(0);
     setrequestfordriver((prev) => [...prev, ...newValues]);
-    setrequestfordriver((prev) => [...prev, ...newDistance]);
+    setCalculateDistance((prev) => [...prev, ...newDistance]);
   };
 
   useEffect(() => {
     if (user) {
       dispatch(fetchAddress(user.id));
       dispatch(fetchCartItems());
+      dispatch(fetchDishesForLandingPage());
     }
     console.log(user);
   }, [user, dispatch]);
@@ -372,13 +382,57 @@ function getRouteDistance(fromLatLng: [number, number], toLatLng: [number, numbe
     AddDistance(menuItem);
   }, [menuItem, addresses]);
 
-
-  const AddDistance=(menuItem:any)=>
-  {
-    for(const item of menuItem)
-    {
-      
+  useEffect(() => {
+    if (data) {
+          const filteravailable: any = [];
+      data?.foodHolder?.forEach((dish: any) => {
+        filteravailable.push(dish.id);
+      });
+      setFilterAvailabele(filteravailable);
+      checkForAvailibility()
     }
+  }, [data,menuItem]);
+
+    const checkForAvailibility=()=>{
+      if (menuItem && Array.isArray(menuItem)) {
+        for (const cart of menuItem) {
+          if (cart.menu_items && Array.isArray(cart.menu_items)) {
+            for (const item of cart.menu_items) {
+              if (!filterAvailable.includes(item.id))
+              {
+                dispatch(
+                  removeCartItems({
+                    business: cart.business,
+                    business_id: cart.business_id,
+                    menu_item: {
+                      name: item.name,
+                      description: item.description,
+                      status: item.status,
+                      food_type: item.food_type,
+                      thumbnails: item.thumbnails,
+                      id: item.id,
+                    },
+                  })
+                );
+              }
+            }
+          }
+        }
+    }
+  }
+
+  const AddDistance = async (menuItem: any) => {
+    const updatedArray = [...CalculateDistance];
+
+    for (let index = 0; index < menuItem.length; index++) {
+      const value = menuItem[index];
+      const distance = await getRouteDistance(
+        [Number(value.business.latitude), Number(value.business.longitude)],
+        [Number(addresses[0].lat), Number(addresses[0].long)]
+      );
+      updatedArray[index] = distance;
+    }
+    setCalculateDistance(updatedArray);
   };
 
   return (
@@ -715,6 +769,12 @@ function getRouteDistance(fromLatLng: [number, number], toLatLng: [number, numbe
                                 onClick={() => setSelectedOrder(cart)}
                               />
                             </div>
+                            {CalculateDistance[index] && (
+                              <div>
+                                amount :{" "}
+                                {CalculateDistance[index] * amount_per_km}
+                              </div>
+                            )}
                           </div>
                         )
                     )}

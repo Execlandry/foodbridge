@@ -3,14 +3,15 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, Like } from "typeorm";
+import * as bcrypt from "bcrypt";
 
-import { Logger } from '@fbe/logger';
-import { ConfigService } from '@fbe/config';
-import { UserRoles } from '@fbe/types';
+import { Logger } from "@fbe/logger";
+import Stripe from "stripe";
+import { ConfigService } from "@fbe/config";
+import { UserRoles } from "@fbe/types";
 
 import {
   DeliveryPartnerSignupDto,
@@ -23,14 +24,16 @@ import {
   UpdateUserByIdDto,
   UpdateUserPermissionBodyDto,
   UserSignupDto,
-} from './dto/user-request.dto';
+} from "./dto/user-request.dto";
 
-import { UserEntity } from './entity/user.entity';
-import { DeliveryPartnerEntity } from './entity/delivery-partner.entity';
-import { AuthService } from '../auth/auth.service';
+import { UserEntity } from "./entity/user.entity";
+import { DeliveryPartnerEntity } from "./entity/delivery-partner.entity";
+import { AuthService } from "../auth/auth.service";
 
 @Injectable()
 export class UserService {
+  private stripe: Stripe; // Declare stripe as a private property
+
   constructor(
     private readonly logger: Logger,
     private readonly authService: AuthService,
@@ -38,7 +41,12 @@ export class UserService {
     @InjectRepository(DeliveryPartnerEntity)
     private partnerRepo: Repository<DeliveryPartnerEntity>,
     private configService: ConfigService
-  ) {}
+  ) {
+    // Initialize Stripe in the constructor
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2023-08-16", // Use the correct Stripe API version
+    });
+  }
 
   async getAllUsers() {
     return this.userRepo.find({});
@@ -72,14 +80,14 @@ export class UserService {
           fields.password_update.new_password
         );
       } else {
-        throw new BadRequestException('Invalid old password');
+        throw new BadRequestException("Invalid old password");
       }
     }
 
     for (const key in fields) {
       if (
-        key !== 'password_update' &&
-        typeof fields[key] !== 'undefined' &&
+        key !== "password_update" &&
+        typeof fields[key] !== "undefined" &&
         fields[key] !== null
       ) {
         fieldToUpdate[key] = fields[key];
@@ -112,83 +120,137 @@ export class UserService {
     });
   }
 
+  async createConnectedAccount(userId: string): Promise<{ url: string, accountId: string }> {
+    // 1. Create Express account
+    const account = await this.stripe.accounts.create({
+      type: 'express',
+      metadata: { userId },
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+    });
+
+    // 2. Create account link (onboarding)
+    const accountLink = await this.stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: 'https://localhost:3000/',
+      return_url: 'https://localhost:3000/',
+      type: 'account_onboarding',
+    });
+
+    return { url: accountLink.url, accountId: account.id };
+  }
+
   async registerDeliveryPartner(dto: DeliveryPartnerSignupDto) {
     const { email, password, name, mobno } = dto;
 
+    // ✅ 1. Check if user already exists
     const existing = await this.userRepo.findOne({ where: { email } });
     if (existing) {
-      throw new BadRequestException('User already exists');
+      throw new ConflictException("User already exists");
     }
 
+    // ✅ 2. Hash the password
     const hashedPassword = await this.hashPassword(password);
 
+    // ✅ 3. Create and save UserEntity
     const user = this.userRepo.create({
       email,
       password: hashedPassword,
       name,
       mobno,
-      permissions: UserRoles['delivery-partner'],
+      permissions: UserRoles["delivery-partner"],
     });
+
     await this.userRepo.save(user);
 
+    // ✅ 4. Create Stripe connected account and get onboarding URL
+    const { url, accountId } = await this.createConnectedAccount(user.id);
+
+    // ✅ 5. Create and save DeliveryPartnerEntity
     const partner = this.partnerRepo.create({
       user,
       mobno,
       availability: true,
+      stripe_id: accountId,
+      onboarded: false,
     });
-    return this.partnerRepo.save(partner);
 
-    // return {
-    //   message: 'Delivery partner registered',
-    //   userId: user.id,
-    // };
+    await this.partnerRepo.save(partner);
+
+    // ✅ 6. Return partner info and onboarding URL
+    return {
+      message: "Delivery partner registered successfully",
+      partnerId: partner.id,
+      stripeAccountId: accountId,
+      onboardingUrl: url,
+    };
   }
-
+async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
+    try {
+      if (event.type === 'account.updated') {
+        const account = event.data.object as Stripe.Account;
+        const partner = await this.partnerRepo.findOne({ where: { stripe_id: account.id } });
+        if (partner && account.details_submitted) {
+          partner.onboarded = true;
+          await this.partnerRepo.save(partner);
+          this.logger.log(`Partner ${partner.id} onboarded successfully for Stripe account ${account.id}`);
+        }
+      }
+      return { received: true };
+    } catch (error) {
+      this.logger.error(`Webhook error: ${error.message}`);
+      throw new BadRequestException('Webhook processing failed');
+    }
+  }
   async updatePartnerAvailability(
     param: GetDeliveryPartnerbyId,
     body: GetDeliveryPartnerAvailability
-  ):Promise<PartnerResponseDto> {
+  ): Promise<PartnerResponseDto> {
     const { id } = param;
     const { availability } = body;
 
-    const partner = await this.partnerRepo.findOne({ 
-      where: { 
-        user:{
-          id:id,
-          permissions: UserRoles['delivery-partner']
-        }
+    const partner = await this.partnerRepo.findOne({
+      where: {
+        user: {
+          id: id,
+          permissions: UserRoles["delivery-partner"],
+        },
       },
-      relations: ['user'],
+      relations: ["user"],
     });
 
     if (!partner) throw new NotFoundException();
 
     partner.availability = availability;
     await this.partnerRepo.save(partner);
-    return{
+    return {
       id: partner.id,
       email: partner.user.email,
       availability: partner.availability,
-    }
+    };
   }
 
-  async fetchRequestedPartnerDetails(param: GetDeliveryPartnerbyId): Promise<FullPartnerDetailsDto> {
+  async fetchRequestedPartnerDetails(
+    param: GetDeliveryPartnerbyId
+  ): Promise<FullPartnerDetailsDto> {
     const { id } = param;
-  
+
     const partner = await this.partnerRepo.findOne({
-      where: { 
-        user:{
-          id:id,
-          permissions: UserRoles['delivery-partner']
-        }
+      where: {
+        user: {
+          id: id,
+          permissions: UserRoles["delivery-partner"],
+        },
       },
-      relations: ['user'],
+      relations: ["user"],
     });
-  
+
     if (!partner) {
       throw new NotFoundException("Partner not found");
     }
-  
+
     return {
       // partnerId: partner.id,
       availability: partner.availability,
@@ -215,7 +277,7 @@ export class UserService {
 
     user.permissions = payload.permissions;
 
-    if (payload.permissions === UserRoles['delivery-partner']) {
+    if (payload.permissions === UserRoles["delivery-partner"]) {
       const existingPartner = await this.partnerRepo.findOne({
         where: { user: { id: user.id } },
       });
@@ -229,13 +291,13 @@ export class UserService {
 
     return this.userRepo.save(user);
   }
-
+  
   async create(userInput: UserSignupDto): Promise<UserEntity> {
     const { email } = userInput;
 
     const existingUser = await this.findOneByEmail(email.toLowerCase());
     if (existingUser) {
-      throw new ConflictException('User with email already exists');
+      throw new ConflictException("User with email already exists");
     }
 
     const userEntity = this.userRepo.create();
@@ -259,7 +321,7 @@ export class UserService {
       return user;
     } catch (err) {
       this.logger.error(err);
-      throw new ConflictException('User already exists with same email');
+      throw new ConflictException("User already exists with same email");
     }
   }
 

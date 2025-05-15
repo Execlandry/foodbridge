@@ -26,6 +26,13 @@ export const PlaceOrder = createAsyncThunk(
   }
 );
 
+export const fetchAllOrders=createAsyncThunk(
+  "fetch/activeOrder",
+  async () => {
+    return ExternalApis.fetchAllOrders();
+  }
+);
+
 const initialState = {
   order: {
     status: "idle",
@@ -54,6 +61,27 @@ export const OrderSlice = createSlice({
       };
     },
     [fetchOrderItems.rejected.type]: (state: OrderState, action: any) => {
+      state.order = {
+        status: "idle",
+        data: {},
+        error: action.payload,
+      };
+    },
+     [fetchAllOrders.pending.type]: (state: OrderState, action: any) => {
+      state.order = {
+        status: "pending",
+        data: {},
+        error: null,
+      };
+    },
+    [fetchAllOrders.fulfilled.type]: (state: OrderState, action: any) => {
+      state.order = {
+        status: "idle",
+        data: action.payload || {},
+        error: null,
+      };
+    },
+    [fetchAllOrders.rejected.type]: (state: OrderState, action: any) => {
       state.order = {
         status: "idle",
         data: {},

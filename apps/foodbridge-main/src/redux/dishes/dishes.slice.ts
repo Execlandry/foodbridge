@@ -44,7 +44,7 @@ export const fetchDishesForLandingPage = createAsyncThunk(
           food_type: item.food_type,
           // meal_type: item.meal_type,
           // price: item.price,
-          // menu_id: item.category,
+          expires_at: item.expires_at,
           business_id: item.business.id,
           business: item.business,
           status: item.status,

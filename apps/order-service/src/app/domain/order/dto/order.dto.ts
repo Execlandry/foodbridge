@@ -21,7 +21,6 @@ import {
 import { Type as validateType } from "class-transformer";
 import { mealType, cuisineType, foodType } from "@fbe/types";
 
-
 export enum status {
   "available" = "available",
   "pending" = "pending",
@@ -111,14 +110,14 @@ export class MenuItemBodyDto {
   @IsString()
   public quantity!: string;
 
-    @ApiProperty({
-      description: "status",
-      required: true,
-      enum: status,
-      example: status.available,
-    })
-    @IsEnum(status)
-    public status!: string;
+  @ApiProperty({
+    description: "status",
+    required: true,
+    enum: status,
+    example: status.available,
+  })
+  @IsEnum(status)
+  public status!: string;
   // @ApiProperty({
   //   description: "number of items",
   //   example: 2,
@@ -139,7 +138,6 @@ export class MenuItemBodyDto {
 }
 
 export class CreatePaymentBodyDto {
-
   @ApiProperty({
     description: "business",
     example: {

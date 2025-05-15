@@ -11,8 +11,6 @@ import { OrderController } from "./order/controller/order.controller";
 import { OrderService } from "./order/services/order.service";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
-
-
 @Module({
   imports: [
     ClientsModule.register([
@@ -30,17 +28,17 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
     ]),
     AuthModule,
     EventEmitterModule.forRoot(),
-    TypeOrmModule.forFeature([OrderEntity ]),//PaymentEntity
+    TypeOrmModule.forFeature([OrderEntity]), //PaymentEntity
     DBModule.forRoot({
-      entities: [OrderEntity,],//PaymentEntity
+      entities: [OrderEntity], //PaymentEntity
     }),
     TerminusModule,
     AppLoggerModule,
     ConfigModule,
   ],
 
-  controllers: [OrderController,],//PaymentController
-  providers: [OrderService,],//PaymentService
-  exports: [OrderService,]//PaymentService
+  controllers: [OrderController], //PaymentController
+  providers: [OrderService], //PaymentService
+  exports: [OrderService], //PaymentService
 })
 export class DomainModule {}

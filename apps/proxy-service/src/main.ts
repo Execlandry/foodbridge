@@ -25,7 +25,9 @@ async function bootstrap() {
       selfHandleResponse: false, // ✅ Let proxy handle streaming
       onProxyReq: (proxyReq, req, res) => {
         console.log(
-          `[Proxy]: Forwarding ${req.method} ${req.originalUrl} → ${proxyReq.getHeader('host')}${proxyReq.path}`
+          `[Proxy]: Forwarding ${req.method} ${
+            req.originalUrl
+          } → ${proxyReq.getHeader('host')}${proxyReq.path}`,
         );
       },
     }),

@@ -138,5 +138,4 @@ export class OrderController {
   // public async testRMQ(@User() user: UserMetaData) {
   //   return await this.service.testRMQ();
   // }
-
 }

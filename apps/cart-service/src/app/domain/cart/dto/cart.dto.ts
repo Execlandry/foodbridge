@@ -64,14 +64,14 @@ export class MenuItemBodyDto {
   // @IsEnum(cuisineType)
   // public cuisine_type!: string;
 
-  // @ApiProperty({
-  //   description: "meal_type",
-  //   required: true,
-  //   enum: mealType,
-  //   example: mealType.breakfast,
-  // })
-  // @IsEnum(mealType)
-  // public meal_type!: string;
+ @ApiProperty({
+    description: "expires_at",
+    example: "2025-05-30T00:00:00Z",
+    required: false,
+  })
+  @IsOptional()
+  @IsDateString()
+  public expires_at!: Date;
 
   @ApiProperty({
     description: "Ingredients",

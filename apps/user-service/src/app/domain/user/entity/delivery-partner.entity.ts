@@ -27,6 +27,12 @@ export class DeliveryPartnerEntity extends BaseEntity {
   @Column({ type: "varchar", nullable: true })
   public ratings!: string;
 
+  @Column({ type: "varchar", length: 255, nullable: true })
+  public stripe_id!: string;
+
+  @Column({ type: "boolean", default: false })
+  public onboarded!: boolean;
+
   @CreateDateColumn({
     type: "timestamptz",
     default: () => "CURRENT_TIMESTAMP",

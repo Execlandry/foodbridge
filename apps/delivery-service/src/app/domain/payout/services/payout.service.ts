@@ -6,11 +6,14 @@ import Stripe from "stripe";
 
 import { NotFoundException } from "@nestjs/common";
 
-
 import { UserMetaData } from "../../auth/guards/user";
 import { PayoutEntity } from "../entity/payout.entity";
-import { CreatePaymentBodyDto, UpdateByIdDto, UpdateByIdQueryDto, UpdatePaymentBodyDto } from "../dto/payout.dto";
-
+import {
+  CreatePaymentBodyDto,
+  UpdateByIdDto,
+  UpdateByIdQueryDto,
+  UpdatePaymentBodyDto,
+} from "../dto/payout.dto";
 
 @Injectable()
 export class PayoutService implements OnModuleInit {

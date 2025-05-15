@@ -10,12 +10,14 @@ import {
 import {
   fetchDishesForLandingPage,
   listDishesForLandingPage,
+  UpdateDishStatus
 } from "../../redux/dishes/dishes.slice";
 import { addCartItems, removeCartItems } from "../../redux/cart/cart.slice";
 import {
   fetchBusinesses,
   topBusinesses,
 } from "../../redux/business/business.slice";
+import { UserAddressSelector, fetchAddress } from "../../redux/user/user.slice";
 import Rating from "./rating";
 import delivery_bike_icon from "../../assets/banner/2.png";
 import banner_image_spags from "../../assets/banner/1.jpeg";
@@ -23,6 +25,7 @@ import { UserContext, UserContextType } from "../../hooks/user-context";
 import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
 import useAuth from "../../hooks/use-auth";
 import { Navigate, useNavigate } from "react-router-dom";
+import { filter } from "@chakra-ui/react";
 
 interface Address {
   id: string;
@@ -37,8 +40,9 @@ interface Business {
   id: string | number;
   name: string;
   thumbnails?: string;
-  category?: string;
-  avg_price?: number;
+  is_available: boolean;
+  latitude: string;
+  longitude: string;
   address?: Address;
 }
 
@@ -46,6 +50,7 @@ interface Dish {
   id: string | number;
   dish_id?: string | number;
   name: string;
+  expires_at: string;
   thumbnails?: string;
   description: string;
   status: string;
@@ -55,7 +60,6 @@ interface Dish {
   business: Business;
   business_id?: string | number;
 }
-
 
 interface GroupedDishes {
   [key: string]: {
@@ -69,11 +73,13 @@ function Home() {
   const { data } = useSelector(listDishesForLandingPage);
   const { data: businessesData } = useSelector(topBusinesses);
   const { data: cartData } = useSelector(CartItemsSelector);
+  const { data: addresses } = useSelector(UserAddressSelector);
   const { user } = useContext(UserContext) as UserContextType;
   const { logoutUser } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [cartItems, setcartItems] = useState<string[]>([]);
+  const [filterAvailable, setFilterAvailabele] = useState<string[]>([]);
 
   useEffect(() => {
     // if(user && user.permissions=="business-admin")
@@ -84,23 +90,62 @@ function Home() {
     dispatch(fetchDishesForLandingPage());
     dispatch(fetchBusinesses());
     dispatch(fetchCartItems());
+    dispatch(fetchAddress(user.id));
+
     // console.log(data);
   }, [dispatch]);
 
   const groupDishesByBusiness = (): GroupedDishes => {
     const grouped: GroupedDishes = {};
+    const filteravailable: any = [];
     data?.foodHolder?.forEach((dish: Dish) => {
       const businessId = dish?.business_id || "unknown";
       if (!grouped[businessId] && dish?.business) {
         grouped[businessId] = { business: dish.business, dishes: [] };
+        filteravailable.push(dish.id);
       }
       if (dish?.business) grouped[businessId].dishes.push(dish);
     });
-    console.log("grouped Dishes :g", grouped);
-    console.log("Data Dishes :g", data.foodHolder);
+    setFilterAvailabele(filteravailable);
+    checkForAvailibility();
+    if (addresses) {
+      const reference = addresses[0];
+
+      // Step 2: Sort keys based on business distance
+      const sortedKeys = Object.keys(grouped).sort((a, b) => {
+        const aBusiness = grouped[a].business;
+        const bBusiness = grouped[b].business;
+
+        const distA = getDistance(
+          Number(reference.lat),
+          Number(reference.long),
+          Number(aBusiness.latitude),
+          Number(aBusiness.longitude)
+        );
+        const distB = getDistance(
+          Number(reference.lat),
+          Number(reference.long),
+          Number(bBusiness.latitude),
+          Number(bBusiness.longitude)
+        );
+
+        return distA - distB;
+      });
+      // Step 3: Create new object with sorted keys
+      const sortedGrouped: GroupedDishes = {};
+      for (const key of sortedKeys) {
+        sortedGrouped[key] = grouped[key];
+      }
+      return sortedGrouped;
+    }
 
     return grouped;
   };
+  function getDistance(lat1: any, lon1: any, lat2: any, lon2: any) {
+    return Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lon2 - lon1, 2));
+  }
+
+  let groupedDishes = groupDishesByBusiness();
 
   useEffect(() => {
     const cartDishIds: string[] = [];
@@ -108,17 +153,47 @@ function Home() {
       for (const cart of cartData) {
         if (cart.menu_items && Array.isArray(cart.menu_items)) {
           for (const item of cart.menu_items) {
-            cartDishIds.push(item.id);
+            if (filterAvailable && filterAvailable.includes(item.id))
+              cartDishIds.push(item.id);
           }
         }
+        setcartItems(cartDishIds);
+        checkForAvailibility();
       }
-      setcartItems(cartDishIds);
-      console.log(cartDishIds);
-      console.log(user);
     }
   }, [cartData]);
 
-  const groupedDishes = groupDishesByBusiness();
+  const checkForAvailibility = () => {
+    if (cartData && Array.isArray(cartData)) {
+      for (const cart of cartData) {
+        if (cart.menu_items && Array.isArray(cart.menu_items)) {
+          for (const item of cart.menu_items) {
+            if (!filterAvailable.includes(item.id)) {
+              dispatch(
+                removeCartItems({
+                  business: cart.business,
+                  business_id: cart.business_id,
+                  menu_item: {
+                    name: item.name,
+                    description: item.description,
+                    status: item.status,
+                    food_type: item.food_type,
+                    thumbnails: item.thumbnails,
+                    id: item.id,
+                  },
+                })
+              );
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const removeExpiredDish=(dish:any,id:any)=>{
+    dispatch(UpdateDishStatus({ id, dish }));
+  }
+  
   const filteredBusinesses = businessesData?.filter((business: Business) =>
     business.name.toUpperCase().includes(searchTerm.toUpperCase())
   );
@@ -138,6 +213,7 @@ function Home() {
           ingredients: dish.ingredients,
           thumbnails: dish.thumbnails,
           id: dish.id,
+          expires_at: dish.expires_at,
         },
       })
     );
@@ -159,6 +235,12 @@ function Home() {
       })
     );
   };
+
+  useEffect(() => {
+    if (businessesData && addresses) {
+      groupedDishes = groupDishesByBusiness();
+    }
+  }, [addresses, businessesData]);
 
   // const addAllDishesToCart = (businessId: string | number) => {
   //   if (!user || user.permissions === "business-admin") return;
@@ -233,10 +315,6 @@ function Home() {
               <h3 className="text-xl font-semibold text-gray-900 truncate">
                 {business?.name}
               </h3>
-              <p className="text-sm text-gray-500">
-                {business?.category || "Cuisine"}
-              </p>
-
               <span className="text-green-600 font-medium text-base">
                 {/* Avg: ${business?.avg_price?.toFixed(2) || "N/A"} */}
               </span>
@@ -279,6 +357,19 @@ function Home() {
                       {" "}
                       {dish?.quantity} Kg
                     </span>
+                    {dish.expires_at &&
+                    new Date() > new Date(dish.expires_at) ? (
+                      <>
+                        <div className="text-red-600 text-sm font-medium">
+                          Expired
+                        </div>
+                        {removeExpiredDish(dish,business.id)}
+                      </>
+                    ) : (
+                      <div className="mt-1 text-sm text-gray-500">
+                        Expires At: {new Date(dish.expires_at).toLocaleString()}
+                      </div>
+                    )}
                     <div className="flex space-x-1">
                       <button
                         onClick={() => removeFromCart(dish)}

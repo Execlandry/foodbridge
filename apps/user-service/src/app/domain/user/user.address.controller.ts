@@ -29,7 +29,7 @@ import { UserAddressService } from "./user.address.service";
 import { User, UserMetaData } from "../auth/guards/user";
 import { AccessTokenGuard } from "../auth/guards/access_token.guard";
 
-@ApiBearerAuth("authorization")
+// @ApiBearerAuth("authorization")
 @Controller("users")
 @UsePipes(
   new ValidationPipe({
@@ -44,7 +44,7 @@ export class UserAddressController {
     private readonly logger: Logger
   ) {}
 
-  @UseGuards(AccessTokenGuard)
+  // @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ description: "address create api " })
   @ApiConsumes("application/json")
@@ -57,7 +57,7 @@ export class UserAddressController {
     return this.service.create(param, body, user);
   }
 
-  @UseGuards(AccessTokenGuard)
+  // @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "address list api" })
   @ApiConsumes("application/json")
