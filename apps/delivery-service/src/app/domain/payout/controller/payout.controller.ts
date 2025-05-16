@@ -19,6 +19,7 @@ import {
   ValidationPipe,
   Req,
   Res,
+  BadRequestException,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -31,6 +32,7 @@ import {
   ApiOperation,
   ApiTags,
   ApiUnprocessableEntityResponse,
+  ApiBadRequestResponse,
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
 import { Request, Response } from "express";
@@ -118,6 +120,40 @@ export class PayoutController {
     @Body() payload: UpdatePaymentBodyDto
   ) {
     return await this.service.updatePayout(user, payload);
+  }
+
+  @Post("create-payment-intent")
+  @ApiOperation({
+    summary: "Create a payment intent",
+    description: "Create a Stripe payment intent and return client secret.",
+  })
+  @ApiOkResponse({
+    description: "Payment intent created successfully.",
+    schema: {
+      type: "object",
+      properties: {
+        clientSecret: { type: "string" },
+        platformFee: { type: "number" },
+      },
+    },
+  })
+  @ApiBadRequestResponse({ description: "Invalid input data" })
+  @HttpCode(HttpStatus.OK)
+  async createPaymentIntent(@Body() body: { amount: number }) {
+    const { amount } = body;
+
+    if (!amount || amount <= 0) {
+      throw new BadRequestException("Amount must be a valid positive number.");
+    }
+
+    try {
+      const result = await this.service.createPaymentIntent(amount);
+      return result;
+    } catch (error) {
+      throw new BadRequestException(
+        `Error creating payment intent: ${error.message}`
+      );
+    }
   }
 
   @HttpCode(HttpStatus.OK)

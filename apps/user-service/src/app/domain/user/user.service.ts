@@ -383,4 +383,27 @@ export class UserService {
   async hashPassword(password: string) {
     return bcrypt.hash(password, 10);
   }
+
+  async createPaymentIntent(amount: number) {
+    const platformFee = Math.round(amount * 0.1);
+
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount,
+        currency: "usd",
+        application_fee_amount: platformFee,
+        transfer_data: {
+          destination: "acct_1Ql6RFI6yIQWMWvq", // Replace with your Stripe account ID
+        },
+        automatic_payment_methods: { enabled: true },
+      });
+
+      return {
+        clientSecret: paymentIntent.client_secret,
+        platformFee,
+      };
+    } catch (error) {
+      throw new Error(`Error creating payment intent: ${error.message}`);
+    }
+  }
 }
