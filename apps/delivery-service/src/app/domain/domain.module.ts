@@ -30,23 +30,12 @@ import {PayoutController } from "./payout/controller/payout.controller";
     AppLoggerModule,
     ConfigModule,
   ],
-<<<<<<< HEAD
   controllers: [DeliveryController,PayoutController],
   providers: [DeliveryService,DeliveryService,
     DeliveryEventService,
     UserProxyService,
     HttpClientService,PayoutService],
   exports: [DeliveryService,PayoutService],
-=======
-  controllers: [DeliveryController],
-  providers: [
-    DeliveryService,
-    DeliveryService,
-    DeliveryEventService,
-    UserProxyService,
-    HttpClientService,
-  ],
-  exports: [DeliveryService],
->>>>>>> 0e705ca3130ade8eb7667f387caf701d0e3794f8
+
 })
 export class DomainModule {}
