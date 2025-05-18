@@ -52,7 +52,7 @@ export class OrderService implements OnModuleInit {
           id: payload.user.id,
           email: payload.user.email,
           first_name: payload.user.first_name,
-          last_name: payload.user.lastname,
+          last_name: payload.user.last_name,
           mobno: payload.user.mobno,
         },
       },
@@ -93,6 +93,16 @@ export class OrderService implements OnModuleInit {
     const order = await this.orderRepo.findOne({
       where: {
         order_status: "payment_processed",
+        user_id: user.userId,
+      },
+    });
+    return order;
+  }
+
+    async getOrderByUserID(user: UserMetaData) {
+    // fetch last processed order for tracking and delivery
+    const order = await this.orderRepo.find({
+      where: {
         user_id: user.userId,
       },
     });

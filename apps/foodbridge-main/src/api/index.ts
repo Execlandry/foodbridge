@@ -71,12 +71,12 @@ export class ExternalApis {
     return response.data;
   }
 
-  static async createAddress(id: any, payload: any) {
+  static async createAddress(id: any, payload: any) 
+  {
     const url = `/api/v1/auth-service/users/address/${id}`;
     const response = await axios.post(url, payload);
     return response.data;
   }
-
 
   static async FetchDeliveryOrder(id:any)
   {
@@ -84,6 +84,7 @@ export class ExternalApis {
     const response = await axios.post(url);
     return response.data;
   }
+
   static async createPayment({ cart }: any) {
     const response = await axios.post("/api/v1/payment-service/payments", cart);
     return response.data;
@@ -121,7 +122,7 @@ export class ExternalApis {
   }
   
   static async fetchAllOrders()
-{
+  {
     const response = await axios.post("/api/v1/order-service/order/all");
     return response.data;
   }

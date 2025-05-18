@@ -93,6 +93,18 @@ export class OrderController {
     return await this.service.getLastPaymentProcessedOrder(user);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @UseGuards(AccessTokenGuard)
+  @Get("/all")
+  public async getOrderByUserID(@User() user: UserMetaData) {
+    return await this.service.getOrderByUserID(user);
+  }
+
   // @HttpCode(HttpStatus.OK)
   // @ApiConsumes("application/json")
   // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })

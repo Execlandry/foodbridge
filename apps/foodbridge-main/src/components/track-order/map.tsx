@@ -1,50 +1,151 @@
-import * as React from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-// import the mapbox-gl styles so that the map is displayed correctly
+import React, { useEffect, useRef } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
-function MapboxMap({ lat, lon }: any) {
-  // this is where the map instance will be stored after initialization
-  const [map, setMap] = React.useState<mapboxgl.Map>();
 
-  // React ref to store a reference to the DOM node that will be used
-  // as a required parameter `container` when initializing the mapbox-gl
-  // will contain `null` by default
-  const mapNode = React.useRef(null);
+// Fix for Leaflet default marker icons
 
-  React.useEffect(() => {
-    const node = mapNode.current;
-    // if the window object is not found, that means
-    // the component is rendered on the server
-    // or the dom node is not initialized, then return early
-    if (typeof window === "undefined" || node === null) return;
+interface Coordinates{
+  lat:number,
+  lng:number
+}
 
-    // otherwise, create a map instance
-    const mapboxMap = new mapboxgl.Map({
-      container: node,
-      center: [75.82, 26.9], // starting position
-      accessToken: process.env.REACT_APP_MAPGL_TOKEN,
-      style: "mapbox://styles/mapbox/streets-v12",
-      zoom: 9,
-    });
-    // mapboxMap.setCenter([26.9124, 75.7873]);
-    //mapboxMap.seset
-    // 26.9124° N, 75.7873°
-    // save the map object to React.useState
-    setMap(mapboxMap);
 
+interface MapProps {
+  coordinates: Coordinates[];
+}
+
+const Map: React.FC<MapProps> = ({ coordinates }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const leafletMapRef = useRef<L.Map | null>(null);
+
+  useEffect(() => {
+    // Only initialize the map if it hasn't been initialized yet
+    if (!leafletMapRef.current && mapRef.current) {
+      // Fix Leaflet's default icon issue
+      const defaultIcon = L.icon({
+        iconUrl: markerIcon,
+        shadowUrl: markerShadow,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+      
+      L.Marker.prototype.options.icon = defaultIcon;
+
+      // Create map
+      const map = L.map(mapRef.current).setView([51.505, -0.09], 13);
+      
+      // Add tile layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      leafletMapRef.current = map;
+    }
+
+    // Update map with new coordinates
+    if (leafletMapRef.current && coordinates.length > 0) {
+      const map = leafletMapRef.current;
+      
+      // Clear existing layers
+      map.eachLayer((layer) => {
+        if (layer instanceof L.Marker || layer instanceof L.Routing.Control) {
+          map.removeLayer(layer);
+        }
+      });
+
+      // Add markers for each coordinate
+      coordinates.forEach((coord, index) => {
+        const marker = L.marker([coord.lat, coord.lng])
+          .addTo(map)
+          .bindPopup(`Location ${index + 1}`);
+      });
+
+      // Create two separate routes if we have all three coordinates
+      if (coordinates.length >= 3) {
+        // First route: Location 1 to Location 2
+        L.Routing.control({
+          waypoints: [
+            L.latLng(coordinates[0].lat, coordinates[0].lng),
+            L.latLng(coordinates[1].lat, coordinates[1].lng)
+          ],
+          routeWhileDragging: false,
+          showAlternatives: false,
+          fitSelectedRoutes: true,
+          lineOptions: {
+            styles: [
+              { color: '#6366F1', opacity: 0.8, weight: 6 }
+            ]
+          },
+          createMarker: () => null // Don't create additional markers
+        }).addTo(map);
+
+        // Second route: Location 2 to Location 3
+        L.Routing.control({
+          waypoints: [
+            L.latLng(coordinates[1].lat, coordinates[1].lng),
+            L.latLng(coordinates[2].lat, coordinates[2].lng)
+          ],
+          routeWhileDragging: false,
+          showAlternatives: false,
+          fitSelectedRoutes: true,
+          lineOptions: {
+            styles: [
+              { color: '#4F46E5', opacity: 0.8, weight: 6 } // Slightly different color for the second route
+            
+            ]
+          },
+          createMarker: () => null // Don't create additional markers
+        }).addTo(map);
+      }
+
+      // Fit bounds to include all coordinates
+      if (coordinates.length > 0) {
+        const bounds = L.latLngBounds(coordinates.map(coord => L.latLng(coord.lat, coord.lng)));
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
+    }
+
+    // Cleanup
     return () => {
-      mapboxMap.remove();
+      if (leafletMapRef.current) {
+        // We don't actually destroy the map here to prevent flickering on re-renders
+        // The map will be properly destroyed when the component unmounts
+      }
+    };
+  }, [coordinates]);
+
+  // Handle map resize when window size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (leafletMapRef.current) {
+        leafletMapRef.current.invalidateSize();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  return (
-    <div
-      className="rounded-md p-4 m-4"
-      ref={mapNode}
-      style={{ width: "100%", height: "100%" }}
-    />
-  );
-}
+  // When component unmounts, destroy map
+  useEffect(() => {
+    return () => {
+      if (leafletMapRef.current) {
+        leafletMapRef.current.remove();
+        leafletMapRef.current = null;
+      }
+    };
+  }, []);
 
-export default MapboxMap;
+  return <div ref={mapRef} className="h-full w-full z-0" />;
+};
+
+export default Map;
