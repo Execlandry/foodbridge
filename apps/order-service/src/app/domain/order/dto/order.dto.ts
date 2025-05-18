@@ -175,25 +175,25 @@ export class CreatePaymentBodyDto {
   @IsObject()
   public user!: any;
 
-  @ApiProperty({
-    description: "driver_id",
-    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
-    required: false,
-  })
-  public driver_id!: string;
+  // @ApiProperty({
+  //   description: "driver_id",
+  //   example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+  //   required: false,
+  // })
+  // public driver_id!: string;
 
-  @ApiProperty({
-    description: "driver",
-    example: {
-      mobno: "1234567891",
-      availability: false,
-      location: "porvorim",
-      ratings: 4,
-    },
-    required: false,
-  })
-  @IsObject()
-  public driver!: any;
+  // @ApiProperty({
+  //   description: "driver",
+  //   example: {
+  //     mobno: "1234567891",
+  //     availability: false,
+  //     location: "porvorim",
+  //     ratings: 4,
+  //   },
+  //   required: false,
+  // })
+  // @IsObject()
+  // public driver!: any;
 
   @ApiProperty({
     description: "address obj",
@@ -227,15 +227,6 @@ export class CreatePaymentBodyDto {
     required: true,
   })
   public amount!: string;
-
-  // @ApiProperty({
-  //   description: "Payment method (UPI or COD)",
-  //   example: "cod",
-  //   enum: ["upi", "cod"],
-  //   required: true,
-  // })
-  // @IsEnum(["upi", "cod"])
-  // public payment_method: "upi" | "cod";
 
   @ApiProperty({
     description: "menu_item object",
@@ -286,16 +277,16 @@ export enum OrderStatus {
   "failed" = "failed",
 }
 
-export class UpdateByIdQueryDto {
-  @ApiProperty({
-    description: "success/failure",
-    example: PaymentStatus.success,
-    enum: PaymentStatus,
-    required: true,
-  })
-  @IsEnum(PaymentStatus)
-  @IsString()
-  public status!: string;
-}
+// export class UpdateByIdQueryDto {
+//   @ApiProperty({
+//     description: "success/failure",
+//     example: PaymentStatus.success,
+//     enum: PaymentStatus,
+//     required: true,
+//   })
+//   @IsEnum(PaymentStatus)
+//   @IsString()
+//   public status!: string;
+// }
 
 export class UpdatePaymentBodyDto extends PartialType(CreatePaymentBodyDto) {}

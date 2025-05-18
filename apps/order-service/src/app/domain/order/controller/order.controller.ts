@@ -37,18 +37,10 @@ import {
   NO_ENTITY_FOUND,
   UNAUTHORIZED_REQUEST,
 } from "src/app/app.constants";
-import { OrderService } from "../services/order.service";
-import { Type } from "class-transformer";
-import {
-  CreatePaymentBodyDto,
-  UpdateByIdDto,
-  UpdateByIdQueryDto,
-} from "../dto/order.dto";
+import { CreatePaymentBodyDto, UpdateByIdDto } from "../dto/order.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { AccessTokenGuard } from "../../auth/guards/access_token.guard";
-import { UserRoles } from "@fbe/types";
-import { RoleAllowed } from "../../auth/guards/role-decorator";
-import { RolesGuard } from "../../auth/guards/role-guard";
+import { OrderService } from "../services/order.service";
 
 @ApiBearerAuth("authorization")
 @Controller("order")
@@ -61,7 +53,7 @@ import { RolesGuard } from "../../auth/guards/role-guard";
 @ApiTags("orders")
 export class OrderController {
   constructor(
-    private readonly service: OrderService,
+    private readonly orderService: OrderService,
     private readonly logger: Logger
   ) {}
 
@@ -78,20 +70,20 @@ export class OrderController {
     @Body() payload: CreatePaymentBodyDto
   ) {
     console.log(user);
-    return await this.service.createOrder(user, payload);
+    return await this.orderService.createOrder(user, payload);
   }
 
-  @HttpCode(HttpStatus.OK)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Get("/")
-  public async getLastProcessedOrder(@User() user: UserMetaData) {
-    return await this.service.getLastPaymentProcessedOrder(user);
-  }
+  // @HttpCode(HttpStatus.OK)
+  // @ApiConsumes("application/json")
+  // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  // @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  // @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  // @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  // @UseGuards(AccessTokenGuard)
+  // @Get("/")
+  // public async getLastProcessedOrder(@User() user: UserMetaData) {
+  //   return await this.orderService.getLastPaymentProcessedOrder(user);
+  // }
 
   @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")
@@ -102,7 +94,7 @@ export class OrderController {
   @UseGuards(AccessTokenGuard)
   @Get("/all")
   public async getOrderByUserID(@User() user: UserMetaData) {
-    return await this.service.getOrderByUserID(user);
+    return await this.orderService.getOrderByUserID(user);
   }
 
   // @HttpCode(HttpStatus.OK)
@@ -130,14 +122,23 @@ export class OrderController {
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @UseGuards(AccessTokenGuard)
   @Patch("/:id")
+  @Get(":id/otp")
   public async confirmOrder(
     @User() user: UserMetaData,
-    @Param() param: UpdateByIdDto,
-    @Query() query: UpdateByIdQueryDto
+    @Param() param: UpdateByIdDto
+    // @Query() query: UpdateByIdQueryDto
   ) {
-    console.log(user);
-    // return await this.service.confirmOrderPayment(user, param, query);
+    return await this.orderService.getOrderOtp(param);
+    // return await this.orderService.confirmOrderPayment(user, param, query);
   }
+
+  //   @Get(':id/otp')
+  // async getOrderOtp(@Param('id') id: string): Promise<{ otp: string }> {
+  //   const order = await this.orderService
+  //   if (!order) throw new NotFoundException('Order not found');
+
+  //   return { otp: order.otp! }; // You may want to restrict this to delivery personnel/admins only
+  // }
 
   // @HttpCode(HttpStatus.OK)
   // @ApiConsumes("application/json")
@@ -148,6 +149,6 @@ export class OrderController {
   // @UseGuards(AccessTokenGuard)
   // @Get("/test")
   // public async testRMQ(@User() user: UserMetaData) {
-  //   return await this.service.testRMQ();
+  //   return await this.orderService.testRMQ();
   // }
 }

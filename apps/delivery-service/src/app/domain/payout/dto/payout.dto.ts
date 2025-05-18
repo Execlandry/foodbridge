@@ -16,19 +16,16 @@ import {
   MinLength,
   ValidateNested,
 } from "class-validator";
-import { Type as validateType } from "class-transformer";
 import { mealType, cuisineType, foodType } from "@fbe/types";
 
-export class MenuItemBodyDto {
-  @ApiProperty({
-    description: "id",
-    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
-    required: true,
-  })
-  @IsDefined()
-  @IsString()
-  public id!: string;
+export enum status {
+  available = "available",
+  pending = "pending",
+  failed = "failed",
+  completed = "completed",
+}
 
+export class MenuItemBodyDto {
   @ApiProperty({
     description: "name",
     example: "paneer tikka masala",
@@ -36,88 +33,100 @@ export class MenuItemBodyDto {
   })
   @IsDefined()
   @IsString()
-  public name!: string;
+  name!: string;
 
   @ApiProperty({
-    description: "descriotion",
+    description: "description",
     example:
-      "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
-    required: true,
+      "Paneer tikka or Paneer Soola is an Indian dish made from chunks of paneer marinated in spices and grilled in a tandoor...",
+    required: false,
   })
   @IsOptional()
   @IsString()
-  public description!: string;
-
-  @ApiProperty({
-    description: "cuisine_type",
-    required: true,
-    enum: cuisineType,
-    example: cuisineType.indian,
-  })
-  @IsEnum(cuisineType)
-  public cuisine_type!: string;
-
-  @ApiProperty({
-    description: "meal_type",
-    required: true,
-    enum: mealType,
-    example: mealType.breakfast,
-  })
-  @IsEnum(mealType)
-  public meal_type!: string;
-
-  @ApiProperty({
-    description: "category",
-    example: "category",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public category!: string;
+  description?: string;
 
   @ApiProperty({
     description: "ingredients",
-    example: "ingredients",
-    required: true,
+    example: "paneer, spices, cream",
+    required: false,
   })
   @IsOptional()
   @IsString()
-  public ingredients!: string;
+  ingredients?: string;
 
   @ApiProperty({
     description: "food_type",
-    required: true,
     enum: foodType,
     example: foodType.vegan,
+    required: true,
   })
+  @IsDefined()
   @IsEnum(foodType)
-  public food_type!: string;
+  food_type!: foodType;
 
   @ApiProperty({
-    description: "price",
+    description: "quantity",
     example: 500,
     required: true,
   })
+  @IsDefined()
   @IsNumber()
-  public price!: number;
+  quantity!: number;
 
   @ApiProperty({
-    description: "number of items",
-    example: 2,
-    required: true,
-  })
-  @IsOptional()
-  @IsNumber()
-  public count!: number;
-
-  @ApiProperty({
-    description: "thumbnails",
-    example: "https://google.com/banner.png",
-    required: true,
+    description: "quantity_unit",
+    example: "grams",
+    required: false,
   })
   @IsOptional()
   @IsString()
-  public thumbnails!: string;
+  quantity_unit?: string;
+
+  @ApiProperty({
+    description: "posted_at",
+    example: "2025-04-30T00:00:00Z",
+    required: false,
+  })
+  @IsOptional()
+  @IsDateString()
+  posted_at?: Date;
+
+  @ApiProperty({
+    description: "expires_at",
+    example: "2025-05-30T00:00:00Z",
+    required: false,
+  })
+  @IsOptional()
+  @IsDateString()
+  expires_at?: Date;
+
+  @ApiProperty({
+    description: "notes",
+    example: "Contains dairy and nuts.",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  notes?: string;
+
+  @ApiProperty({
+    description: "status",
+    enum: status,
+    example: status.available,
+    required: true,
+  })
+  @IsDefined()
+  @IsEnum(status)
+  status!: status;
+
+  @ApiProperty({
+    description: "thumbnails",
+    example: "https://example.com/image.png",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  thumbnails?: string;
 }
 
 export class CreatePaymentBodyDto {
@@ -140,6 +149,22 @@ export class CreatePaymentBodyDto {
   public order_id!: string;
 
   @ApiProperty({
+    description: "delivery_id",
+    example: "093df604-c6cf-4aff-bd4e-6e1ae7267941",
+    required: true,
+  })
+  @IsString()
+  public delivery_id!: string;
+
+  @ApiProperty({
+    description: "delivery_acc_id",
+    example: "acct_1RNz2p4DDu1hL5FF",
+    required: true,
+  })
+  @IsString()
+  public delivery_acc_id!: string;
+
+  @ApiProperty({
     description: "menu_item object",
     example: [
       {
@@ -147,13 +172,14 @@ export class CreatePaymentBodyDto {
         name: "paneer tikka masala",
         description:
           "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
-        cuisine_type: "indian",
-        meal_type: "breakfast",
-        category: "category",
         ingredients: "ingredients",
         food_type: "vegan",
-        count: 1,
-        price: 500,
+        quantity: 500,
+        quantity_unit: "grams",
+        posted_at: "2025-04-30T00:00:00Z",
+        expires_at: "2025-05-30T00:00:00Z",
+        notes: "Contains dairy and nuts.",
+        status: "available",
         thumbnails: "https://google.com/banner.png",
       },
     ],

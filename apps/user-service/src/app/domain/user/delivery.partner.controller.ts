@@ -106,10 +106,10 @@ export class DeliveryPartnerController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({
     type: PartnerResponseDto,
-    description: "Partner availability updated successfully",
+    description: "Partner availability updated to true successfully",
   })
   @ApiParam({
-    name: "id",
+    name: "delivery_partner_id",
     description: "User ID of the delivery partner",
     type: "string",
     required: true,
@@ -122,27 +122,44 @@ export class DeliveryPartnerController {
   }
 
   @Put(":id/release")
-  @ApiOperation({ summary: "Release partner for new orders" })
-  async releasePartner(@Param() param: GetDeliveryPartnerbyId) {
-    return this.service.updatePartnerAvailability(param, {
-      availability: true,
-    });
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: PartnerResponseDto,
+    description: "Partner availability updated to false successfully",
+  })
+  @ApiParam({
+    name: "delivery_partner_id",
+    description: "User ID of the delivery partner",
+    type: "string",
+    required: true,
+  })
+  async updateReleasePartnerAvailability(
+    @Param() param: GetDeliveryPartnerbyId,
+    @Body() body: GetDeliveryPartnerAvailability
+  ) {
+    return this.service.updateReleasePartnerAvailability(param, body);
   }
 
-  @Post('webhook')
+  @Post("webhook")
   @HttpCode(HttpStatus.OK)
   async handleWebhook(@Req() req: Request, @Res() res: Response) {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2023-08-16" });
-    const signature = req.headers['stripe-signature'] as string;
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2023-08-16",
+    });
+    const signature = req.headers["stripe-signature"] as string;
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     const rawBody = (req as any).rawBody;
 
     if (!rawBody) {
-      return res.status(400).send('Raw body missing');
+      return res.status(400).send("Raw body missing");
     }
 
     try {
-      const event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+      const event = stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        webhookSecret
+      );
       // ... call your service
       await this.service.handleStripeWebhook(event);
       res.send({ received: true });
@@ -151,6 +168,4 @@ export class DeliveryPartnerController {
       res.status(400).send(`Webhook Error: ${err.message}`);
     }
   }
-
 }
-

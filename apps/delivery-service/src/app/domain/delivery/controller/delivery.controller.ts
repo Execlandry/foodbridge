@@ -1,9 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from "@nestjs/common";
@@ -20,6 +22,7 @@ import { RoleAllowed } from "../../auth/guards/role-decorator";
 import { UserRoles } from "@fbe/types";
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
@@ -27,6 +30,7 @@ import {
   ApiOperation,
 } from "@nestjs/swagger";
 import { User, UserMetaData } from "../../auth/guards/user";
+import { LocationDto } from "../dto/update-current-location.dto";
 
 @ApiBearerAuth("authorization")
 @Controller("delivery")
@@ -39,11 +43,37 @@ export class DeliveryController {
 
   @UseGuards(AccessTokenGuard, RolesGuard)
   @RoleAllowed(UserRoles["delivery-partner"])
+  @Patch("/current-location")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: "Update current location of delivery partner during pickup",
+  })
+  @ApiOkResponse({
+    description: "Successfully updated current location",
+    schema: {
+      example: {
+        currentLocation: {
+          lat: 15.2993,
+          lng: 74.124,
+        },
+      },
+    },
+  })
+  @ApiBody({ type: LocationDto })
+  public async updateCurrentLocation(
+    @User() user: UserMetaData,
+    @Body() dto: LocationDto
+  ) {
+    return await this.service.updateCurrentLocation(user.userId, dto);
+  }
+
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
   @Get("/available-orders")
   @ApiOperation({ summary: "Get available orders for delivery partners" })
   @ApiOkResponse({ description: "Returns list of unassigned orders" })
-  public async getAvailableOrdersForDelivery(@User() user: UserMetaData) {
+  public async getAvailableOrdersForDelivery() {
     return await this.service.getAvailableOrdersForDelivery();
   }
 
@@ -51,10 +81,24 @@ export class DeliveryController {
   @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
   @Get("/current-orders")
-  @ApiOperation({ summary: "Get available orders for delivery partners" })
-  @ApiOkResponse({ description: "Returns list of unassigned orders" })
+  @ApiOperation({
+    summary: "Get currently assigned orders for delivery partners",
+  })
+  @ApiOkResponse({ description: "Returns currently assigned orders" })
   public async getCurrentOrdersForDeliveryPartner(@User() user: UserMetaData) {
     return await this.service.getCurrentOrdersForDeliveryPartner(user.userId);
+  }
+
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
+  @HttpCode(HttpStatus.OK)
+  @Get("/order-history")
+  @ApiOperation({
+    summary: "Get Delivery of orders history for delivery partners",
+  })
+  @ApiOkResponse({ description: "Returns orders history of delivery partner" })
+  public async getDeliveryOrdersHistory(@User() user: UserMetaData) {
+    return await this.service.getDeliveryOrdersHistory(user.userId);
   }
 
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -69,11 +113,28 @@ export class DeliveryController {
   @ApiForbiddenResponse({ description: "Partner not available" })
   @ApiInternalServerErrorResponse({ description: "Assignment failed" })
   @ApiBearerAuth()
-  public async acceptOrder(
+  public async assignOrder(
     @Param("orderId") orderId: string,
     @User() user: UserMetaData
   ) {
     return this.service.assignOrder(orderId, user.userId);
+  }
+
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
+  @HttpCode(HttpStatus.OK)
+  @Post("/confirm-delivery/:orderId")
+  @ApiOperation({ summary: "Confirm a delivery" })
+  @ApiOkResponse({ description: "Order delivered success" })
+  @ApiNotFoundResponse({ description: "Order not found" })
+  @ApiForbiddenResponse({ description: "Partner not available" })
+  @ApiInternalServerErrorResponse({ description: "Assignment failed" })
+  @ApiBearerAuth()
+  public async confirmDelivery(
+    @Param("orderId") orderId: string,
+    @User() user: UserMetaData
+  ) {
+    return this.service.confirmDelivery(orderId, user.userId);
   }
 
   @EventPattern("order_processed_success")

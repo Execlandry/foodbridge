@@ -1,10 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 import HttpClientService from "src/lib/http.client.service";
 import { ConfigService } from "@fbe/config";
-import { Request } from "express";
-import { Cron, CronExpression } from "@nestjs/schedule";
 
 @Injectable()
 export class UserProxyService {
@@ -33,7 +29,6 @@ export class UserProxyService {
     }
   }
 
-  // @Cron(CronExpression.EVERY_10_SECONDS)
   async markDeliveryPartnerAssigned(payload: {
     orderId: string;
     partnerId: string;
@@ -61,13 +56,13 @@ export class UserProxyService {
     partnerId: string;
   }) {
     console.log(
-      "Calling user service from markdeliverypartnerassigned:",
+      "Calling user service from markdeliverypartnerunassigned:",
       this.baseURL
     );
 
     try {
       const { data } = await this.httpClientService.send({
-        url: `partners/${payload.partnerId}/availability`,
+        url: `partners/${payload.partnerId}/release`,
         baseURL: this.baseURL,
         method: "PUT",
         data: { availability: true },

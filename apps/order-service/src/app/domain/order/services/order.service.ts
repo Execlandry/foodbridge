@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
+  InternalServerErrorException,
   OnModuleInit,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -17,11 +18,9 @@ import {
   CreatePaymentBodyDto,
   // PaymentStatus,
   UpdateByIdDto,
-  UpdateByIdQueryDto,
 } from "../dto/order.dto";
 import { UserMetaData } from "../../auth/guards/user";
 import { ClientProxy } from "@nestjs/microservices";
-
 @Injectable()
 export class OrderService implements OnModuleInit {
   constructor(
@@ -42,62 +41,85 @@ export class OrderService implements OnModuleInit {
     }
   }
 
-  async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
-    const order = this.orderRepo.create({
-      user_id: user.userId,
-      address: {
-        ...payload.address,
-        user: {
-          name: payload.user.name,
-          id: payload.user.id,
-          email: payload.user.email,
-          first_name: payload.user.first_name,
-          last_name: payload.user.last_name,
-          mobno: payload.user.mobno,
-        },
-      },
-      business: payload.business,
-      amount: payload.amount,
-      driver: payload.driver,
-      // address_id: payload.address_id,
-      // business_id: payload.business_id,
-      menu_items: payload.menu_items,
-      order_status: "pending",
-      payment_status: "pending",
-      payment_method: "upi",
-      driver_id: payload.driver_id,
-      request_for_driver: payload.request_for_driver,
-    });
-    const savedOrder = await this.orderRepo.save(order);
-
-    if (savedOrder.request_for_driver) {
-      this.client.emit("order_processed_success", savedOrder);
+  private generateOtp(length = 6): string {
+    const digits = "0123456789";
+    let otp = "";
+    for (let i = 0; i < length; i++) {
+      otp += digits.charAt(Math.floor(Math.random() * digits.length));
     }
-    console.log(savedOrder);
-    return savedOrder;
+    return otp;
   }
 
-  // async getAvailableOrdersForDelivery() {
-  //   return this.orderRepo.find({
-  //     where: {
-  //       driver_id: null,
-  //       request_for_driver: true,
-  //     },
-  //     order: { created_at: 'ASC' },
-  //   });
-  // }
+  async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const otp = await this.generateOtp();
+      const order = this.orderRepo.create({
+        user_id: user.userId,
+        address: {
+          ...payload.address,
+          user: {
+            name: payload.user.name,
+            id: payload.user.id,
+            email: payload.user.email,
+            first_name: payload.user.first_name,
+            last_name: payload.user.last_name,
+            mobno: payload.user.mobno,
+            picture_url: payload.user.picture_url,
+          },
+        },
+        business: payload.business,
+        amount: payload.amount,
+        // driver: payload.driver,
+        // address_id: payload.address_id,
+        // business_id: payload.business_id,
+        menu_items: payload.menu_items,
+        // order_status: "pending",
+        // payment_status: "pending",
+        // payment_method:"upi",
+        // driver_id: payload.driver_id,
+        otp,
+        request_for_driver: payload.request_for_driver,
+      });
+      const savedOrder = await this.orderRepo.save(order);
+      await queryRunner.commitTransaction();
+
+      if (savedOrder.request_for_driver) {
+        this.client.emit("order_processed_success", savedOrder);
+      }
+      return savedOrder;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error(`Order creation failed: ${error.message}`);
+
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+      throw new InternalServerErrorException("Failed to create order");
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async getOrderOtp(param: UpdateByIdDto) {
+    return this.orderRepo.findOne({ where: { id: param.id }, select: ["otp"] });
+  }
 
   //for payment history
-  async getLastPaymentProcessedOrder(user: UserMetaData) {
-    // fetch last processed order for tracking and delivery
-    const order = await this.orderRepo.findOne({
-      where: {
-        order_status: "payment_processed",
-        user_id: user.userId,
-      },
-    });
-    return order;
-  }
+  // async getLastPaymentProcessedOrder(user: UserMetaData) {
+  // fetch last processed order for tracking and delivery
+  //   const order = await this.orderRepo.findOne({
+  //     where: {
+  //       order_status: "payment_processed",
+  //       user_id: user.userId,
+  //     },
+  //   });
+  //   return order;
+  // }
 
     async getOrderByUserID(user: UserMetaData) {
     // fetch last processed order for tracking and delivery
@@ -138,36 +160,6 @@ export class OrderService implements OnModuleInit {
   //     });
   //   }
   //   return savedOrder;
-  // }
-
-  // async acceptOrder(orderId: string, partnerId: string) {
-  //   const queryRunner = this.connection.createQueryRunner();
-  //   await queryRunner.connect();
-  //   await queryRunner.startTransaction();
-
-  //   try{
-  //     const order= await queryRunner.manager.findOne(OrderEntity,{
-  //       where:{id:orderId},
-  //       lock:{mode:"pessimistic_write"}
-  //     });
-  //     if(!order) throw new NotFoundException("Order not found");
-  //     if(order.driver_id) throw new ConflictException('Order already taken');
-
-  //     await queryRunner.manager.update(OrderEntity,orderId,{
-  //       driver_id:partnerId,
-  //       order_status:'accepted'
-  //     });
-
-  //     await queryRunner.commitTransaction();
-  //     return{success:true,order};
-  //   }
-  //   catch(err){
-  //     await queryRunner.rollbackTransaction();
-  //     throw err;
-  //   }
-  //   finally{
-  //     await queryRunner.release();
-  //   }
   // }
 
   // async processPayment(orderId: string, payload: ProcessPaymentDto) {

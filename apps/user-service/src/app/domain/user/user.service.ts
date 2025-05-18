@@ -120,10 +120,12 @@ export class UserService {
     });
   }
 
-  async createConnectedAccount(userId: string): Promise<{ url: string, accountId: string }> {
+  async createConnectedAccount(
+    userId: string
+  ): Promise<{ url: string; accountId: string }> {
     // 1. Create Express account
     const account = await this.stripe.accounts.create({
-      type: 'express',
+      type: "express",
       metadata: { userId },
       capabilities: {
         card_payments: { requested: true },
@@ -134,9 +136,9 @@ export class UserService {
     // 2. Create account link (onboarding)
     const accountLink = await this.stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'https://localhost:3000/',
-      return_url: 'https://localhost:3000/',
-      type: 'account_onboarding',
+      refresh_url: "https://localhost:3000/",
+      return_url: "https://localhost:3000/",
+      type: "account_onboarding",
     });
 
     return { url: accountLink.url, accountId: account.id };
@@ -187,24 +189,59 @@ export class UserService {
       onboardingUrl: url,
     };
   }
-async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
+  async handleStripeWebhook(
+    event: Stripe.Event
+  ): Promise<{ received: boolean }> {
     try {
-      if (event.type === 'account.updated') {
+      if (event.type === "account.updated") {
+        console.log("Account updated:");
         const account = event.data.object as Stripe.Account;
-        const partner = await this.partnerRepo.findOne({ where: { stripe_id: account.id } });
+        const partner = await this.partnerRepo.findOne({
+          where: { stripe_id: account.id },
+        });
         if (partner && account.details_submitted) {
           partner.onboarded = true;
           await this.partnerRepo.save(partner);
-          this.logger.log(`Partner ${partner.id} onboarded successfully for Stripe account ${account.id}`);
+          this.logger.log(
+            `Partner ${partner.id} onboarded successfully for Stripe account ${account.id}`
+          );
         }
       }
       return { received: true };
     } catch (error) {
       this.logger.error(`Webhook error: ${error.message}`);
-      throw new BadRequestException('Webhook processing failed');
+      throw new BadRequestException("Webhook processing failed");
     }
   }
   async updatePartnerAvailability(
+    param: GetDeliveryPartnerbyId,
+    body: GetDeliveryPartnerAvailability
+  ): Promise<PartnerResponseDto> {
+    const { id } = param;
+    const { availability } = body;
+
+    const partner = await this.partnerRepo.findOne({
+      where: {
+        user: {
+          id: id,
+          permissions: UserRoles["delivery-partner"],
+        },
+      },
+      relations: ["user"],
+    });
+
+    if (!partner) throw new NotFoundException();
+
+    partner.availability = availability;
+    await this.partnerRepo.save(partner);
+    return {
+      id: partner.id,
+      email: partner.user.email,
+      availability: partner.availability,
+    };
+  }
+
+  async updateReleasePartnerAvailability(
     param: GetDeliveryPartnerbyId,
     body: GetDeliveryPartnerAvailability
   ): Promise<PartnerResponseDto> {
@@ -256,6 +293,8 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
       availability: partner.availability,
       ratings: partner.ratings,
       mobno: partner.mobno,
+      stripe_id: partner.stripe_id,
+      onboarded: partner.onboarded,
       created_at: partner.created_at,
       updated_at: partner.updated_at,
       user: {
@@ -291,7 +330,7 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
 
     return this.userRepo.save(user);
   }
-  
+
   async create(userInput: UserSignupDto): Promise<UserEntity> {
     const { email } = userInput;
 
@@ -343,5 +382,28 @@ async handleStripeWebhook(event: Stripe.Event): Promise<{ received: boolean }> {
 
   async hashPassword(password: string) {
     return bcrypt.hash(password, 10);
+  }
+
+  async createPaymentIntent(amount: number) {
+    const platformFee = Math.round(amount * 0.1);
+
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount,
+        currency: "usd",
+        application_fee_amount: platformFee,
+        transfer_data: {
+          destination: "acct_1Ql6RFI6yIQWMWvq", // Replace with your Stripe account ID
+        },
+        automatic_payment_methods: { enabled: true },
+      });
+
+      return {
+        clientSecret: paymentIntent.client_secret,
+        platformFee,
+      };
+    } catch (error) {
+      throw new Error(`Error creating payment intent: ${error.message}`);
+    }
   }
 }

@@ -33,7 +33,7 @@ import {
   UpdateDishStatus,
 } from "../../redux/dishes/dishes.slice";
 import { cartData } from "../utils/dummyData";
-// import { distance } from "framer-motion";
+
 
 interface MenuItems {
   description: string;
@@ -703,10 +703,10 @@ function Checkout() {
                               <strong>Description:</strong>{" "}
                               {cart.business.description}
                             </p>
-                            <p>
+                            {/* <p>
                               <strong>Average Price:</strong> ₹
-                              {cart.business.average_price}
-                            </p>
+                              {cart.business?.average_price}
+                            </p> */}
                             <p>
                               <strong>Contact Number:</strong>{" "}
                               {cart.business.contact_no}

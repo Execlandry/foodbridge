@@ -6,10 +6,10 @@ import { DBModule } from "@fbe/database";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { AuthModule } from "./auth/auth.module";
 import { OrderEntity } from "./order/entity/order.entity";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { OrderController } from "./order/controller/order.controller";
 import { OrderService } from "./order/services/order.service";
 import { ClientsModule, Transport } from "@nestjs/microservices";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [

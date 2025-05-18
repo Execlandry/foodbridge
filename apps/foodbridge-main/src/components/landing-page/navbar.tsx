@@ -138,6 +138,20 @@ function Navbar() {
                 </button>
               </div>
             )}
+            <button
+              onClick={() => navigate("/donate")}
+              className="
+    inline-flex items-center px-4 py-1.5 
+    bg-gradient-to-r from-green-600 to-green-700 
+    text-white rounded-lg shadow-md 
+    hover:from-green-700 hover:to-green-800 
+    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 
+    transition-all duration-300 ease-in-out 
+    transform hover:-translate-y-0.5
+  "
+            >
+              Donate
+            </button>
           </div>
 
           {/* Hamburger Menu Icon */}

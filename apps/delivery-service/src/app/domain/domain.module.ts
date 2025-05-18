@@ -7,35 +7,38 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
 import { AuthModule } from "./auth/auth.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { DeliveryEntity } from "src/app/domain/delivery/entity/delivery.entity";
+import { PayoutEntity } from "src/app/domain/payout/entity/payout.entity";
 import { DeliveryController } from "src/app/domain/delivery/controller/delivery.controller";
+import { PayoutController } from "src/app/domain/payout/controller/payout.controller";
 import { ScheduleModule } from "@nestjs/schedule";
-import { DeliveryEventService } from "src/app/domain/delivery/services/delivery-event.service";
 import HttpClientService from "src/lib/http.client.service";
 import { DeliveryService } from "./delivery/services/delivery.service";
+import { PayoutService } from "./payout/services/payout.service";
 import { UserProxyService } from "./delivery/services/user.http.service";
-import {PayoutEntity} from "./payout/entity/payout.entity";
-import {PayoutService} from "./payout/services/payout.service";
-import {PayoutController } from "./payout/controller/payout.controller";
+import { LocationModule } from "./location/location.module";
 
 @Module({
   imports: [
+    LocationModule,
     AuthModule,
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([DeliveryEntity,PayoutEntity]),
+    TypeOrmModule.forFeature([DeliveryEntity, PayoutEntity]),
     DBModule.forRoot({
-      entities: [DeliveryEntity,PayoutEntity],
+      entities: [DeliveryEntity, PayoutEntity],
     }),
     TerminusModule,
     AppLoggerModule,
     ConfigModule,
   ],
-  controllers: [DeliveryController,PayoutController],
-  providers: [DeliveryService,DeliveryService,
-    DeliveryEventService,
+  controllers: [DeliveryController, PayoutController],
+  providers: [
+    DeliveryService,
+    DeliveryService,
+    PayoutService,
     UserProxyService,
-    HttpClientService,PayoutService],
-  exports: [DeliveryService,PayoutService],
-
+    HttpClientService,
+  ],
+  exports: [DeliveryService, PayoutService],
 })
 export class DomainModule {}
