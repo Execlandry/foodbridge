@@ -11,7 +11,7 @@ export const User = createParamDecorator((data: any, ctx: ExecutionContext) => {
 });
 
 export interface UserMetaData {
-  userId: string;
+  id: string;
   email: string;
   permissions: string;
 }

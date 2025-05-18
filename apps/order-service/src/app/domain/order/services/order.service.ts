@@ -42,36 +42,51 @@ export class OrderService implements OnModuleInit {
   }
 
   async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
-    console.log("create order", payload.amount);
-    const order = this.orderRepo.create({
-      user_id: user.userId,
-      address: {
-        ...payload.address,
-        user: {
-          name: payload.user.name,
-          id: payload.user.id,
-          email: payload.user.email,
-          first_name: payload.user.first_name,
-          last_name: payload.user.lastname,
-          mobno: payload.user.mobno,
-        },
-      },
-      business: payload.business,
-      amount: payload.amount,
-      driver: payload.driver,
-      menu_items: payload.menu_items,
-      order_status: "pending",
-      payment_status: "pending",
-      payment_method: "upi",
-      driver_id: payload.driver_id,
-      request_for_driver: payload.request_for_driver,
-    });
+    const queryRunner = this.connection.createQueryRunner();
 
-    const savedOrder = await this.orderRepo.save(order);
-    if (savedOrder.request_for_driver) {
-      this.client.emit("order_processed_success", savedOrder);
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const otp = await this.generateOtp();
+      const order = this.orderRepo.create({
+        user_id: user.userId,
+        address: {
+          ...payload.address,
+          user: {
+            name: payload.user.name,
+            id: payload.user.id,
+            email: payload.user.email,
+            first_name: payload.user.first_name,
+            last_name: payload.user.last_name,
+            mobno: payload.user.mobno,
+            picture_url: payload.user.picture_url,
+          },
+        },
+        business: payload.business,
+        amount: payload.amount,
+        menu_items: payload.menu_items,
+        otp,
+        request_for_driver: payload.request_for_driver,
+      });
+      const savedOrder = await this.orderRepo.save(order);
+      await queryRunner.commitTransaction();
+
+      if (savedOrder.request_for_driver) {
+        this.client.emit("order_processed_success", savedOrder);
+      }
+      return savedOrder;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error(`Order creation failed: ${error.message}`);
+
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+      throw new InternalServerErrorException("Failed to create order");
+    } finally {
+      await queryRunner.release();
     }
-    return savedOrder;
   }
 
   async getOrderOtp(param: UpdateByIdDto) {

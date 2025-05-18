@@ -97,8 +97,8 @@ export class DeliveryController {
     summary: "Get Delivery of orders history for delivery partners",
   })
   @ApiOkResponse({ description: "Returns orders history of delivery partner" })
-  public async getDeliveryOrdersHistory(@User() user: UserMetaData) {
-    return await this.service.getDeliveryOrdersHistory(user.userId);
+  public async getOrderWithSuccessfulPayout(@User() user: UserMetaData) {
+    return await this.service.getOrderWithSuccessfulPayout(user.userId);
   }
 
   @UseGuards(AccessTokenGuard, RolesGuard)
@@ -120,22 +120,23 @@ export class DeliveryController {
     return this.service.assignOrder(orderId, user.userId);
   }
 
-  @UseGuards(AccessTokenGuard, RolesGuard)
-  @RoleAllowed(UserRoles["delivery-partner"])
-  @HttpCode(HttpStatus.OK)
-  @Post("/confirm-delivery/:orderId")
-  @ApiOperation({ summary: "Confirm a delivery" })
-  @ApiOkResponse({ description: "Order delivered success" })
-  @ApiNotFoundResponse({ description: "Order not found" })
-  @ApiForbiddenResponse({ description: "Partner not available" })
-  @ApiInternalServerErrorResponse({ description: "Assignment failed" })
-  @ApiBearerAuth()
-  public async confirmDelivery(
-    @Param("orderId") orderId: string,
-    @User() user: UserMetaData
-  ) {
-    return this.service.confirmDelivery(orderId, user.userId);
-  }
+  //refer the delivery-service
+  // @UseGuards(AccessTokenGuard, RolesGuard)
+  // @RoleAllowed(UserRoles["delivery-partner"])
+  // @HttpCode(HttpStatus.OK)
+  // @Post("/confirm-delivery/:orderId")
+  // @ApiOperation({ summary: "Confirm a delivery" })
+  // @ApiOkResponse({ description: "Order delivered success" })
+  // @ApiNotFoundResponse({ description: "Order not found" })
+  // @ApiForbiddenResponse({ description: "Partner not available" })
+  // @ApiInternalServerErrorResponse({ description: "Assignment failed" })
+  // @ApiBearerAuth()
+  // public async confirmDelivery(
+  //   @Param("orderId") orderId: string,
+  //   @User() user: UserMetaData
+  // ) {
+  //   return this.service.confirmDelivery(orderId, user.userId);
+  // }
 
   // @UseGuards(AccessTokenGuard, RolesGuard)
   // @RoleAllowed(UserRoles["delivery-partner"])

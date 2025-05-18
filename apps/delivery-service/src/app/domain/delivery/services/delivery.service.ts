@@ -5,18 +5,20 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Like, Repository, QueryRunner, Connection, Not } from "typeorm";
+import { Repository, QueryRunner, Connection, Not } from "typeorm";
 import { Logger } from "@fbe/logger";
 import { DeliveryEntity } from "../entity/delivery.entity";
 import { UserProxyService } from "./user.http.service";
 import { LocationDto } from "../dto/update-current-location.dto";
-import { UserMetaData } from "../../auth/guards/user";
+import { PayoutEntity } from "../../payout/entity/payout.entity";
 
 @Injectable()
 export class DeliveryService {
   constructor(
     @InjectRepository(DeliveryEntity)
     private deliveryRepo: Repository<DeliveryEntity>,
+    @InjectRepository(PayoutEntity)
+    private payoutRepo: Repository<PayoutEntity>,
     private readonly logger: Logger,
     private readonly userProxyService: UserProxyService,
     private readonly connection: Connection
@@ -33,21 +35,46 @@ export class DeliveryService {
     return { currentLocation: delivery.current_location };
   }
 
-  async getDeliveryOrdersHistory(partnerId: string) {
-    const getCurrentOrders = await this.deliveryRepo.findOne({
-      where: {
-        delivery_partner_id: partnerId,
-        partner_assigned: true,
-        order_status: "delivered",
+  async getOrderWithSuccessfulPayout(deliveryPartnerId: string) {
+    const result = await this.deliveryRepo
+      .createQueryBuilder("delivery")
+      .innerJoinAndMapOne(
+        "delivery.payout",
+        PayoutEntity,
+        "payout",
+        "delivery.order_id = payout.order_id AND delivery.delivery_partner_id = payout.delivery_partner_id"
+      )
+      .where("delivery.delivery_partner_id = :deliveryPartnerId", {
+        deliveryPartnerId,
+      })
+      .andWhere("delivery.order_status = :orderStatus", {
+        orderStatus: "delivered",
+      })
+      .andWhere("payout.payment_status = :paymentStatus", {
+        paymentStatus: "success",
+      })
+      .select([
+        "delivery.order AS order_details",
+        "delivery.order_status AS order_status",
+        "payout.amount AS amount",
+        "payout.commission AS commission",
+        "payout.net_amount AS net_amount",
+        "payout.payment_method AS payment_method",
+        "payout.stripe_payment_intent_id AS stripe_payment_intent_id",
+      ])
+      .getRawMany();
+
+    return result.map((item) => ({
+      order_details: item.order_details,
+      order_status: item.order_status,
+      payment_details: {
+        amount: item.amount,
+        commission: item.commission,
+        net_amount: item.net_amount,
+        payment_method: item.payment_method,
+        stripe_payment_intent_id: item.stripe_payment_intent_id,
       },
-    });
-    if (!getCurrentOrders) {
-      return { CurrentOrder: null, orderStatus: null };
-    }
-    return {
-      CurrentOrder: getCurrentOrders.order,
-      orderStatus: getCurrentOrders.order_status,
-    };
+    }));
   }
 
   async getCurrentOrdersForDeliveryPartner(partnerId: string) {
@@ -146,27 +173,6 @@ export class DeliveryService {
     } finally {
       await queryRunner.release();
     }
-  }
-
-  async confirmDelivery(orderId: string, deliveryPartnerId: string) {
-    try {
-      const deliveredOrder = await this.deliveryRepo.findOne({
-        where: { order_id: orderId },
-      });
-
-      if (!deliveredOrder) {
-        throw new NotFoundException(`Order ${orderId} not found`);
-      }
-
-      deliveredOrder.order_status = "delivered";
-
-      await this.userProxyService.markDeliveryPartnerUnassigned({
-        orderId,
-        partnerId: deliveryPartnerId,
-      });
-
-      return this.deliveryRepo.save(deliveredOrder);
-    } catch (e) {}
   }
 
   private mapError(error: unknown) {

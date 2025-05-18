@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from "typeorm";
 
 @Entity("delivery")
@@ -12,7 +13,7 @@ export class DeliveryEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
-  @Column({ type: "varchar", select: true })
+  @Column({ type: "uuid", select: true })
   public order_id!: string;
 
   @Column({ type: "jsonb", select: true })
@@ -35,7 +36,7 @@ export class DeliveryEntity extends BaseEntity {
     default: "pending",
     enum: ["in_transit", "delivered"],
   })
-  public order_status: string;
+  public order_status!: string;
 
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   public created_at!: Date;
