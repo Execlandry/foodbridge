@@ -145,7 +145,7 @@ export class DeliveryController {
   @ApiForbiddenResponse({ description: "Partner not available" })
   @ApiInternalServerErrorResponse({ description: "Assignment failed" })
   public async fetchOrderById(@Param("orderId") orderId: string) {
-    return this.service.FetchOrder(orderId);
+    return this.service.fetchOrderById(orderId);
   }
 
   @EventPattern("order_processed_success")

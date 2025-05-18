@@ -30,7 +30,7 @@ export class PayoutService implements OnModuleInit {
   }
 
   async createPaymentIntent(orderId:string,deliveryPartnerId:string){
-    this.logger.log(`Called payout for deliverypartner:  ${JSON.stringify(deliveryPartnerId, null, 2)}`);
+    this.logger.log(`Called payout for deliverypartner: ${JSON.stringify(deliveryPartnerId, null, 2)}`);
     const delivery=await this.deliveryRepo.findOne({
       where:{
         delivery_partner_id:deliveryPartnerId,
@@ -76,8 +76,7 @@ export class PayoutService implements OnModuleInit {
     payment_intent_id: paymentIntent.id,
   };
 }
-      
-
+  
   async createPaymentIntentdonation(amount: number) {
     const platformFee = Math.round(amount * 0.1);
     try {

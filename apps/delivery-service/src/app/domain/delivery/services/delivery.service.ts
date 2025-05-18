@@ -94,7 +94,7 @@ export class DeliveryService {
     };
   }
 
-  async FetchOrder(orderId: string) {
+  async fetchOrderById(orderId: string) {
     const Order = await this.deliveryRepo.findOne({
       where: {
         order_id: orderId,
