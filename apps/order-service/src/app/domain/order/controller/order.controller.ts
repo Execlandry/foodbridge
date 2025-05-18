@@ -90,6 +90,22 @@ export class OrderController {
     // return await this.orderService.confirmOrderPayment(user, param, query);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @UseGuards(AccessTokenGuard)
+  @Get("all")
+  public async get(
+    @User() user: UserMetaData
+    // @Query() query: UpdateByIdQueryDto
+  ) {
+    return await this.orderService.getAllOrders(user);
+    // return await this.orderService.confirmOrderPayment(user, param, query);
+  }
+
   //   @Get(':id/otp')
   // async getOrderOtp(@Param('id') id: string): Promise<{ otp: string }> {
   //   const order = await this.orderService

@@ -1,8 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import MapboxMap from "./map";
-import delivery_bike_icon from "../../assets/banner/2.png";
-import banner_image_spags from "../../assets/banner/1.jpeg";
-import { SearchIcon } from "@heroicons/react/outline";
 import { UserContext, UserContextType } from "../../hooks/user-context";
 import { TopSection } from "../checkout/homeComp";
 import {
@@ -60,10 +56,7 @@ const TrackOrderPage = () => {
           )}
         </div>
         <div className=" w-[80%] bg-white p-8">
-          <MapboxMap
-            lat={Number(orderData.business?.latitude)}
-            lon={Number(orderData.business?.longitude)}
-          ></MapboxMap>
+       
         </div>
       </div>
     </>

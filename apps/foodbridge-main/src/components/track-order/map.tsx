@@ -1,50 +1,131 @@
-import * as React from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-// import the mapbox-gl styles so that the map is displayed correctly
+import React, { useEffect, useRef } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
-function MapboxMap({ lat, lon }: any) {
-  // this is where the map instance will be stored after initialization
-  const [map, setMap] = React.useState<mapboxgl.Map>();
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-  // React ref to store a reference to the DOM node that will be used
-  // as a required parameter `container` when initializing the mapbox-gl
-  // will contain `null` by default
-  const mapNode = React.useRef(null);
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
 
-  React.useEffect(() => {
-    const node = mapNode.current;
-    // if the window object is not found, that means
-    // the component is rendered on the server
-    // or the dom node is not initialized, then return early
-    if (typeof window === "undefined" || node === null) return;
+interface MapProps {
+  coordinates: Coordinates[];
+}
 
-    // otherwise, create a map instance
-    const mapboxMap = new mapboxgl.Map({
-      container: node,
-      center: [75.82, 26.9], // starting position
-      accessToken: process.env.REACT_APP_MAPGL_TOKEN,
-      style: "mapbox://styles/mapbox/streets-v12",
-      zoom: 9,
+const Map: React.FC<MapProps> = ({ coordinates }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const leafletMapRef = useRef<L.Map | null>(null);
+  const routingControlRefs = useRef<L.Routing.Control[]>([]);
+
+  useEffect(() => {
+    if (!leafletMapRef.current && mapRef.current) {
+      const defaultIcon = L.icon({
+        iconUrl: markerIcon,
+        shadowUrl: markerShadow,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      });
+      L.Marker.prototype.options.icon = defaultIcon;
+
+      const map = L.map(mapRef.current).setView([15.2993, 74.124], 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      leafletMapRef.current = map;
+    }
+
+    const map = leafletMapRef.current;
+    if (!map) return;
+
+    // Clear existing markers
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer);
+      }
     });
-    // mapboxMap.setCenter([26.9124, 75.7873]);
-    //mapboxMap.seset
-    // 26.9124° N, 75.7873°
-    // save the map object to React.useState
-    setMap(mapboxMap);
 
+    // Remove existing routing controls
+    routingControlRefs.current.forEach((ctrl) => {
+      map.removeControl(ctrl);
+    });
+    routingControlRefs.current = [];
+
+    // Add new markers
+    coordinates.forEach((coord, index) => {
+      L.marker([coord.lat, coord.lng])
+        .addTo(map)
+        .bindPopup(`Location ${index + 1}`);
+    });
+
+    // Create routes between points
+    if (coordinates.length >= 2) {
+      for (let i = 0; i < coordinates.length - 1; i++) {
+        const control = L.Routing.control({
+          waypoints: [
+            L.latLng(coordinates[i].lat, coordinates[i].lng),
+            L.latLng(coordinates[i + 1].lat, coordinates[i + 1].lng),
+          ],
+          routeWhileDragging: false,
+          showAlternatives: false,
+          fitSelectedRoutes: false,
+          addWaypoints: false,
+          lineOptions: {
+            styles: [
+              {
+                color: i % 2 === 0 ? '#6366F1' : '#4F46E5',
+                opacity: 0.8,
+                weight: 6,
+              },
+            ],
+          },
+          createMarker: () => null,
+        } as unknown as L.Routing.RoutingControlOptions);
+
+        control.addTo(map); // ✅ This line makes the route visible
+        routingControlRefs.current.push(control);
+      }
+    }
+
+    // Fit map to bounds
+    if (coordinates.length > 0) {
+      const bounds = L.latLngBounds(
+        coordinates.map((coord) => L.latLng(coord.lat, coord.lng))
+      );
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+
+    // Cleanup on unmount
     return () => {
-      mapboxMap.remove();
+      if (leafletMapRef.current) {
+        leafletMapRef.current.remove();
+        leafletMapRef.current = null;
+      }
+    };
+  }, [coordinates]);
+
+  // Handle resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (leafletMapRef.current) {
+        leafletMapRef.current.invalidateSize();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  return (
-    <div
-      className="rounded-md p-4 m-4"
-      ref={mapNode}
-      style={{ width: "100%", height: "100%" }}
-    />
-  );
-}
+  return <div ref={mapRef} className="h-full w-full z-0" />;
+};
 
-export default MapboxMap;
+export default Map;

@@ -137,6 +137,16 @@ export class DeliveryController {
     return this.service.confirmDelivery(orderId, user.userId);
   }
 
+  // @UseGuards(AccessTokenGuard, RolesGuard)
+  // @RoleAllowed(UserRoles["delivery-partner"])
+  @HttpCode(HttpStatus.OK)
+  @Get("/FetchOrder/:orderId")
+  @ApiForbiddenResponse({ description: "Partner not available" })
+  @ApiInternalServerErrorResponse({ description: "Assignment failed" })
+  public async FetchOrderById(@Param("orderId") orderId: string) {
+    return this.service.FetchOrder(orderId);
+  }
+
   @EventPattern("order_processed_success")
   async handleEventForOrder(data: Record<string, unknown>) {
     // access db table

@@ -77,6 +77,11 @@ export class ExternalApis {
     return response.data;
   }
 
+  static async FetchDeliveryOrder(id: any) {
+    const url = `/api/v1/delivery-service/delivery/FetchOrder/${id}`;
+    const response = await axios.get(url);
+    return response.data;
+  }
   static async createPayment({ cart }: any) {
     const response = await axios.post("/api/v1/payment-service/payments", cart);
     return response.data;
@@ -110,6 +115,11 @@ export class ExternalApis {
     console.log("order", data);
     const response = await axios.post("/api/v1/order-service/order", data);
     console.log(response.data);
+    return response.data;
+  }
+
+  static async fetchAllOrders() {
+    const response = await axios.get("/api/v1/order-service/order/all");
     return response.data;
   }
 

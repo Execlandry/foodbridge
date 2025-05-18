@@ -30,7 +30,6 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
 
   // Mini Navbar UI
   function MiniNavBar() {
-    console.log("cart data", data);
     return (
       <div className="p-4 bg-white border-b border-gray-100 sticky top-0 z-10">
         <div className="flex items-center justify-between">
@@ -88,6 +87,7 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
 
   // Order Menu UI
   function OrderMenu() {
+    // console.log("data",data)
     const CartCard = ({ cart_item }: { cart_item: any }) => (
       <div className="bg-white rounded-xl p-4 flex items-center justify-between border border-gray-100 hover:border-green-100 transition-all duration-300 group">
         <div className="flex items-center space-x-4 flex-1">
@@ -142,11 +142,6 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
 
   // Message/Bill Details UI
   function Message() {
-    const total =
-      data?.menu_items?.reduce(
-        (acc: number, val: any) => acc + val.price * val.count,
-        0
-      ) || 0;
 
     return (
       <div className="p-4 bg-gray-50 border-t border-gray-100 sticky bottom-0">

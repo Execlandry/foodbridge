@@ -5,6 +5,7 @@ import DishReducer from "../dishes/dishes.slice";
 import CartReducer from "../cart/cart.slice";
 import UserReducer from "../user/user.slice";
 import OrderReducer from "../order/order.slice";
+import DeliveryReducer from "../delivery/delivery.slice";
 
 export default configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export default configureStore({
     cart: CartReducer,
     user: UserReducer,
     order: OrderReducer,
+    delivery: DeliveryReducer,
   },
   devTools: true,
 });
