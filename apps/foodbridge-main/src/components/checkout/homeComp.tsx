@@ -382,6 +382,7 @@ function Checkout() {
       
       const distance = calculateDistance[index] || 5; // Default to 5km if distance not calculated
       const amount = (distance * amount_per_km).toFixed(2);
+      // console.log("amount", String(amount));
       
       dispatch(
         PlaceOrder({

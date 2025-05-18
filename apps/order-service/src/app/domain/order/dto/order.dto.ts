@@ -222,11 +222,12 @@ export class CreatePaymentBodyDto {
   public request_for_driver!: boolean;
 
   @ApiProperty({
-    description: "amount",
+    description: "Amount",
     example: "200",
-    required: false,
   })
-  public amount!: string;
+  @IsOptional()
+  @IsString()
+  public amount?: string;
 
   @ApiProperty({
     description: "menu_item object",

@@ -140,10 +140,10 @@ export class DeliveryController {
   // @UseGuards(AccessTokenGuard, RolesGuard)
   // @RoleAllowed(UserRoles["delivery-partner"])
   @HttpCode(HttpStatus.OK)
-  @Get("/FetchOrder/:orderId")
+  @Get("/fetchOrder/:orderId")
   @ApiForbiddenResponse({ description: "Partner not available" })
   @ApiInternalServerErrorResponse({ description: "Assignment failed" })
-  public async FetchOrderById(@Param("orderId") orderId: string) {
+  public async fetchOrderById(@Param("orderId") orderId: string) {
     return this.service.FetchOrder(orderId);
   }
 

@@ -42,6 +42,7 @@ export class OrderService implements OnModuleInit {
   }
 
   async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
+    console.log("create order", payload.amount);
     const order = this.orderRepo.create({
       user_id: user.userId,
       address: {

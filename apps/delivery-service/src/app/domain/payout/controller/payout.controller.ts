@@ -139,7 +139,7 @@ export class PayoutController {
   })
   @ApiBadRequestResponse({ description: "Invalid input data" })
   @HttpCode(HttpStatus.OK)
-  async createPaymentIntent(@Body() body: { amount: number }) {
+  async createPaymentIntentdonation(@Body() body: { amount: number }) {
     const { amount } = body;
 
     if (!amount || amount <= 0) {
@@ -147,7 +147,7 @@ export class PayoutController {
     }
 
     try {
-      const result = await this.service.createPaymentIntent(amount);
+      const result = await this.service.createPaymentIntentdonation(amount);
       return result;
     } catch (error) {
       throw new BadRequestException(
@@ -170,18 +170,5 @@ export class PayoutController {
     @Query() query: UpdateByIdQueryDto
   ) {
     return await this.service.confirmPayout(user, param, query);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: "Get all delivered orders by the delivery partner" })
-  @ApiOkResponse({ description: "List of delivered orders" })
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @Get("/my-delivered-orders")
-  @UseGuards(AccessTokenGuard)
-  public async getDeliveredOrders(@User() user: UserMetaData) {
-    return await this.service.getDeliveredOrdersByDeliveryPartner(user);
   }
 }

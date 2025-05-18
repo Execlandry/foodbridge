@@ -55,7 +55,7 @@ export class PayoutService implements OnModuleInit {
     return await Payout.save();
   }
 
-  async createPaymentIntent(amount: number) {
+  async createPaymentIntentdonation(amount: number) {
     const platformFee = Math.round(amount * 0.1);
 
     try {
@@ -198,29 +198,5 @@ export class PayoutService implements OnModuleInit {
       console.error("❌ Error creating payout:", error.message);
       throw new Error("Failed to create payout");
     }
-  }
-
-  async getDeliveredOrdersByDeliveryPartner(user: UserMetaData) {
-    const deliveredDeliveries = await this.deliveryRepo.find({
-      where: {
-        delivery_partner_id: user.userId,
-        order_status: "success",
-      },
-      select: ["id", "order_id", "order_status", "order", "updated_at"], // Select only needed fields
-    });
-
-    if (!deliveredDeliveries || deliveredDeliveries.length === 0) {
-      throw new NotFoundException(
-        "No delivered orders found for this delivery partner."
-      );
-    }
-
-    return deliveredDeliveries.map((delivery) => ({
-      delivery_id: delivery.id,
-      order_id: delivery.order_id,
-      status: delivery.order_status,
-      order_details: delivery.order,
-      delivered_at: delivery.updated_at,
-    }));
   }
 }
