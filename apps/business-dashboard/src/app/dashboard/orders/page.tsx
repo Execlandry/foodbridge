@@ -18,25 +18,22 @@ export default function Restaurants() {
   // const [businessData, setBusinessData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
     const [pendingOrders, setpendingOrders] = useState<Order[]|null>(null);
-  const [completedOrders, setCompletedOrders] = useState<Order[]|null>(null);
-
+  // const [completedOrders, setCompletedOrders] = useState<Order[]|null>(null);
 
   const fetchAllOrders = async () => {
     try {
       setLoading(true);
       const res = await fetch("/api/order");
+      console.log(res);
       const data = await res.json();
       setorderData(data);
     } catch (error:any) {
-      console.error("Failed to fetch businesses:", error);
+      console.error("Failed to fetch Orders:", error);
       setError(error)
     } finally {
       setLoading(false);
     }
   };
-
-  
-
 
   useEffect(() => {
     fetchAllOrders();
@@ -45,11 +42,11 @@ export default function Restaurants() {
     useEffect(() => {
     if (orderData && Array.isArray(orderData)) {
       setpendingOrders(
-        orderData.filter((order: Order) => order.order_status !== "delivered")
+        orderData.filter((order: Order) => order)
       );
-      setCompletedOrders(
-        orderData.filter((order: Order) => order.order_status === "delivered")
-      );
+      // setCompletedOrders(
+      //   orderData.filter((order: Order) => order.order_status === "delivered")
+      // );
     }
     console.log(orderData);
   }, [orderData]);
@@ -91,13 +88,6 @@ export default function Restaurants() {
             emptyMessage="You don't have any active orders."
             onViewDetails={setSelectedOrder}
             onTrackOrder={setSelectedTrackingOrder}
-          />
-
-          <OrderList
-            orders={completedOrders}
-            title="Completed Orders"
-            emptyMessage="You don't have any completed orders."
-            onViewDetails={setSelectedOrder}
           />
         </>
       )}

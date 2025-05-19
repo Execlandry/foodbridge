@@ -120,12 +120,6 @@ export class DeliveryPartnerController {
     type: PartnerResponseDto,
     description: "Partner availability updated to true successfully",
   })
-  @ApiParam({
-    name: "delivery_partner_id",
-    description: "User ID of the delivery partner",
-    type: "string",
-    required: true,
-  })
   public async updatePartnerAvailability(
     @Param() param: GetDeliveryPartnerbyId,
     @Body() body: GetDeliveryPartnerAvailability
@@ -138,12 +132,6 @@ export class DeliveryPartnerController {
   @ApiOkResponse({
     type: PartnerResponseDto,
     description: "Partner availability updated to false successfully",
-  })
-  @ApiParam({
-    name: "delivery_partner_id",
-    description: "User ID of the delivery partner",
-    type: "string",
-    required: true,
   })
   async updateReleasePartnerAvailability(
     @Param() param: GetDeliveryPartnerbyId,

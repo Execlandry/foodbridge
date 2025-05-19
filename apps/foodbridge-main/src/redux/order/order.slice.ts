@@ -29,7 +29,9 @@ export const PlaceOrder = createAsyncThunk(
 export const fetchAllOrders = createAsyncThunk(
   "fetch/activeOrder",
   async () => {
-    return ExternalApis.fetchAllOrders();
+    const data= await ExternalApis.fetchAllOrders();
+    console.log(data);
+    return data;
   }
 );
 

@@ -18,47 +18,14 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "varchar", select: true })
   public user_id!: string;
 
-  @Column({ type: "varchar", select: true })
-  public owner_id!: string;
-
   @Column({ type: "jsonb", select: true })
   public business!: any;
-
-  @Column({ type: "varchar", select: true, default: null })
-  public driver_id!: string;
-
-  // @Column({ type: "jsonb", select: true })
-  // public driver!: any;
-
-  // @Column({ type: "uuid", select: true, default: null })
-  // public address_id!: string;
 
   @Column({ type: "jsonb", select: true, default: null })
   public address!: any;
 
   @Column({ type: "boolean", default: false })
   public request_for_driver!: boolean;
-
-  @Column({
-    type: "varchar",
-    default: "pending",
-    enum: ["pending", "success", "failed"],
-  })
-  public payment_status!: string;
-
-  @Column({
-    type: "varchar",
-    default: "upi",
-    enum: ["upi", "cod"],
-  })
-  public payment_method!: string;
-
-  @Column({
-    type: "varchar",
-    default: "pending",
-    enum: ["pending", "accepted", "in_transit", "delivered"],
-  })
-  public order_status: string;
 
   @Column({ type: "varchar", select: true})
   public amount!: string;

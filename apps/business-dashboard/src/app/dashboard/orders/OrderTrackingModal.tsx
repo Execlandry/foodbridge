@@ -49,7 +49,7 @@ const blueIcon = new L.Icon({
 
   const FetchCurrentOrder = async () => {
     try {
-      const res = await fetch("/api/delivery/");
+      const res = await fetch(`/api/order/${order_id}`);
       const data = await res.json();
       setorderData(data);
     } catch (error:any) {

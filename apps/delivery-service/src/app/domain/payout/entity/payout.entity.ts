@@ -51,14 +51,6 @@ export class PayoutEntity extends BaseEntity {
   })
   public payment_method!: string;
 
-  // @Column({ type: "jsonb", default: null })
-  // public menu_items!: any;
-
-
-  // @OneToOne(() => UserEntity, (user) => user.partnerProfile)
-  // @JoinColumn()
-  // user: UserEntity;
-
   @CreateDateColumn({
     type: "timestamptz",
     default: () => "CURRENT_TIMESTAMP",

@@ -30,24 +30,13 @@ export interface Address {
   long: string;
 }
 
-export interface Driver {
-  id: string;
-  name: string;
-  phone: string;
-  location: string;
-}
 
 export interface Order {
   id: string;
   user_id: string;
-  driver_id: string | null;
-  driver: Driver | null;
   business: Business;
   address: Address | null;
   request_for_driver: boolean;
-  payment_status: "pending" | "success" | "failed";
-  payment_method: "upi" | "cod";
-  order_status: "pending" | "accepted" | "in_transit" | "delivered";
   amount: string;
   menu_items: MenuItemDto[];
 }

@@ -117,10 +117,10 @@ export class ExternalApis {
     console.log(response.data);
     return response.data;
   }
-  
 
   static async fetchAllOrders() {
     const response = await axios.get("/api/v1/order-service/order/all");
+    console.log(response.data);
     return response.data;
   }
 

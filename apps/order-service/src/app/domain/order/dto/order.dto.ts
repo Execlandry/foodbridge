@@ -186,11 +186,10 @@ export class CreatePaymentBodyDto {
   @ApiProperty({
     description: "Amount",
     example: "200",
-    required: true,
   })
   @IsOptional()
   @IsString()
-  public amount!: string;
+  public amount?: string;
 
   @ApiProperty({
     description: "menu_item object",

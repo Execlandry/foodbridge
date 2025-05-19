@@ -11,6 +11,7 @@ import { DeliveryEntity } from "../entity/delivery.entity";
 import { UserProxyService } from "./user.http.service";
 import { LocationDto } from "../dto/update-current-location.dto";
 import { PayoutEntity } from "../../payout/entity/payout.entity";
+import { UserMetaData } from "../../auth/guards/user";
 
 @Injectable()
 export class DeliveryService {
@@ -102,6 +103,40 @@ export class DeliveryService {
     });
     return Order;
   }
+
+  
+  async FetchAllOrders(orderId: string) {
+    const Order = await this.deliveryRepo.findOne({
+      where: {
+        order_id: orderId,
+      },
+    });
+    return Order;
+  }
+
+  async FetchOrdersByUserId(userId: UserMetaData) {
+  const deliveries = await this.deliveryRepo
+      .createQueryBuilder("delivery")
+      .innerJoinAndMapOne(
+        "delivery.payout",
+        PayoutEntity,
+        "payout",
+        "delivery.order_id = payout.order_id"
+      )
+    .where(`delivery.order->>'user_id' = :userId`, { userId })
+         .select([
+        "delivery.order AS order",
+        "delivery.order_status AS order_status",
+        "payout.payment_status AS payment_status",
+      ])
+      .getRawMany();
+
+  return deliveries.map((item)=>({
+    ...item.order,
+    order_status:item.order_status,
+    payment_status:item.payment_status,
+  }))
+}
 
   async getAvailableOrdersForDelivery() {
     const availableOrders = await this.deliveryRepo.find({

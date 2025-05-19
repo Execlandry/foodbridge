@@ -9,9 +9,7 @@ interface OrderCardProps {
   onTrackOrder?: (order: Order) => void;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails, onTrackOrder }) => {
-  const isCompleted = order.order_status === 'delivered';
-  
+const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails, onTrackOrder }) => {  
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4 transition-all duration-300 hover:shadow-lg">
       <div className="flex justify-between items-start">
@@ -22,7 +20,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails, onTrackOrde
             {/* <Package size={16} className="text-gray-400 mr-1" /> */}
             <span className="text-sm text-gray-600">{order.menu_items.length} items</span>
           </div>
-          <div className="mt-2">
+          {/* <div className="mt-2">
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
               order.payment_status === 'success' 
                 ? 'bg-green-100 text-green-800' 
@@ -43,11 +41,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails, onTrackOrde
             }`}>
               {order.order_status.replace('_', ' ')}
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="text-right">
           <p className="text-lg font-bold">${order.amount}</p>
-          <p className="text-sm text-gray-500">{order.payment_method.toUpperCase()}</p>
+          {/* <p className="text-sm text-gray-500">{order.payment_method.toUpperCase()}</p> */}
         </div>
       </div>
       
@@ -59,7 +57,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails, onTrackOrde
           <EyeIcon className="mr-1" /> View Details
         </button>
         
-        {!isCompleted && onTrackOrder && (
+        {order?.request_for_driver && onTrackOrder && (
           <button 
             onClick={() => onTrackOrder(order)}
             className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors duration-200 flex items-center"

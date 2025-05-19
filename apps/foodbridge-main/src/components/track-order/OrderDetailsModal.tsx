@@ -20,22 +20,22 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
 }) => {
   if (!order) return null;
 
-  const getStepStatus = (step: string) => {
-    const statuses = {
-      pending: 0,
-      accepted: 1,
-      in_transit: 2,
-      delivered: 3,
-    };
+  // const getStepStatus = (step: string) => {
+  //   const statuses = {
+  //     pending: 0,
+  //     accepted: 1,
+  //     in_transit: 2,
+  //     delivered: 3,
+  //   };
 
-    const currentStatusValue =
-      statuses[order.order_status as keyof typeof statuses];
-    const stepValue = statuses[step as keyof typeof statuses];
+  //   // const currentStatusValue =
+  //   //   statuses[order.order_status as keyof typeof statuses];
+  //   // const stepValue = statuses[step as keyof typeof statuses];
 
-    if (stepValue < currentStatusValue) return "completed";
-    if (stepValue === currentStatusValue) return "current";
-    return "upcoming";
-  };
+  //   if (stepValue < currentStatusValue) return "completed";
+  //   if (stepValue === currentStatusValue) return "current";
+  //   return "upcoming";
+  // };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fadeIn">
@@ -44,11 +44,11 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div className="relative pb-12">
-            {/* Vertical line */}
+          {/* <div className="relative pb-12">
+          
             <div className="absolute left-8 top-2 bottom-0 w-1 bg-gray-200 transform -translate-x-1/2"></div>
 
-            {/* Order placed */}
+           
             <div className="relative flex items-start mb-8">
               <div
                 className={`rounded-full h-7 w-7 flex items-center justify-center z-10 ${
@@ -75,7 +75,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               </div>
             </div>
 
-            {/* Order accepted */}
+      
             <div className="relative flex items-start mb-8">
               <div
                 className={`rounded-full h-7 w-7 flex items-center justify-center z-10 ${
@@ -102,7 +102,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               </div>
             </div>
 
-            {/* In transit */}
+            
             <div className="relative flex items-start mb-8">
               <div
                 className={`rounded-full h-7 w-7 flex items-center justify-center z-10 ${
@@ -131,7 +131,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               </div>
             </div>
 
-            {/* Delivered */}
+           
             <div className="relative flex items-start">
               <div
                 className={`rounded-full h-7 w-7 flex items-center justify-center z-10 ${
@@ -153,7 +153,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="ml-10">
           <div className="flex justify-between w-full  items-center">
@@ -183,7 +183,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               <div className="flex flex-col space-y-1">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Order:</span>
-                  <span
+                  {/* <span
                     className={`font-medium ${
                       order.order_status === "delivered"
                         ? "text-green-600"
@@ -193,9 +193,9 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                     }`}
                   >
                     {order.order_status.replace("_", " ")}
-                  </span>
+                  </span> */}
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span className="text-gray-600">Payment:</span>
                   <span
                     className={`font-medium ${
@@ -208,12 +208,12 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                   >
                     {order.payment_status}
                   </span>
-                </div>
+                </div> */}
                 <div className="flex justify-between">
                   <span className="text-gray-600">Method:</span>
-                  <span className="font-medium text-gray-800">
+                  {/* <span className="font-medium text-gray-800">
                     {order.payment_method.toUpperCase()}
-                  </span>
+                  </span> */}
                 </div>
                 {order?.request_for_driver&&
                 <div className="flex justify-between">
@@ -224,7 +224,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                 </div>}
               </div>
             </div>
-
+{/* 
             {order?.driver && (
               <div>
                 <h3 className="font-semibold text-gray-700 mb-2">Driver</h3>
@@ -233,7 +233,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                 </p>
                 <p className="text-gray-600">{order?.driver.phone}</p>
               </div>
-            )}
+            )} */}
 
             {order?.address && (
               <div>

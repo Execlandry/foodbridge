@@ -31,6 +31,7 @@ import {
   UpdateDishStatus,
 } from "../../redux/dishes/dishes.slice";
 import { distance } from "framer-motion";
+import { MenuItem } from "@chakra-ui/react";
 
 // Interface definitions
 interface MenuItems {
@@ -424,7 +425,7 @@ function Checkout() {
           PlaceOrder({
             user: user,
             business: item.business,
-            driver_id: "",
+            // driver_id: "",
             // driver: {},
             address: addresses[0],
             request_for_driver: request[index] || false,
@@ -1170,7 +1171,7 @@ function Checkout() {
                   </div>
 
                   {/* Confirmation button */}
-                  <div
+                  {menuItem?.length>0 && (<div
                     className={`
       mt-8 flex justify-center
       sm:relative sm:mt-10
@@ -1189,7 +1190,7 @@ function Checkout() {
                     >
                       Confirm Order
                     </button>
-                  </div>
+                  </div>)}
                 </div>
               </div>
             </div>

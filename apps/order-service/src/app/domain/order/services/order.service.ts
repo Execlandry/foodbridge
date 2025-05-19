@@ -51,7 +51,7 @@ export class OrderService implements OnModuleInit {
       const otp = await this.generateOtp();
       const order = this.orderRepo.create({
         user_id: user.userId,
-        owner_id:payload.business.owner_id,
+        // owner_id:payload.business.owner_id,
         address: {
           ...payload.address,
           user: {
@@ -110,14 +110,24 @@ export class OrderService implements OnModuleInit {
       },
     });
   }
+async getBusinessOrder(user: UserMetaData) {
+  const userId = user.userId;
 
-   async getAllBusinessOrders(user: UserMetaData) {
-    return this.orderRepo.find({
-      where: {
-        owner_id: user.userId,
-      },
-    });
-  }
+  const deliveries = await this.orderRepo
+    .createQueryBuilder("order")
+    .where(`order.business->>'owner_id' = :userId`, { userId })
+    .getMany();
+
+  return deliveries;
+}
+
+  //  async getAllBusinessOrders(user: UserMetaData) {
+  //   return this.orderRepo.find({
+  //     where: {
+  //       owner_id: user.userId,
+  //     },
+  //   });
+  // }
 
   // async testRMQ() {
   //   // TESTING ONLY

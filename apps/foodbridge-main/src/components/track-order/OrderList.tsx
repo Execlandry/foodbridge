@@ -3,7 +3,7 @@ import { Order } from '../types/Orders';
 import OrderCard from './OrderCard';
 
 interface OrderListProps {
-  orders: Order[];
+  orders: Order[]|null;
   title: string;
   emptyMessage: string;
   onViewDetails: (order: Order) => void;
@@ -17,7 +17,7 @@ const OrderList: React.FC<OrderListProps> = ({
   onViewDetails,
   onTrackOrder
 }) => {
-  if (orders.length === 0) {
+  if (orders?.length === 0) {
     return (
       <div className="mt-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
@@ -32,7 +32,7 @@ const OrderList: React.FC<OrderListProps> = ({
     <div className="mt-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
       <div className="space-y-4">
-        {orders.map(order => (
+        {orders?.map((order:any) => (
           <OrderCard 
             key={order.id}
             order={order}

@@ -25,7 +25,7 @@ const OrdersPage = () => {
   const [selectedTrackingOrder, setSelectedTrackingOrder] =
     useState<Order | null>(null);
   const [pendingOrders, setpendingOrders] = useState<Order[]>([]);
-  const [completedOrders, setCompletedOrders] = useState<Order[]>([]);
+  // const [completedOrders, setCompletedOrders] = useState<Order[]>([]);
 
   //   const [refreshing, setRefreshing] = useState(false);
 
@@ -36,13 +36,9 @@ const OrdersPage = () => {
   useEffect(() => {
     if (orderData && Array.isArray(orderData)) {
       setpendingOrders(
-        orderData.filter((order: any) => order.order_status !== "delivered")
-      );
-      setCompletedOrders(
-        orderData.filter((order: any) => order.order_status === "delivered")
+        orderData.filter((order: any) => order)
       );
     }
-    console.log(orderData);
   }, [orderData]);
 
   return (
@@ -83,12 +79,12 @@ const OrdersPage = () => {
             onTrackOrder={setSelectedTrackingOrder}
           />
 
-          <OrderList
+          {/* <OrderList
             orders={completedOrders}
             title="Completed Orders"
             emptyMessage="You don't have any completed orders."
             onViewDetails={setSelectedOrder}
-          />
+          /> */}
         </>
       )}
 
