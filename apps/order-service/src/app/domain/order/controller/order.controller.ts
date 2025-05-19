@@ -73,46 +73,6 @@ export class OrderController {
     return await this.orderService.createOrder(user, payload);
   }
 
-  // @HttpCode(HttpStatus.OK)
-  // @ApiConsumes("application/json")
-  // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  // @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  // @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  // @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  // @UseGuards(AccessTokenGuard)
-  // @Get("/")
-  // public async getLastProcessedOrder(@User() user: UserMetaData) {
-  //   return await this.orderService.getLastPaymentProcessedOrder(user);
-  // }
-
-  @HttpCode(HttpStatus.OK)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Get("/all")
-  public async getOrderByUserID(@User() user: UserMetaData) {
-    return await this.orderService.getOrderByUserID(user);
-  }
-
-  // @HttpCode(HttpStatus.OK)
-  // @ApiConsumes("application/json")
-  // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  // @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  // @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  // @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  // @UseGuards(AccessTokenGuard)
-  // @Patch("/:id")
-  // public async confirmOrder(
-  //   @User() user: UserMetaData,
-  //   @Param() param: UpdateByIdDto,
-  //   @Query() query: UpdateByIdQueryDto
-  // ) {
-  //   console.log(user);
-  //   return await this.service.confirmOrder(user, param, query);
-  // }
 
   @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")
@@ -129,7 +89,6 @@ export class OrderController {
     // @Query() query: UpdateByIdQueryDto
   ) {
     return await this.orderService.getOrderOtp(param);
-    // return await this.orderService.confirmOrderPayment(user, param, query);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -145,16 +104,8 @@ export class OrderController {
     // @Query() query: UpdateByIdQueryDto
   ) {
     return await this.orderService.getAllOrders(user);
-    // return await this.orderService.confirmOrderPayment(user, param, query);
   }
 
-  //   @Get(':id/otp')
-  // async getOrderOtp(@Param('id') id: string): Promise<{ otp: string }> {
-  //   const order = await this.orderService
-  //   if (!order) throw new NotFoundException('Order not found');
-
-  //   return { otp: order.otp! }; // You may want to restrict this to delivery personnel/admins only
-  // }
 
   // @HttpCode(HttpStatus.OK)
   // @ApiConsumes("application/json")
