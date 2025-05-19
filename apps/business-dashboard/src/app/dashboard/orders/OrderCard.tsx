@@ -1,5 +1,5 @@
 import React from 'react';
-import { Order } from '../types/Orders';
+import { Order } from './Orders';
 import { EyeIcon, LocationMarkerIcon, MapIcon } from '@heroicons/react/outline';
 // import { Package, Eye, Map } from 'lucide-react';
 

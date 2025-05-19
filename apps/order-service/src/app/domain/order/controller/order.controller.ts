@@ -85,18 +85,6 @@ export class OrderController {
   //   return await this.orderService.getLastPaymentProcessedOrder(user);
   // }
 
-  @HttpCode(HttpStatus.OK)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Get("/all")
-  public async getOrderByUserID(@User() user: UserMetaData) {
-    return await this.orderService.getOrderByUserID(user);
-  }
-
   // @HttpCode(HttpStatus.OK)
   // @ApiConsumes("application/json")
   // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
@@ -139,7 +127,7 @@ export class OrderController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @UseGuards(AccessTokenGuard)
-  @Get("all")
+  @Get("/all")
   public async get(
     @User() user: UserMetaData
     // @Query() query: UpdateByIdQueryDto
@@ -147,6 +135,24 @@ export class OrderController {
     return await this.orderService.getAllOrders(user);
     // return await this.orderService.confirmOrderPayment(user, param, query);
   }
+
+    @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @UseGuards(AccessTokenGuard)
+  @Get("/business/all")
+  public async getBusinessOrder(
+    @User() user: UserMetaData
+    // @Query() query: UpdateByIdQueryDto
+  ) {
+    return await this.orderService.getAllBusinessOrders(user);
+    // return await this.orderService.confirmOrderPayment(user, param, query);
+  }
+
+  
 
   //   @Get(':id/otp')
   // async getOrderOtp(@Param('id') id: string): Promise<{ otp: string }> {

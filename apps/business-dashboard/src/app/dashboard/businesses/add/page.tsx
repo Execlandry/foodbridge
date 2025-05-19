@@ -32,7 +32,6 @@ async function Coordinates(addressObj: Address) {
   );
   const apiKey = "pk.00118eabe58a823ba3c1eddccba9eda9";
   const url = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${address}&format=json`;
-
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -46,7 +45,7 @@ async function Coordinates(addressObj: Address) {
     });
 
     clearTimeout(timeout);
-
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

@@ -3,17 +3,10 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
-import { useDispatch, useSelector } from "react-redux";
-import { UserContext, UserContextType } from "../../hooks/user-context";
 import { XIcon } from "@heroicons/react/solid";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/use-auth";
-import blueicon from "../checkout/images/marker-icon-2x-blue.png";
-import redicon from "../checkout/images/marker-icon-2x-red (1).png";
-import {
-  FetchCurrentOrder,
-  OrderSelector,
-} from "../../redux/delivery/delivery.slice";
+import blueicon from "./images/marker-icon-2x-blue.png";
+import redicon from "./images/marker-icon-2x-red (1).png";
+import './Orders'
 
 interface OrderTrackingModalProps {
   order_id: string;
@@ -40,23 +33,30 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
     geocodedCoords: { lat: 15.5439, lng: 73.755 },
   });
 
-  const dispatch = useDispatch();
-  const { user } = useContext(UserContext) as UserContextType;
-  const { logoutUser } = useAuth();
-  const navigate = useNavigate();
-  const { data: orderData } = useSelector(OrderSelector);
+const [orderData, setorderData] = useState<any>(null);
 
-  const blueIcon = new L.Icon({
-    iconUrl: blueicon,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
+const blueIcon = new L.Icon({
+  iconUrl: blueicon,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
   useEffect(() => {
-    dispatch(FetchCurrentOrder(order_id));
-  }, [dispatch]);
+    FetchCurrentOrder();
+  }, []);
+
+  const FetchCurrentOrder = async () => {
+    try {
+      const res = await fetch("/api/delivery/");
+      const data = await res.json();
+      setorderData(data);
+    } catch (error:any) {
+      console.error("Failed to fetch businesses:", error);
+      // setError(error)
+    } 
+  };
 
   const redIcon = new L.Icon({
     iconUrl: redicon,
@@ -71,7 +71,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   useEffect(() => {
     // Start polling
     intervalRef.current = window.setInterval(() => {
-      dispatch(FetchCurrentOrder(order_id));
+      FetchCurrentOrder();
     }, 10000);
 
     // Cleanup on unmount
@@ -80,7 +80,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
         clearInterval(intervalRef.current);
       }
     };
-  }, [dispatch, order_id]);
+  }, [order_id]);
 
   const closeFunction = () => {
     if (intervalRef.current !== null) {

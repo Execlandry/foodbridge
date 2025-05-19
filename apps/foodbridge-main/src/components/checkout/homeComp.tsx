@@ -30,6 +30,7 @@ import {
   listDishesForLandingPage,
   UpdateDishStatus,
 } from "../../redux/dishes/dishes.slice";
+import { distance } from "framer-motion";
 
 // Interface definitions
 interface MenuItems {
@@ -396,6 +397,7 @@ function Checkout() {
 
     try {
       let ordersPlaced = 0;
+      const dist=calculateDistance
 
       menuItem.forEach((value: any, index: number) => {
         if (
@@ -413,19 +415,21 @@ function Checkout() {
           return;
         }
 
-        const distance = calculateDistance[index] || 5; // Default to 5km if distance not calculated
+        const distance = dist[index] || 5; // Default to 5km if distance not calculated
         const amount = (distance * amount_per_km).toFixed(2);
 
+        const request=requestForDriver;
+        const item=value;
         dispatch(
           PlaceOrder({
             user: user,
-            business: value.business,
+            business: item.business,
             driver_id: "",
-            driver: {},
+            // driver: {},
             address: addresses[0],
-            request_for_driver: requestForDriver[index] || false,
+            request_for_driver: request[index] || false,
             amount: String(amount),
-            menu_items: value.menu_items,
+            menu_items: item.menu_items,
           })
         );
 

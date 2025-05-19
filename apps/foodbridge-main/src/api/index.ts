@@ -14,7 +14,6 @@ export class ExternalApis {
     const url = `${this.url}/cart-service/cart`;
     // cookies have token
     const response = await axios.get(url);
-    console.log(response);
     return response.data;
   }
   static async addCartItems(payload: any) {

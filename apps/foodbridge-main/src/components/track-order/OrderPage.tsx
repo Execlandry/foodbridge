@@ -42,6 +42,7 @@ const OrdersPage = () => {
         orderData.filter((order: any) => order.order_status === "delivered")
       );
     }
+    console.log(orderData);
   }, [orderData]);
 
   return (

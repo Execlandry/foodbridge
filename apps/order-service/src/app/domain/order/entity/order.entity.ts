@@ -18,14 +18,17 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "varchar", select: true })
   public user_id!: string;
 
+  @Column({ type: "varchar", select: true })
+  public owner_id!: string;
+
   @Column({ type: "jsonb", select: true })
   public business!: any;
 
   @Column({ type: "varchar", select: true, default: null })
   public driver_id!: string;
 
-  @Column({ type: "jsonb", select: true })
-  public driver!: any;
+  // @Column({ type: "jsonb", select: true })
+  // public driver!: any;
 
   // @Column({ type: "uuid", select: true, default: null })
   // public address_id!: string;

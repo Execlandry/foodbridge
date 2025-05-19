@@ -51,6 +51,7 @@ export class OrderService implements OnModuleInit {
       const otp = await this.generateOtp();
       const order = this.orderRepo.create({
         user_id: user.userId,
+        owner_id:payload.business.owner_id,
         address: {
           ...payload.address,
           user: {
@@ -92,6 +93,7 @@ export class OrderService implements OnModuleInit {
   async getOrderOtp(param: UpdateByIdDto) {
     return this.orderRepo.findOne({ where: { id: param.id }, select: ["otp"] });
   }
+
   private generateOtp(length = 6): string {
     const digits = "0123456789";
     let otp = "";
@@ -105,6 +107,14 @@ export class OrderService implements OnModuleInit {
     return this.orderRepo.find({
       where: {
         user_id: user.userId,
+      },
+    });
+  }
+
+   async getAllBusinessOrders(user: UserMetaData) {
+    return this.orderRepo.find({
+      where: {
+        owner_id: user.userId,
       },
     });
   }
