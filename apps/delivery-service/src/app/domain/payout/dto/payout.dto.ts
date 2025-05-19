@@ -149,12 +149,12 @@ export class CreatePaymentBodyDto {
   public order_id!: string;
 
   @ApiProperty({
-    description: "delivery_id",
+    description: "delivery_partner_id",
     example: "093df604-c6cf-4aff-bd4e-6e1ae7267941",
     required: true,
   })
   @IsString()
-  public delivery_id!: string;
+  public delivery_partner_id!: string;
 
   @ApiProperty({
     description: "delivery_acc_id",

@@ -57,33 +57,6 @@ export class MenuItemBodyDto {
   @IsString()
   public description!: string;
 
-  // @ApiProperty({
-  //   description: "cuisine_type",
-  //   required: true,
-  //   enum: cuisineType,
-  //   example: cuisineType.indian,
-  // })
-  // @IsEnum(cuisineType)
-  // public cuisine_type!: string;
-
-  // @ApiProperty({
-  //   description: "meal_type",
-  //   required: true,
-  //   enum: mealType,
-  //   example: mealType.breakfast,
-  // })
-  // @IsEnum(mealType)
-  // public meal_type!: string;
-
-  // @ApiProperty({
-  //   description: "category",
-  //   example: "category",
-  //   required: true,
-  // })
-  // @IsOptional()
-  // @IsString()
-  // public category!: string;
-
   @ApiProperty({
     description: "ingredients",
     example: "ingredients",
@@ -118,14 +91,6 @@ export class MenuItemBodyDto {
   })
   @IsEnum(status)
   public status!: string;
-  // @ApiProperty({
-  //   description: "number of items",
-  //   example: 2,
-  //   required: true,
-  // })
-  // @IsOptional()
-  // @IsNumber()
-  // public count!: number;
 
   @ApiProperty({
     description: "thumbnails",
@@ -141,25 +106,37 @@ export class CreatePaymentBodyDto {
   @ApiProperty({
     description: "business",
     example: {
-      id: "dee90081-616b-4744-b2fd-7ee11f38070a",
-      name: "Kanha Veg Business",
-      description: "Veg Business in North Goa",
-      owner_id: "c8584afc-f395-4892-97df-d12487e39771",
-      website_url: null,
-      social_links: null,
-      cuisine: null,
-      average_price: 1200,
-      average_rating: null,
-      latitude: "11",
-      is_available: true,
-      longitude: "11",
-      contact_no: "8998978987",
-      banner: "https://gogole.com/banner.png",
-      delivery_options: "all",
-      pickup_options: "all",
-      address: {},
+    id: "1873a2e4-9e35-40f6-bf81-cc1a2cb536c0",
+    name: "patrao business",
+    banner: "https://foodbridge-storage.s3.amazonaws.com/0a3dbbe6-94a8-4c94-a0d4-93db724fe5cb-rest-1.webp?AWSAccessKeyId=AKIA6D6JBC4PR3AXW5XR&Expires=1748082791&Signature=F0dQ43EZEnxRsPUi2rjyd4LaJCc%3D&response-content-disposition=attachment%3B%20filename%20%3D%22rest-1.webp%22",
+    cuisine: null,
+    latitude: "15.501107",
+    opens_at: "2025-05-17T16:02",
+    owner_id: "476a2ba5-0b07-49ed-a3b6-3a8a69e5f1d7",
+    closes_at: "2025-05-18T16:02",
+    longitude: "73.769915",
+    contact_no: "9945667898",
+    created_at: "2025-05-17T10:33:12.180Z",
+    deleted_at: "2025-05-17T10:33:12.180Z",
+    updated_at: "2025-05-17T10:33:12.180Z",
+    description: "hello this is best",
+    website_url: null,
+    is_available: true,
+    social_links: null,
+    average_rating: null,
+    address: {
+      id: "49f2d0dc-e654-4c4b-b703-9c31fc5143d5",
+      city: "Panaji",
+      name: "Dona Paula View Point",
+      state: "Goa",
+      street: "Dona Paula Road",
+      country: "India",
+      pincode: "403004",
+      created_at: "2025-05-17T10:33:12.180Z",
+      updated_at: "2025-05-17T10:33:12.180Z"
     },
-    required: true,
+  },
+  required: true,
   })
   @IsObject()
   public business!: any;
@@ -167,33 +144,18 @@ export class CreatePaymentBodyDto {
   @ApiProperty({
     description: "User",
     example: {
-      id: "dee90081-616b-4744-b2fd-7ee11f38070a",
-      name: "Kanha Veg Business",
-    },
+        id: "1f69cd5e-52fe-490e-9c7e-b5c2974c45e4",
+        name: "Helping Hands",
+        email: "charles@gmail.com",
+        mobno: "9923490118",
+        last_name: "shirodkar",
+        first_name: "charles",
+        picture_url: "https://foodbridge-storage.s3.amazonaws.com/bf884e45-61b8-44b3-b3b4-0409d9bbf5e2-helping%20hands.jpg?AWSAccessKeyId=AKIA6D6JBC4PR3AXW5XR&Expires=1748083315&Signature=1mCa8X9tud4MZTBkXuk4dVCHBJI%3D&response-content-disposition=attachment%3B%20filename%20%3D%22helping%20hands.jpg%22"
+      },
     required: true,
   })
   @IsObject()
   public user!: any;
-
-  @ApiProperty({
-    description: "driver_id",
-    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
-    required: false,
-  })
-  public driver_id!: string;
-
-  @ApiProperty({
-    description: "driver",
-    example: {
-      mobno: "1234567891",
-      availability: false,
-      location: "porvorim",
-      ratings: 4,
-    },
-    required: false,
-  })
-  @IsObject()
-  public driver!: any;
 
   @ApiProperty({
     description: "address obj",
@@ -215,20 +177,27 @@ export class CreatePaymentBodyDto {
 
   @ApiProperty({
     description: "Request for driver",
-    example: false,
+    example: true,
     required: false,
   })
   @IsBoolean()
   public request_for_driver!: boolean;
 
   @ApiProperty({
-    description: "amount",
+    description: "Amount",
     example: "200",
+<<<<<<< HEAD
     required: true,
   })
   @IsOptional()
   @IsString()
   public amount!: string;
+=======
+  })
+  @IsOptional()
+  @IsString()
+  public amount?: string;
+>>>>>>> origin/finalized
 
   @ApiProperty({
     description: "menu_item object",
@@ -244,7 +213,8 @@ export class CreatePaymentBodyDto {
         ingredients: "ingredients",
         food_type: "vegan",
         // count: 1,
-        quantity: 3,
+        quantity: "3",
+        status:"available",
         thumbnails: "https://google.com/banner.png",
       },
     ],

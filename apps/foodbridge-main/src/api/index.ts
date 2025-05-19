@@ -79,7 +79,7 @@ export class ExternalApis {
   }
 
   static async FetchDeliveryOrder(id: any) {
-    const url = `/api/v1/delivery-service/delivery/FetchOrder/${id}`;
+    const url = `/api/v1/delivery-service/delivery/fetchOrder/${id}`;
     const response = await axios.get(url);
     return response.data;
   }

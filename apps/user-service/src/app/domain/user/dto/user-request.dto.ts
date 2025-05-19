@@ -31,7 +31,10 @@ export class UserNestedDto {
   email: string;
 
   @ApiProperty()
-  name: string;
+  first_name: string;
+
+  @ApiProperty()
+  last_name: string;
 
   @ApiProperty()
   permissions: string;
@@ -65,13 +68,22 @@ export class FullPartnerDetailsDto {
 
 export class DeliveryPartnerSignupDto {
   @ApiProperty({
-    description: "username",
+    description: "first Name",
     example: "john",
     required: false,
   })
   @IsOptional()
   @IsString()
-  public name!: string;
+  public first_name!: string;
+
+  @ApiProperty({
+    description: "last Name",
+    example: "kennedy",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  public last_name!: string;
 
   @ApiProperty({
     description: "email",

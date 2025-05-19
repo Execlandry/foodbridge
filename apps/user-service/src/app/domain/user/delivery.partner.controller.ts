@@ -54,6 +54,7 @@ import { UserService } from "./user.service";
 import { RolesGuard } from "../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
 import { RoleAllowed } from "../auth/guards/role-decorator";
+import { User, UserMetaData } from "../auth/guards/user";
 @ApiBearerAuth("authorization")
 @Controller("partners")
 @UsePipes(
@@ -84,6 +85,17 @@ export class DeliveryPartnerController {
   @ApiInternalServerErrorResponse({ description: "Server error" })
   public async registerDeliveryPartner(@Body() body: DeliveryPartnerSignupDto) {
     return this.service.registerDeliveryPartner(body);
+  }
+
+
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
+  @Post('refresh-onboarding-url')
+  @ApiBearerAuth()
+  public async refreshOnboardingUrl(
+    @User() user: UserMetaData) {
+    this.logger.log(`Incoming User Metadata: ${JSON.stringify(user, null, 2)}`);
+  return this.service.refreshOnboardingUrl(user.id);
   }
 
   // @UseGuards(AccessTokenGuard, RolesGuard)
@@ -161,9 +173,12 @@ export class DeliveryPartnerController {
         webhookSecret
       );
       // ... call your service
+      console.log(`from  webhook 1${event}`)
+
       await this.service.handleStripeWebhook(event);
       res.send({ received: true });
     } catch (err) {
+      console.log(`from  webhook 2${err}`)
       this.logger.error(`Webhook Error: ${err.message}`);
       res.status(400).send(`Webhook Error: ${err.message}`);
     }

@@ -29,10 +29,11 @@ import {
 import { UserEntity } from "./entity/user.entity";
 import { DeliveryPartnerEntity } from "./entity/delivery-partner.entity";
 import { AuthService } from "../auth/auth.service";
+import { UserMetaData } from "../auth/guards/user";
 
 @Injectable()
 export class UserService {
-  private stripe: Stripe; // Declare stripe as a private property
+  private stripe: Stripe;
 
   constructor(
     private readonly logger: Logger,
@@ -42,9 +43,8 @@ export class UserService {
     private partnerRepo: Repository<DeliveryPartnerEntity>,
     private configService: ConfigService
   ) {
-    // Initialize Stripe in the constructor
-    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: "2023-08-16", // Use the correct Stripe API version
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2023-08-16",
     });
   }
 
@@ -64,7 +64,7 @@ export class UserService {
     if (fields.email) {
       const duplicateUser = await this.findOneByEmail(fields.email);
       if (duplicateUser && duplicateUser.id !== existingUser.id) {
-        fields.email = undefined; // prevent duplicate email
+        fields.email = undefined;
       } else {
         fieldToUpdate.email = fields.email.toLowerCase();
       }
@@ -120,10 +120,7 @@ export class UserService {
     });
   }
 
-  async createConnectedAccount(
-    userId: string
-  ): Promise<{ url: string; accountId: string }> {
-    // 1. Create Express account
+  private async createConnectedAccount(userId: string): Promise<string> {
     const account = await this.stripe.accounts.create({
       type: "express",
       metadata: { userId },
@@ -132,69 +129,93 @@ export class UserService {
         transfers: { requested: true },
       },
     });
-
-    // 2. Create account link (onboarding)
-    const accountLink = await this.stripe.accountLinks.create({
-      account: account.id,
-      refresh_url: "https://localhost:3000/",
-      return_url: "https://localhost:3000/",
-      type: "account_onboarding",
-    });
-
-    return { url: accountLink.url, accountId: account.id };
+    return account.id;
   }
 
   async registerDeliveryPartner(dto: DeliveryPartnerSignupDto) {
-    const { email, password, name, mobno } = dto;
+    const { email, password, first_name, last_name, mobno } = dto;
 
-    // ✅ 1. Check if user already exists
     const existing = await this.userRepo.findOne({ where: { email } });
     if (existing) {
       throw new ConflictException("User already exists");
     }
 
-    // ✅ 2. Hash the password
     const hashedPassword = await this.hashPassword(password);
 
-    // ✅ 3. Create and save UserEntity
     const user = this.userRepo.create({
       email,
       password: hashedPassword,
-      name,
+      first_name,
+      last_name,
       mobno,
       permissions: UserRoles["delivery-partner"],
     });
 
     await this.userRepo.save(user);
 
-    // ✅ 4. Create Stripe connected account and get onboarding URL
-    const { url, accountId } = await this.createConnectedAccount(user.id);
+    const stripeAccountId = await this.createConnectedAccount(user.id);
 
-    // ✅ 5. Create and save DeliveryPartnerEntity
     const partner = this.partnerRepo.create({
       user,
       mobno,
       availability: true,
-      stripe_id: accountId,
+      stripe_id: stripeAccountId,
       onboarded: false,
     });
 
     await this.partnerRepo.save(partner);
 
-    // ✅ 6. Return partner info and onboarding URL
     return {
       message: "Delivery partner registered successfully",
       partnerId: partner.id,
-      stripeAccountId: accountId,
-      onboardingUrl: url,
+      stripeAccountId,
     };
   }
+
+  async refreshOnboardingUrl(partnerId: string): Promise<{ onboarding_url: string }> {
+
+    const deliveryPartner = await this.partnerRepo.findOne({
+      where: {
+        user: {
+          id: partnerId,
+          permissions: UserRoles["delivery-partner"],
+        },
+      },
+      relations: ["user"]
+    });
+    
+    this.logger.log(`Called refreshOnboardingUrl for partnerId:  ${JSON.stringify(partnerId, null, 2)}`);
+    this.logger.log(`Fetched Delivery Partner: ${JSON.stringify(deliveryPartner, null, 2)}`);
+
+
+
+    if (!deliveryPartner || !deliveryPartner.stripe_id) {
+      throw new BadRequestException("Delivery partner or Stripe ID not found.");
+    }
+
+    // if (deliveryPartner.onboarded == false) {
+      const accountId = deliveryPartner.stripe_id;
+      
+      try {
+        const accountLink = await this.stripe.accountLinks.create({
+          account: accountId,
+          refresh_url: "https://localhost:3000/",
+          return_url: "https://localhost:3000/",
+          type: "account_onboarding",
+        });
+        return { onboarding_url: accountLink.url };
+      } catch (error) {
+        this.logger.error(`Failed to refresh Stripe URL: ${error.message}`);
+        throw new BadRequestException('Failed to refresh onboarding URL');
+      }
+    // }
+  }
+
   async handleStripeWebhook(
     event: Stripe.Event
   ): Promise<{ received: boolean }> {
     try {
       if (event.type === "account.updated") {
-        console.log("Account updated:");
         const account = event.data.object as Stripe.Account;
         const partner = await this.partnerRepo.findOne({
           where: { stripe_id: account.id },
@@ -205,6 +226,7 @@ export class UserService {
           this.logger.log(
             `Partner ${partner.id} onboarded successfully for Stripe account ${account.id}`
           );
+          this.logger.log(`Capabilities: ${JSON.stringify(account.capabilities)}`);
         }
       }
       return { received: true };
@@ -213,6 +235,7 @@ export class UserService {
       throw new BadRequestException("Webhook processing failed");
     }
   }
+
   async updatePartnerAvailability(
     param: GetDeliveryPartnerbyId,
     body: GetDeliveryPartnerAvailability
@@ -289,7 +312,6 @@ export class UserService {
     }
 
     return {
-      // partnerId: partner.id,
       availability: partner.availability,
       ratings: partner.ratings,
       mobno: partner.mobno,
@@ -300,7 +322,8 @@ export class UserService {
       user: {
         id: partner.user.id,
         email: partner.user.email,
-        name: partner.user.name,
+        first_name: partner.user.first_name,
+        last_name: partner.user.last_name,
         permissions: partner.user.permissions,
       },
     };
@@ -382,28 +405,5 @@ export class UserService {
 
   async hashPassword(password: string) {
     return bcrypt.hash(password, 10);
-  }
-
-  async createPaymentIntent(amount: number) {
-    const platformFee = Math.round(amount * 0.1);
-
-    try {
-      const paymentIntent = await this.stripe.paymentIntents.create({
-        amount,
-        currency: "usd",
-        application_fee_amount: platformFee,
-        transfer_data: {
-          destination: "acct_1Ql6RFI6yIQWMWvq", // Replace with your Stripe account ID
-        },
-        automatic_payment_methods: { enabled: true },
-      });
-
-      return {
-        clientSecret: paymentIntent.client_secret,
-        platformFee,
-      };
-    } catch (error) {
-      throw new Error(`Error creating payment intent: ${error.message}`);
-    }
   }
 }

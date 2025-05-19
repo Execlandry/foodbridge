@@ -1,54 +1,63 @@
-// import { MenuItemBodyDto } from '../../../../../../order-service/src/app/domain/order/dto/order.dto';
-
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  OneToMany,
 } from "typeorm";
 
-@Entity("payment")
+@Entity("payout")
 export class PayoutEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
-  @Column({ type: "varchar", select: true })
+  @Column({ type: "uuid", select: true })
   public user_id!: string;
 
   @Column({ type: "uuid", select: true })
   public business_id!: string;
 
-  @Column({ type: "varchar", select: true })
-  public delivery_id!: string;
-
-  @Column({ type: "varchar", select: true })
-  public delivery_acc_id!: string;
+  @Column({ type: "uuid", select: true })
+  public delivery_partner_id!: string;
 
   @Column({ type: "uuid", select: true })
   public order_id!: string;
 
-  @Column({ type: "int", select: true })
+  @Column({ type: "decimal", select: true })
   public amount!: number;
+
+  @Column({ type: "varchar", select: true })
+  public stripe_payment_intent_id!: string;
+
+  @Column({ type: "decimal", select: true })
+  public commission!: number;
+
+  @Column({ type: "decimal", select: true })
+  public net_amount!: number;
 
   @Column({
     type: "varchar",
     default: "pending",
-    enum: ["pending", "success", "failed"],
+    enum: ["pending", "success", "failed"], 
   })
   public payment_status!: string;
 
   @Column({
     type: "varchar",
-    default: "upi",
+    default: "card",
     enum: ["upi", "cod"],
   })
   public payment_method!: string;
 
-  @Column({ type: "jsonb", default: null })
-  public menu_items!: any;
+  // @Column({ type: "jsonb", default: null })
+  // public menu_items!: any;
+
+
+  // @OneToOne(() => UserEntity, (user) => user.partnerProfile)
+  // @JoinColumn()
+  // user: UserEntity;
 
   @CreateDateColumn({
     type: "timestamptz",
@@ -64,10 +73,9 @@ export class PayoutEntity extends BaseEntity {
   })
   public updated_at!: Date;
 
-  @UpdateDateColumn({
+  @DeleteDateColumn({
     type: "timestamptz",
-    default: () => "CURRENT_TIMESTAMP",
     select: true,
   })
-  public deleted_at!: Date;
+  public deleted_at!: Date | null;
 }
