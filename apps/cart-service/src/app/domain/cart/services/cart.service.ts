@@ -96,16 +96,7 @@ export class CartService {
       existingCart.menu_items = existingCart.menu_items.filter(
         (item) => item.id !== menu_item.id
       );
-      // const updatedMenuItems = existingCart.menu_items
-      //   .map((i) => {
-      //     if (i.id === menu_item.id) {
-      //       i.count = i.count - 1;
-      //       return i;
-      //     }
-      //     return i;
-      //   })
-      //   .filter((i) => i.count > 0);
-      // existingCart.menu_items = updatedMenuItems;
+
       await existingCart.save();
     }
     const Newcart = await this.cartRepo.find({

@@ -10,6 +10,7 @@ import { Logger } from "@fbe/logger";
 import { DeliveryEntity } from "../entity/delivery.entity";
 import { UserProxyService } from "./user.http.service";
 import { LocationDto } from "../dto/update-current-location.dto";
+import { UserMetaData } from "../../auth/guards/user";
 
 @Injectable()
 export class DeliveryService {
@@ -64,6 +65,15 @@ export class DeliveryService {
       CurrentOrder: getCurrentOrders.order,
       orderStatus: getCurrentOrders.order_status,
     };
+  }
+
+  async FetchOrder(orderId: string) {
+    const Order = await this.deliveryRepo.findOne({
+      where: {
+        order_id: orderId,
+      },
+    });
+    return Order;
   }
 
   async getAvailableOrdersForDelivery() {

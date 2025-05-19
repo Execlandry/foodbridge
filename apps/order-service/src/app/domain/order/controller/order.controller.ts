@@ -69,7 +69,7 @@ export class OrderController {
     @User() user: UserMetaData,
     @Body() payload: CreatePaymentBodyDto
   ) {
-    console.log(user);
+    // console.log(user);
     return await this.orderService.createOrder(user, payload);
   }
 
@@ -129,6 +129,22 @@ export class OrderController {
     // @Query() query: UpdateByIdQueryDto
   ) {
     return await this.orderService.getOrderOtp(param);
+    // return await this.orderService.confirmOrderPayment(user, param, query);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @UseGuards(AccessTokenGuard)
+  @Get("all")
+  public async get(
+    @User() user: UserMetaData
+    // @Query() query: UpdateByIdQueryDto
+  ) {
+    return await this.orderService.getAllOrders(user);
     // return await this.orderService.confirmOrderPayment(user, param, query);
   }
 

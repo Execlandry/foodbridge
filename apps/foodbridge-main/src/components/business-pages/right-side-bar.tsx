@@ -56,18 +56,18 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
             </svg>
           </button>
           <div className="flex items-center space-x-4">
-            <div className="relative group">
+            {/* <div className="relative group">
               <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 relative">
                 <BellIcon className="h-5 w-5 text-gray-600" />
                 <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-medium rounded-full h-4 w-4 flex items-center justify-center ring-2 ring-white transition-transform group-hover:scale-110">
                   4
                 </span>
               </button>
-            </div>
+            </div> */}
             {user && (
               <div className="flex items-center space-x-2 group cursor-pointer">
                 <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-medium">
-                  {user?.name}
+                  
                 </div>
                 {/* <img src={user.picture_url} alt="" /> */}
                 <div className="hidden md:flex flex-col">
@@ -87,6 +87,7 @@ function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
 
   // Order Menu UI
   function OrderMenu() {
+    // console.log("data",data)
     const CartCard = ({ cart_item }: { cart_item: any }) => (
       <div className="bg-white rounded-xl p-4 flex items-center justify-between border border-gray-100 hover:border-green-100 transition-all duration-300 group">
         <div className="flex items-center space-x-4 flex-1">

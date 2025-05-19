@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { ExternalApis } from "../../api";
 
 export interface ApiData {
@@ -9,18 +8,18 @@ export interface ApiData {
 }
 
 interface OrderState {
-  delivery: ApiData;
+  order: ApiData;
 }
 
 export const FetchCurrentOrder = createAsyncThunk(
   "fetch/activeOrder",
-  async (id:any) => {
+  async (id: any) => {
     return ExternalApis.FetchDeliveryOrder(id);
   }
 );
 
 const initialState = {
-  delivery: {
+  order: {
     status: "idle",
     data: {},
     error: null,
@@ -33,28 +32,28 @@ export const DeliverySlice = createSlice({
   reducers: {},
   extraReducers: {
     [FetchCurrentOrder.pending.type]: (state: OrderState, action: any) => {
-      state.delivery = {
+      state.order = {
         status: "pending",
         data: {},
         error: null,
       };
     },
     [FetchCurrentOrder.fulfilled.type]: (state: OrderState, action: any) => {
-      state.delivery = {
+      state.order = {
         status: "idle",
         data: action.payload || {},
         error: null,
       };
     },
     [FetchCurrentOrder.rejected.type]: (state: OrderState, action: any) => {
-      state.delivery = {
+      state.order = {
         status: "idle",
         data: {},
         error: action.payload,
       };
-    }
+    },
   },
 });
 
-export const OrderSelector = (state: any) => state.delivery.order;
+export const OrderSelector = (state: any) => state.order.order;
 export default DeliverySlice.reducer;

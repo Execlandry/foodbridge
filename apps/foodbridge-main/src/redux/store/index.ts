@@ -15,7 +15,7 @@ export default configureStore({
     cart: CartReducer,
     user: UserReducer,
     order: OrderReducer,
-    delivery:DeliveryReducer,
+    delivery: DeliveryReducer,
   },
   devTools: true,
 });

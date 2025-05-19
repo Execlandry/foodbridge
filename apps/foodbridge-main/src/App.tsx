@@ -10,7 +10,7 @@ import LandingPage from "./routes/landing";
 import BusinessPage from "./routes/business";
 import DonatePage from "./routes/donate";
 import SuccessPage from "./routes/success";
-import TrackOrderPage from "./components/track-order/track-order";
+import TrackOrderPage from "./routes/track-order";
 import LeftSideBar from "./components/business-pages/left-side-bar";
 import RightSideBar from "./components/business-pages/right-side-bar";
 import PaymentPage from "./routes/payments"
@@ -107,8 +107,7 @@ const App = () => {
             <Route path="settings" element={<BusinessPage />} />
             <Route path="chat" element={<BusinessPage />} />
             <Route path="fav" element={<BusinessPage />} />
-            <Route path="payments" element={<BusinessPage />} />
-            <Route path="donate" element={<DonatePage />} />
+            <Route path="payments" element={<PaymentPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -41,6 +41,41 @@ export class OrderService implements OnModuleInit {
     }
   }
 
+  async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
+    const order = this.orderRepo.create({
+      user_id: user.userId,
+      address: {
+        ...payload.address,
+        user: {
+          name: payload.user.name,
+          id: payload.user.id,
+          email: payload.user.email,
+          first_name: payload.user.first_name,
+          last_name: payload.user.lastname,
+          mobno: payload.user.mobno,
+        },
+      },
+      business: payload.business,
+      amount: payload.amount,
+      driver: payload.driver,
+      menu_items: payload.menu_items,
+      order_status: "pending",
+      payment_status: "pending",
+      payment_method: "upi",
+      driver_id: payload.driver_id,
+      request_for_driver: payload.request_for_driver,
+    });
+
+    const savedOrder = await this.orderRepo.save(order);
+    if (savedOrder.request_for_driver) {
+      this.client.emit("order_processed_success", savedOrder);
+    }
+    return savedOrder;
+  }
+
+  async getOrderOtp(param: UpdateByIdDto) {
+    return this.orderRepo.findOne({ where: { id: param.id }, select: ["otp"] });
+  }
   private generateOtp(length = 6): string {
     const digits = "0123456789";
     let otp = "";
@@ -50,76 +85,25 @@ export class OrderService implements OnModuleInit {
     return otp;
   }
 
-  async createOrder(user: UserMetaData, payload: CreatePaymentBodyDto) {
-    const queryRunner = this.connection.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      const otp = await this.generateOtp();
-      const order = this.orderRepo.create({
+  async getAllOrders(user: UserMetaData) {
+    return this.orderRepo.find({
+      where: {
         user_id: user.userId,
-        address: {
-          ...payload.address,
-          user: {
-            name: payload.user.name,
-            id: payload.user.id,
-            email: payload.user.email,
-            first_name: payload.user.first_name,
-            last_name: payload.user.last_name,
-            mobno: payload.user.mobno,
-            picture_url: payload.user.picture_url,
-          },
-        },
-        business: payload.business,
-        amount: payload.amount,
-        // driver: payload.driver,
-        // address_id: payload.address_id,
-        // business_id: payload.business_id,
-        menu_items: payload.menu_items,
-        // order_status: "pending",
-        // payment_status: "pending",
-        // payment_method:"upi",
-        // driver_id: payload.driver_id,
-        otp,
-        request_for_driver: payload.request_for_driver,
-      });
-      const savedOrder = await this.orderRepo.save(order);
-      await queryRunner.commitTransaction();
-
-      if (savedOrder.request_for_driver) {
-        this.client.emit("order_processed_success", savedOrder);
-      }
-      return savedOrder;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      this.logger.error(`Order creation failed: ${error.message}`);
-
-      if (error instanceof ConflictException) {
-        throw error;
-      }
-      throw new InternalServerErrorException("Failed to create order");
-    } finally {
-      await queryRunner.release();
-    }
-  }
-
-  async getOrderOtp(param: UpdateByIdDto) {
-    return this.orderRepo.findOne({ where: { id: param.id }, select: ["otp"] });
+      },
+    });
   }
 
   //for payment history
-  // async getLastPaymentProcessedOrder(user: UserMetaData) {
-  // fetch last processed order for tracking and delivery
-  //   const order = await this.orderRepo.findOne({
-  //     where: {
-  //       order_status: "payment_processed",
-  //       user_id: user.userId,
-  //     },
-  //   });
-  //   return order;
-  // }
+  async getLastPaymentProcessedOrder(user: UserMetaData) {
+    // fetch last processed order for tracking and delivery
+    const order = await this.orderRepo.findOne({
+      where: {
+        order_status: "payment_processed",
+        user_id: user.userId,
+      },
+    });
+    return order;
+  }
 
     async getOrderByUserID(user: UserMetaData) {
     // fetch last processed order for tracking and delivery
@@ -160,6 +144,36 @@ export class OrderService implements OnModuleInit {
   //     });
   //   }
   //   return savedOrder;
+  // }
+
+  // async acceptOrder(orderId: string, partnerId: string) {
+  //   const queryRunner = this.connection.createQueryRunner();
+  //   await queryRunner.connect();
+  //   await queryRunner.startTransaction();
+
+  //   try{
+  //     const order= await queryRunner.manager.findOne(OrderEntity,{
+  //       where:{id:orderId},
+  //       lock:{mode:"pessimistic_write"}
+  //     });
+  //     if(!order) throw new NotFoundException("Order not found");
+  //     if(order.driver_id) throw new ConflictException('Order already taken');
+
+  //     await queryRunner.manager.update(OrderEntity,orderId,{
+  //       driver_id:partnerId,
+  //       order_status:'accepted'
+  //     });
+
+  //     await queryRunner.commitTransaction();
+  //     return{success:true,order};
+  //   }
+  //   catch(err){
+  //     await queryRunner.rollbackTransaction();
+  //     throw err;
+  //   }
+  //   finally{
+  //     await queryRunner.release();
+  //   }
   // }
 
   // async processPayment(orderId: string, payload: ProcessPaymentDto) {

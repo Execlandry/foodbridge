@@ -1,5 +1,6 @@
 import React from 'react';
 import { Order } from '../types/Orders';
+import { EyeIcon, LocationMarkerIcon, MapIcon } from '@heroicons/react/outline';
 // import { Package, Eye, Map } from 'lucide-react';
 
 interface OrderCardProps {
@@ -55,15 +56,16 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails, onTrackOrde
           onClick={() => onViewDetails(order)}
           className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 flex items-center"
         >
-          {/* <Eye size={16} className="mr-1" /> View Details */}
+          <EyeIcon className="mr-1" /> View Details
         </button>
         
-        {!isCompleted && onTrackOrder && (
+        {!isCompleted && onTrackOrder && order.order_status!=="pending" && (
           <button 
             onClick={() => onTrackOrder(order)}
             className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors duration-200 flex items-center"
           >
-            {/* <Map size={16} className="mr-1" /> Track */}
+            <LocationMarkerIcon  className="mr-1" />
+             Track
           </button>
         )}
       </div>

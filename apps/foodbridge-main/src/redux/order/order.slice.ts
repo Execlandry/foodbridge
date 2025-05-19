@@ -26,7 +26,7 @@ export const PlaceOrder = createAsyncThunk(
   }
 );
 
-export const fetchAllOrders=createAsyncThunk(
+export const fetchAllOrders = createAsyncThunk(
   "fetch/activeOrder",
   async () => {
     return ExternalApis.fetchAllOrders();
@@ -67,7 +67,7 @@ export const OrderSlice = createSlice({
         error: action.payload,
       };
     },
-     [fetchAllOrders.pending.type]: (state: OrderState, action: any) => {
+    [fetchAllOrders.pending.type]: (state: OrderState, action: any) => {
       state.order = {
         status: "pending",
         data: {},

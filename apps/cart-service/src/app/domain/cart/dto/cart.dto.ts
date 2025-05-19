@@ -64,7 +64,7 @@ export class MenuItemBodyDto {
   // @IsEnum(cuisineType)
   // public cuisine_type!: string;
 
- @ApiProperty({
+  @ApiProperty({
     description: "expires_at",
     example: "2025-05-30T00:00:00Z",
     required: false,

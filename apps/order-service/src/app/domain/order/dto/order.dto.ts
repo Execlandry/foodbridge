@@ -175,25 +175,25 @@ export class CreatePaymentBodyDto {
   @IsObject()
   public user!: any;
 
-  // @ApiProperty({
-  //   description: "driver_id",
-  //   example: "5272ec36-d9db-11ed-afa1-0242ac120002",
-  //   required: false,
-  // })
-  // public driver_id!: string;
+  @ApiProperty({
+    description: "driver_id",
+    example: "5272ec36-d9db-11ed-afa1-0242ac120002",
+    required: false,
+  })
+  public driver_id!: string;
 
-  // @ApiProperty({
-  //   description: "driver",
-  //   example: {
-  //     mobno: "1234567891",
-  //     availability: false,
-  //     location: "porvorim",
-  //     ratings: 4,
-  //   },
-  //   required: false,
-  // })
-  // @IsObject()
-  // public driver!: any;
+  @ApiProperty({
+    description: "driver",
+    example: {
+      mobno: "1234567891",
+      availability: false,
+      location: "porvorim",
+      ratings: 4,
+    },
+    required: false,
+  })
+  @IsObject()
+  public driver!: any;
 
   @ApiProperty({
     description: "address obj",
@@ -226,6 +226,8 @@ export class CreatePaymentBodyDto {
     example: "200",
     required: true,
   })
+  @IsOptional()
+  @IsString()
   public amount!: string;
 
   @ApiProperty({
