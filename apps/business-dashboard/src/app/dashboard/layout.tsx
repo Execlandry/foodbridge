@@ -18,7 +18,6 @@ export default function RootLayout({ children }: any) {
       <head />
       <body>
         <div className="flex bg-gray-100 min-h-screen relative">
-          <Sidebar mobileNavsidebar={mobileNavsidebar} />
 
           <div className="flex-grow text-gray-800">
             <Header
@@ -26,8 +25,13 @@ export default function RootLayout({ children }: any) {
               mobileNavsidebar={mobileNavsidebar}
               setMobileNavsidebar={setMobileNavsidebar}
             />
+            <div className="flex flex-row ">
+              <div className="inline-block ">
+          <Sidebar mobileNavsidebar={mobileNavsidebar} /></div>
+</div>
             {children}
           </div>
+          
 
           <Footer />
         </div>

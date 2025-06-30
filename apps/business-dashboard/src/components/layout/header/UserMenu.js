@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon, ChevronUpIcon,UserCircleIcon } from "@heroicons/react/solid";
 import React, { useEffect, useRef, useState } from "react";
 import OutsideClick from "../../../utils/outsideClick";
 
@@ -18,7 +18,7 @@ const UserMenu = ({ user }) => {
       setUserMenuStatus(false);
     }
   }, [buttonOutsideClick]);
-
+  console.log("user", user);
   //console.log("userbutton", buttonOutsideClick)
   return (
     <button
@@ -36,11 +36,7 @@ const UserMenu = ({ user }) => {
         </span>
       </div>
       <span className="h-12 w-12 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
-        <img
-          src="https://randomuser.me/api/portraits/women/68.jpg"
-          alt="user profile photo"
-          className="h-full w-full object-cover"
-        />
+        <UserCircleIcon className="h-full w-full text-gray-400" />
       </span>
 
       {userMenuStatus && (

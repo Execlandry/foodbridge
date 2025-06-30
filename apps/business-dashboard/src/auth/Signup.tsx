@@ -22,7 +22,7 @@ export default function Signup() {
 
   useEffect(() => {
     if (user) {
-      router.push("/dashboard");
+      router.push("/dashboard/businesses");
     }
   }, [user, router]);
 

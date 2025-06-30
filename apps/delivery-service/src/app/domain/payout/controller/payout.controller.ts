@@ -65,6 +65,40 @@ export class PayoutController {
   return this.service.createPaymentIntent(orderId,user.userId);
 }
 
+// @Post("create-payment-intent")
+//   @ApiOperation({
+//     summary: "Create a payment intent",
+//     description: "Create a Stripe payment intent and return client secret.",
+//   })
+//   @ApiOkResponse({
+//     description: "Payment intent created successfully.",
+//     schema: {
+//       type: "object",
+//       properties: {
+//         clientSecret: { type: "string" },
+//         platformFee: { type: "number" },
+//       },
+//     },
+//   })
+//   @ApiBadRequestResponse({ description: "Invalid input data" })
+//   @HttpCode(HttpStatus.OK)
+//   async createPaymentIntentdonation(@Body() body: { amount: number }) {
+//     const { amount } = body;
+
+//     if (!amount || amount <= 0) {
+//       throw new BadRequestException("Amount must be a valid positive number.");
+//     }
+
+//     try {
+//       const result = await this.service.createPaymentIntentdonation(amount);
+//       return result;
+//     } catch (error) {
+//       throw new BadRequestException(
+//         `Error creating payment intent: ${error.message}`
+//       );
+//     }
+//   }
+
   @Post("/stripe-webhook")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: "Stripe webhook to trigger payouts" })

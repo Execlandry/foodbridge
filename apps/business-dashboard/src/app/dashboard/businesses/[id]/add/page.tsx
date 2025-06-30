@@ -48,6 +48,15 @@ function AddFoodItemForm({ params }: any) {
 
   const { id } = params;
 
+  // Function to validate expiry date
+  const validateExpiryDate = (expiryDate: string): boolean => {
+    if (!expiryDate) return true; // Allow empty expiry date if not required
+    const expiry = new Date(expiryDate);
+    const currentTime = new Date();
+    const minExpiryTime = new Date(currentTime.getTime() + 3 * 60 * 60 * 1000); // Current time + 3 hours
+    return expiry >= minExpiryTime;
+  };
+
   async function uploadImage(file: File): Promise<string> {
     const formData = new FormData();
     formData.append("filename", file);
@@ -109,6 +118,13 @@ function AddFoodItemForm({ params }: any) {
     setIsSubmitting(true);
     setError(null);
 
+    // Validate expiry date before submission
+    if (formData.expires_at && !validateExpiryDate(formData.expires_at)) {
+      setError("Expiry date must be at least 3 hours from now.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       let thumbnailUrl = "";
       if (formData.thumbnails instanceof File) {
@@ -152,6 +168,14 @@ function AddFoodItemForm({ params }: any) {
     >
   ) => {
     const { name, value } = e.target;
+
+    // Validate expiry date on change
+    if (name === "expires_at" && value && !validateExpiryDate(value)) {
+      setError("Expiry date must be at least 3 hours from now.");
+    } else if (name === "expires_at" && error?.includes("Expiry date")) {
+      setError(null); // Clear error if valid
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: name === "quantity" ? Number(value) : value,
@@ -327,26 +351,6 @@ function AddFoodItemForm({ params }: any) {
             </div>
           </div>
 
-          {/* <div>
-            <label htmlFor="posted_at" className="block text-sm font-medium text-green-900 mb-1">
-              Posted At
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <CalendarIcon className="h-5 w-5 text-green-600" />
-              </div>
-              <input
-                type="datetime-local"
-                id="posted_at"
-                name="posted_at"
-                value={formData.posted_at}
-                onChange={handleChange}
-                placeholder="Posted At"
-                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 placeholder-green-400/50 transition-colors duration-300"
-              />
-            </div>
-          </div> */}
-
           <div>
             <label
               htmlFor="expires_at"
@@ -392,30 +396,6 @@ function AddFoodItemForm({ params }: any) {
               />
             </div>
           </div>
-
-          {/* <div>
-            <label htmlFor="status" className="block text-sm font-medium text-green-900 mb-1">
-              Status
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <CheckCircleIcon className="h-5 w-5 text-green-600" />
-              </div>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="block w-full pl-10 pr-3 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-600 text-green-900 bg-white appearance-none transition-colors duration-300"
-                required
-              >
-                <option value="available">Available</option>
-                <option value="pending">Pending</option>
-                <option value="failed">Failed</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div> */}
-          {/* </div> */}
 
           <div>
             <label

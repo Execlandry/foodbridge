@@ -40,7 +40,7 @@ function Navbar() {
 
   return (
     <nav className="w-full bg-white shadow-lg shadow-gray-100/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16" ref={ref}>
           {/* Left Section - Logo */}
           <div className="flex-shrink-0">
@@ -205,6 +205,13 @@ function Navbar() {
               >
                 Sign In as Business
               </button>
+                          <button
+              onClick={() => navigate("/donate")}
+              className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none
+  "
+            >
+              Donate
+            </button>
             </div>
           )}
         </div>

@@ -21,6 +21,10 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "jsonb", select: true })
   public business!: any;
 
+
+  // @Column({ type: "uuid", select: true, default: null })
+  // public address_id!: string;
+
   @Column({ type: "jsonb", select: true, default: null })
   public address!: any;
 
@@ -59,5 +63,5 @@ export class OrderEntity extends BaseEntity {
     default: () => "CURRENT_TIMESTAMP",
     select: true,
   })
-  public deleted_at!: Date;
+  public deleted_at!: Date;
 }

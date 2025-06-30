@@ -23,7 +23,7 @@ const Header = ({ mobileNavsidebar, setMobileNavsidebar, user }: any) => {
       <div className="flex items-center gap-4 sm:gap-6">
         <UserMenu user={user} />
         <div className="flex items-center gap-2 sm:gap-3 pl-3 sm:pl-4 border-l border-green-200">
-          <Notifications />
+          {/* <Notifications /> */}
           <LogOutButton />
         </div>
       </div>

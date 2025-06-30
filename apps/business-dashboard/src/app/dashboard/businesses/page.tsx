@@ -78,11 +78,11 @@ export default function Restaurants() {
               >
                 <div className="relative h-48 overflow-hidden rounded-t-2xl">
                   <Image
-                    src={data.banner || "/assets/bannerbackground.png"}
+                    src={data.banner}
                     alt={data.name}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="33vw"
                     priority
                   />
                 </div>

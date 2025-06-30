@@ -161,4 +161,25 @@ export class BusinessController {
   public async fetchAllMyBusiness() {
     return await this.service.fetchAllMyBusiness();
   }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @ApiOperation({
+    description: "return all admin business",
+  })
+  @ApiOkResponse({
+    description: "return search business successfully",
+  })
+  @RoleAllowed(UserRoles["business-admin"])
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Get("/my-business")
+  public async fetchAll(
+    @User() user: UserMetaData
+  ) {
+    return await this.service.fetchAllMyBusiness1(user);
+  }
 }
