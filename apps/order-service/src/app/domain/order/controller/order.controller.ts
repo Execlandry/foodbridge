@@ -37,15 +37,10 @@ import {
   NO_ENTITY_FOUND,
   UNAUTHORIZED_REQUEST,
 } from "src/app/app.constants";
-import { OrderService } from "../services/order.service";
-import { Type } from "class-transformer";
-import {
-  CreatePaymentBodyDto,
-  UpdateByIdDto,
-  UpdateByIdQueryDto,
-} from "../dto/order.dto";
+import { CreatePaymentBodyDto, UpdateByIdDto } from "../dto/order.dto";
 import { User, UserMetaData } from "../../auth/guards/user";
 import { AccessTokenGuard } from "../../auth/guards/access_token.guard";
+import { OrderService } from "../services/order.service";
 
 @ApiBearerAuth("authorization")
 @Controller("order")
@@ -58,7 +53,7 @@ import { AccessTokenGuard } from "../../auth/guards/access_token.guard";
 @ApiTags("orders")
 export class OrderController {
   constructor(
-    private readonly service: OrderService,
+    private readonly orderService: OrderService,
     private readonly logger: Logger
   ) {}
 
@@ -74,20 +69,8 @@ export class OrderController {
     @User() user: UserMetaData,
     @Body() payload: CreatePaymentBodyDto
   ) {
-    console.log(user);
-    return await this.service.createOrder(user, payload);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @ApiConsumes("application/json")
-  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
-  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
-  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
-  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Get("/")
-  public async getLastProcessedOrder(@User() user: UserMetaData) {
-    return await this.service.getLasProcessedOrder(user);
+    // console.log(user);
+    return await this.orderService.createOrder(user, payload);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -98,13 +81,13 @@ export class OrderController {
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @UseGuards(AccessTokenGuard)
   @Patch("/:id")
+  @Get(":id/otp")
   public async confirmOrder(
     @User() user: UserMetaData,
-    @Param() param: UpdateByIdDto,
-    @Query() query: UpdateByIdQueryDto
+    @Param() param: UpdateByIdDto
+    // @Query() query: UpdateByIdQueryDto
   ) {
-    console.log(user);
-    return await this.service.confirmOrder(user, param, query);
+    return await this.orderService.getOrderOtp(param);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -114,8 +97,39 @@ export class OrderController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @UseGuards(AccessTokenGuard)
-  @Get("/test")
-  public async testRMQ(@User() user: UserMetaData) {
-    return await this.service.testRMQ();
+  @Get("/all")
+  public async get(
+    @User() user: UserMetaData
+    // @Query() query: UpdateByIdQueryDto
+  ) {
+    return await this.orderService.getAllOrders(user);
   }
+
+    @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @UseGuards(AccessTokenGuard)
+  @Get("/business/all")
+  public async getBusinessOrder(
+    @User() user: UserMetaData
+    // @Query() query: UpdateByIdQueryDto
+  ) {
+    return await this.orderService.getBusinessOrder(user);
+  }
+
+
+  // @HttpCode(HttpStatus.OK)
+  // @ApiConsumes("application/json")
+  // @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  // @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  // @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  // @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  // @UseGuards(AccessTokenGuard)
+  // @Get("/test")
+  // public async testRMQ(@User() user: UserMetaData) {
+  //   return await this.orderService.testRMQ();
+  // }
 }

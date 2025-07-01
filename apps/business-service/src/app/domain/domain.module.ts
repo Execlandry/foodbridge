@@ -27,11 +27,7 @@ import { DishController } from "./business/controller/dish.controller";
       BusinessAddressEntity,
     ]),
     DBModule.forRoot({
-      entities: [
-        BusinessAddressEntity,
-        BusinessEntity,
-        BusinessDishEntity,
-      ],
+      entities: [BusinessAddressEntity, BusinessEntity, BusinessDishEntity],
     }),
     TerminusModule,
     AppLoggerModule,

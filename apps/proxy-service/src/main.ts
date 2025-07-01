@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+// import { json } from 'express';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bodyParser: false });
   const globalPrefix = 'api';
+  // app.use(json());
   app.setGlobalPrefix(globalPrefix);
 
   app.use((req, _, next) => {
@@ -11,6 +13,25 @@ async function bootstrap() {
     next();
   });
 
+  app.use(
+    `/api/v1/user-service/*`,
+    createProxyMiddleware({
+      target: 'http://localhost:3002/api/v1/', // adjust to actual user-service port
+      pathRewrite: {
+        '^/api/v1/user-service': '', // strip prefix
+      },
+      changeOrigin: true,
+      secure: false,
+      selfHandleResponse: false, // ✅ Let proxy handle streaming
+      onProxyReq: (proxyReq, req, res) => {
+        console.log(
+          `[Proxy]: Forwarding ${req.method} ${
+            req.originalUrl
+          } → ${proxyReq.getHeader('host')}${proxyReq.path}`,
+        );
+      },
+    }),
+  );
   /*
   app.use(
     `/api/v1/auth-service/*`,
@@ -29,7 +50,7 @@ async function bootstrap() {
     }),
   );
 */
-  await app.listen(3001, () => {
+  await app.listen(3001, '0.0.0.0', () => {
     //console.log('Listening at http://localhost:' + 3001 + '/' + globalPrefix);
   });
 }

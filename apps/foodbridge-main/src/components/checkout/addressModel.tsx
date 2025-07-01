@@ -10,7 +10,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/core";
 
-export function AddressModel({isOpen, onClose}: any) {
+export function AddressModel({ isOpen, onClose }: any) {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>

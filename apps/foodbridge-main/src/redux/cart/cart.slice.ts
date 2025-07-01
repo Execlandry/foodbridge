@@ -13,7 +13,8 @@ interface CartState {
 }
 
 export const fetchCartItems = createAsyncThunk("fetch/cartItems", async () => {
-  return ExternalApis.fetchCart();
+  const test = ExternalApis.fetchCart();
+  return test;
 });
 
 export const addCartItems = createAsyncThunk(
@@ -29,6 +30,10 @@ export const removeCartItems = createAsyncThunk(
     return ExternalApis.removeCartItems(payload);
   }
 );
+
+export const EmptyCart = createAsyncThunk("fetch/removeCartItem", async () => {
+  return ExternalApis.EmptyCart();
+});
 
 const initialState = {
   cart: {

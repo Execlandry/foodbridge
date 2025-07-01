@@ -13,6 +13,7 @@ export class ReverseProxyAuthMiddleware implements NestMiddleware {
       '/api/v1/auth-service': '/',
     },
     secure: false,
+    selfHandleResponse: false,
     onProxyReq: (proxyReq, req, res) => {
       console.log(proxyReq);
       // console.log(

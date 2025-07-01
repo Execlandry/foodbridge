@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from "typeorm";
 import { BusinessDishEntity } from "./business.dish.entity";
 import { BusinessAddressEntity } from "./business.address.entity";
@@ -34,8 +35,8 @@ export class BusinessEntity extends BaseEntity {
   @Column({ type: "varchar", default: null })
   public cuisine!: string;
 
-  @Column({ type: "int", default: null })
-  public average_price!: number;
+  // @Column({ type: "int", default: null })
+  // public average_price!: number;
 
   @Column({ type: "int", default: null })
   public average_rating!: number;
@@ -55,11 +56,11 @@ export class BusinessEntity extends BaseEntity {
   @Column({ type: "varchar", default: null })
   public banner!: string;
 
-  @Column({ type: "varchar", default: null })
-  public delivery_options!: string;
+  // @Column({ type: "varchar", default: null })
+  // public delivery_options!: string;
 
-  @Column({ type: "varchar" })
-  public pickup_options!: string;
+  // @Column({ type: "varchar" })
+  // public pickup_options!: string;
 
   @Column({ type: "varchar" })
   public opens_at!: string;
@@ -70,8 +71,8 @@ export class BusinessEntity extends BaseEntity {
   @OneToMany(() => BusinessDishEntity, (event) => event.business)
   public dishes!: BusinessDishEntity[];
 
-  @OneToOne(() => BusinessAddressEntity)
-  address: BusinessAddressEntity;
+  @OneToOne(() => BusinessAddressEntity, (event) => event.business)
+  public address: BusinessAddressEntity;
 
   @CreateDateColumn({
     type: "timestamptz",

@@ -16,12 +16,20 @@ export class AccessTokenJwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: any) => {
-          console.log(request.cookies);
-          let data = request?.cookies["access_token"];
-          if (!data) {
-            return null;
+          // 1. Try Authorization Header
+          const authHeader = request?.headers?.authorization;
+          if (authHeader?.startsWith("Bearer ")) {
+            return authHeader.split(" ")[1];
           }
-          return data;
+
+          // 2. Try Cookie
+          const cookieToken = request?.cookies?.["access_token"];
+          if (cookieToken) {
+            return cookieToken;
+          }
+
+          // 3. Default to null
+          return null;
         },
       ]),
       secretOrKey: configService.get().auth.access_token_secret,

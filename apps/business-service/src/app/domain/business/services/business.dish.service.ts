@@ -66,7 +66,8 @@ export class BusinessDishService {
     const query = this.connection
       .getRepository(BusinessDishEntity)
       .createQueryBuilder("business_dishes")
-      .leftJoinAndSelect("business_dishes.business", "business");
+      .leftJoinAndSelect("business_dishes.business", "business")
+      .leftJoinAndSelect("business.address", "address");
 
     if (search_text) {
       query.andWhere(
@@ -112,9 +113,7 @@ export class BusinessDishService {
       where: { id },
     });
     if (!dish) {
-      throw new NotFoundException(
-        `business dish with this Id not found ${id}`
-      );
+      throw new NotFoundException(`business dish with this Id not found ${id}`);
     }
     return dish;
   }
@@ -162,7 +161,10 @@ export class BusinessDishService {
   ) {
     const { dish_id, id } = param;
 
-    await this.validateAuthorization(user, param);
+    // await this.validateAuthorization(user, param);
+    this.logger.log(
+      `value printed : ${JSON.stringify(param)} ${JSON.stringify(payload)}`
+    );
     const dish = await this.findDishById(dish_id);
     return await this.businessDishRepo.save({
       id: dish.id,
@@ -190,10 +192,7 @@ export class BusinessDishService {
     });
   }
 
-  async getAllDishByBusiness(
-    user: UserMetaData,
-    param: BusinessParamParamDto
-  ) {
+  async getAllDishByBusiness(user: UserMetaData, param: BusinessParamParamDto) {
     const { id } = param;
     const business = await this.businessRepo.findOne({
       where: { id },

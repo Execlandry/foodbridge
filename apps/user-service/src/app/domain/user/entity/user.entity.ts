@@ -6,8 +6,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
+  OneToOne,
 } from "typeorm";
 import { UserAddressEntity } from "./user.address.entity";
+import { DeliveryPartnerEntity } from "./delivery-partner.entity";
 
 @Entity("users")
 export class UserEntity extends BaseEntity {
@@ -43,6 +45,9 @@ export class UserEntity extends BaseEntity {
 
   @Column({ type: "jsonb", default: null })
   public passwordReset!: any;
+
+  @OneToOne(() => DeliveryPartnerEntity, (partner) => partner.user)
+  partnerProfile?: DeliveryPartnerEntity;
 
   @OneToMany(() => UserAddressEntity, (event) => event.user)
   public addresses!: UserAddressEntity[];

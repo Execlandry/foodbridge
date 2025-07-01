@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": ["leaflet", "leaflet-routing-machine"],
     "paths": {"react": ["./node_modules/@types/react"]},
     "allowJs": true,
     "skipLibCheck": true,

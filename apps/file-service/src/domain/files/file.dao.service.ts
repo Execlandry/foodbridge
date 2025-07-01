@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { FileData } from '@prisma/client';
-import { AWSS3Service } from '@fbe/aws-s3';
 import { AwsS3ClientService, InjectAwsS3Client } from '@fbe/aws-s3-dynamic';
 
 @Injectable()

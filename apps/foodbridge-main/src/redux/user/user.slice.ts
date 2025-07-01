@@ -16,14 +16,17 @@ export const fetchOrders = createAsyncThunk("fetch/fetchOrders", async () => {
   return ExternalApis.fetchCart();
 });
 
-export const fetchAddress = createAsyncThunk("fetch/fetchAddress", async () => {
-  return ExternalApis.fetchAddress();
-});
+export const fetchAddress = createAsyncThunk(
+  "fetch/fetchAddress",
+  async (userid: any) => {
+    return ExternalApis.fetchAddress(userid);
+  }
+);
 
 export const createAddress = createAsyncThunk(
   "fetch/CreateAddress",
   async (_arg: any) => {
-    return ExternalApis.createAddress(_arg);
+    return ExternalApis.createAddress(_arg.id, _arg.formdata);
   }
 );
 
@@ -61,7 +64,12 @@ export const UserSlice = createSlice({
       };
     },
     [createAddress.fulfilled.type]: (state: UserState, action: any) => {
-      state.addresses.data.push(action.payload);
+      const exists = state.addresses.data.find(
+        (addr: any) => addr.id === action.payload.id
+      );
+      if (!exists) {
+        state.addresses.data = [...state.addresses.data, action.payload];
+      }
     },
   },
 });

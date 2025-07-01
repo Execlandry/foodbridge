@@ -24,21 +24,17 @@ export enum filterType {
   "rating" = "rating",
   "delivery_time" = "delivery_time",
 }
+
 export enum OrderBy {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
 
-export enum mealType {
-  "breakfast" = "breakfast",
-  "lunch" = "lunch",
-  "dinner" = "dinner",
-}
-export enum cuisineType {
-  "indian" = "indian",
-  "north_indian" = "north_indian",
-  "italian" = "italian",
-  "chinese" = "chinese",
+export enum status {
+  "available" = "available",
+  "pending" = "pending",
+  "failed" = "failed",
+  "completed" = "completed",
 }
 
 export enum foodType {
@@ -141,7 +137,7 @@ export class CreateBusinessDishBodyDto {
   public name!: string;
 
   @ApiProperty({
-    description: "descriotion",
+    description: "description",
     example:
       "Paneer tikka or Paneer Soola or Chhena Soola is an Indian dish made from chunks of paneer/ chhena marinated in spices and grilled in a tandoor. It is a vegetarian alternative to chicken tikka and other meat dishes. It is a popular dish that is widely available in India and countries with an Indian diaspora",
     required: true,
@@ -149,33 +145,6 @@ export class CreateBusinessDishBodyDto {
   @IsOptional()
   @IsString()
   public description!: string;
-
-  @ApiProperty({
-    description: "cuisine_type",
-    required: true,
-    enum: cuisineType,
-    example: cuisineType.indian,
-  })
-  @IsEnum(cuisineType)
-  public cuisine_type!: string;
-
-  @ApiProperty({
-    description: "meal_type",
-    required: true,
-    enum: mealType,
-    example: mealType.breakfast,
-  })
-  @IsEnum(mealType)
-  public meal_type!: string;
-
-  @ApiProperty({
-    description: "category",
-    example: "category",
-    required: true,
-  })
-  @IsOptional()
-  @IsString()
-  public category!: string;
 
   @ApiProperty({
     description: "ingredients",
@@ -196,12 +165,58 @@ export class CreateBusinessDishBodyDto {
   public food_type!: string;
 
   @ApiProperty({
-    description: "price",
+    description: "quantity",
     example: 500,
     required: true,
   })
   @IsNumber()
-  public price!: number;
+  @IsDefined()
+  public quantity!: number;
+
+  @ApiProperty({
+    description: "quantity_unit",
+    example: "grams",
+    required: true,
+  })
+  @IsString()
+  @IsOptional()
+  public quantity_unit!: string;
+
+  @ApiProperty({
+    description: "posted_at",
+    example: "2025-04-30T00:00:00Z",
+    required: false,
+  })
+  @IsOptional()
+  @IsDateString()
+  public posted_at!: Date;
+
+  @ApiProperty({
+    description: "expires_at",
+    example: "2025-05-30T00:00:00Z",
+    required: false,
+  })
+  @IsOptional()
+  @IsDateString()
+  public expires_at!: Date;
+
+  @ApiProperty({
+    description: "notes",
+    example: "Contains dairy and nuts.",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  public notes!: string;
+
+  @ApiProperty({
+    description: "status",
+    required: true,
+    enum: status,
+    example: status.available,
+  })
+  @IsEnum(status)
+  public status!: string;
 
   @ApiProperty({
     description: "thumbnails",

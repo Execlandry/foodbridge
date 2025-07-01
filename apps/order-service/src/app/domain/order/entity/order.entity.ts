@@ -6,6 +6,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
+  Index,
 } from "typeorm";
 import { MenuItemBodyDto } from "../dto/order.dto";
 
@@ -17,30 +18,26 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "varchar", select: true })
   public user_id!: string;
 
-  @Column({ type: "uuid", select: true })
-  public business_id!: string;
-
   @Column({ type: "jsonb", select: true })
   public business!: any;
-
-  @Column({ type: "uuid", select: true, default: null })
-  public address_id!: string;
 
   @Column({ type: "jsonb", select: true, default: null })
   public address!: any;
 
-  @Column({ type: "varchar", default: "draft" })
-  public payment_status!: string;
-  // success and failure
+  @Column({ type: "boolean", default: false })
+  public request_for_driver!: boolean;
 
-  @Column({ type: "varchar", default: "draft" })
-  public order_status!: string;
-  // initiated, payment_processed, in_delivery, delivered, completed
+  @Column({ type: "varchar", select: true})
+  public amount!: string;
 
-  @Column({ type: "int", select: true })
-  public amount!: number;
+  @Column({ type: "varchar", length: 6, nullable: true })
+  public otp?: string;
 
-  @Column({ type: "jsonb", default: null })
+  //TODO::implement this for navigate pickup view
+  @Column({ type: "boolean", default: false })
+  public is_otp_verified?: string;
+
+  @Column({ type: "jsonb", select: true, default: null })
   public menu_items!: MenuItemBodyDto[];
 
   @CreateDateColumn({

@@ -42,33 +42,40 @@ export class CartService {
     let existingItems: MenuItemBodyDto[] = [];
     if (existingCart) {
       existingItems = existingCart.menu_items;
-      const isItemExists = existingItems.find(
-        (i) => i.id === payload.menu_item.id
-      );
-      if (!isItemExists) {
-        payload.menu_item.count = 1;
-        existingItems.push(payload.menu_item);
-      } else {
-        existingItems = existingItems.map((i) => {
-          if (i.id === payload.menu_item.id) {
-            i.count = i.count + 1;
-            return i;
-          }
-          return i;
-        });
-      }
-      existingCart.menu_items = existingItems;
-      return await existingCart.save();
-    } else {
-      payload.menu_item.count = 1;
+      // const isItemExists = existingItems.find(
+      //   (i) => i.id === payload.menu_item.id
+      // );
+      // if (!isItemExists) {
+      //   payload.menu_item.count = 1;
+      //   existingItems.push(payload.menu_item);
+      // } else {
+      //   existingItems = existingItems.map((i) => {
+      //     if (i.id === payload.menu_item.id) {
+      //       i.count = i.count + 1;
+      //       return i;
+      //     }
+      //     return i;
+      //   });
+      // }
+      // existingCart.menu_items = existingItems;
       existingItems.push(payload.menu_item);
-      return await this.cartRepo.save({
+      await existingCart.save();
+    } else {
+      // payload.menu_item.count = 1;
+      existingItems.push(payload.menu_item);
+      await this.cartRepo.save({
         user_id: user.userId,
         business_id: business_id,
         menu_items: existingItems,
         business: payload.business,
       });
     }
+    const FinalData = await this.cartRepo.find({
+      where: {
+        user_id: user.userId,
+      },
+    });
+    return FinalData;
   }
 
   async deleteCartMenuItem(
@@ -86,33 +93,34 @@ export class CartService {
     if (!existingCart) {
       throw new NotFoundException();
     } else {
-      const updatedMenuItems = existingCart.menu_items
-        .map((i) => {
-          if (i.id === menu_item.id) {
-            i.count = i.count - 1;
-            return i;
-          }
-          return i;
-        })
-        .filter((i) => i.count > 0);
-      existingCart.menu_items = updatedMenuItems;
-      return await existingCart.save();
+      existingCart.menu_items = existingCart.menu_items.filter(
+        (item) => item.id !== menu_item.id
+      );
+
+      await existingCart.save();
     }
-  }
-  async clearCartMenuItem(user: UserMetaData) {
-    const { userId } = user;
-    const item = await this.cartRepo.findOne({
+    const Newcart = await this.cartRepo.find({
       where: {
         user_id: userId,
       },
     });
-    await this.cartRepo.delete({ id: item.id });
+    return Newcart;
+  }
+
+  async clearCartMenuItem(user: UserMetaData) {
+    const { userId } = user;
+    const items = await this.cartRepo.find({
+      where: {
+        user_id: userId,
+      },
+    });
+    for (const item of items) await this.cartRepo.delete({ id: item.id });
     return null;
   }
 
   async listUserCart(user: UserMetaData) {
     const { userId } = user;
-    return await this.cartRepo.findOne({
+    return await this.cartRepo.find({
       where: {
         user_id: userId,
       },

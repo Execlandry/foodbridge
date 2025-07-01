@@ -23,6 +23,7 @@ import { UserMetaData } from "../../auth/guards/user";
 import { SearchService } from "../../search/search.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { groupBy } from "../../utility";
+import { ResponseError } from "@elastic/elasticsearch/lib/errors";
 
 @Injectable()
 export class BusinessService {
@@ -42,11 +43,9 @@ export class BusinessService {
     return await this.searchService.search(searchParam);
   }
 
-  public async fetchAllMyBusiness(user: UserMetaData) {
-    const { userId } = user;
+  public async fetchAllMyBusiness() {
     return await this.businessRepo.find({
-      where: { owner_id: userId },
-      relations: ["dishes"],
+      relations: ["dishes", "address"],
     });
   }
 
@@ -59,10 +58,13 @@ export class BusinessService {
     const address = await this.businessAddRepo.findOne({
       where: { business: { id } },
     });
+    const availabledishes = response.dishes.filter(
+      (dish) => dish.status == "available"
+    );
     const dishMenuItems = response.dishes;
-    const categories = groupBy(dishMenuItems, "category");
+    // const categories = groupBy(dishMenuItems, "category");
     response.address = address;
-    response.dishes = categories;
+    response.dishes = availabledishes;
     return response;
   }
 
@@ -98,10 +100,7 @@ export class BusinessService {
     }
   }
 
-  async validateAuthorization(
-    user: UserMetaData,
-    param: fetchBusinessByIdDto
-  ) {
+  async validateAuthorization(user: UserMetaData, param: fetchBusinessByIdDto) {
     const { id } = param;
     const business = await this.businessRepo.findOne({
       where: { id },

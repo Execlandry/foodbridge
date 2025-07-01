@@ -1,80 +1,160 @@
 "use client";
+
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {Business} from "@fbe/types";
+import { Business } from "@fbe/types";
 import { useEffect, useState } from "react";
-import Link from 'next/link'
+import { RestaurantPopup } from "@components/BusinessPopUp/BusinessPopUp";
+import Image from "next/image";
 
-export default function Index() {
+export default function Restaurants() {
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [businessData, setBusinessData] = useState({});
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const fetchBusiness = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/business");
+      const data = await res.json();
+      setBusinesses(data);
+    } catch (error) {
+      console.error("Failed to fetch businesses:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  const [businesses, setBusinesses] = useState([])
+  const selectRestaurant = (data: Business) => {
+    setBusinessData(data);
+    setIsPopupOpen(true);
+  };
 
-  const fetchBusiness = async () =>  {
-    const res = await fetch("/api/business");
-    const data = await res.json();
-    setBusinesses(data)
-  }
+  const openBusiness = (data: Business) => {
+    router.push(`/dashboard/businesses/${data.id}`);
+  };
 
   useEffect(() => {
     fetchBusiness();
-  }, [])
+  }, []);
 
-  const openBusiness = (data: any ) => {
-    router.push(`/dashboard/businesses/${data.id}`);
-  }
-
-
-  // list of businesses
-  return (
-    <div className="grid grid-cols-4 gap-2">
-      {businesses && businesses.map((data: Business ) => {
-        return (
-          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <a href="#">
-            <img
-              className="rounded-t-lg"
-              src="/docs/images/blog/image-1.jpg"
-              alt=""
-            />
-          </a>
-          <div className="p-5">
-            <a href="#">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {data.name}
-              </h5>
-            </a>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              {data.description}
-            </p>
-            <div onClick={() => openBusiness(data)}
-              className="inline-flex cursor-pointer items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Read more
-              <svg
-                className="w-3.5 h-3.5 ml-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </div>
-          </div>
+  const SkeletonCard = () => (
+    <div className="animate-pulse bg-white border border-green-100 rounded-2xl shadow-md">
+      <div className="h-48 bg-green-100/50 rounded-t-2xl"></div>
+      <div className="p-5 space-y-4">
+        <div className="h-6 bg-green-100 rounded w-3/4"></div>
+        <div className="space-y-2">
+          <div className="h-4 bg-green-100 rounded"></div>
+          <div className="h-4 bg-green-100 rounded w-5/6"></div>
         </div>
-        )
-      })}
-     
+        <div className="flex gap-3">
+          <div className="flex-1 h-10 bg-green-100 rounded-lg"></div>
+          <div className="flex-1 h-10 bg-green-100 rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-green-50/50 to-white py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl font-bold text-green-900 mb-8 tracking-tight">
+          Explore Restaurants
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          {isLoading ? (
+            Array(8)
+              .fill(0)
+              .map((_, index) => <SkeletonCard key={index} />)
+          ) : businesses.length > 0 ? (
+            businesses.map((data: Business) => (
+              <div
+                key={data.id}
+                className="group bg-white border border-green-100 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="relative h-48 overflow-hidden rounded-t-2xl">
+                  <Image
+                    src={data.banner || "/assets/bannerbackground.png"}
+                    alt={data.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-lg sm:text-xl font-semibold text-green-900 mb-2 truncate group-hover:text-green-600 transition-colors duration-300">
+                    {data.name}
+                  </h3>
+                  <p className="text-green-700/80 text-sm mb-4 line-clamp-2">
+                    {data.description || "No description available"}
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      onClick={() => openBusiness(data)}
+                      className="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-200 transition-colors duration-300"
+                    >
+                      View Dishes
+                      <svg
+                        className="w-4 h-4 ml-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 10"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M1 5h12m0 0L9 1m4 4L9 9"
+                        />
+                      </svg>
+                    </button>
+
+                    <button
+                      onClick={() => selectRestaurant(data)}
+                      className="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded-lg hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-200 transition-colors duration-300"
+                    >
+                      View Profile
+                      <svg
+                        className="w-4 h-4 ml-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 10"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M1 5h12m0 0L9 1m4 4L9 9"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-green-700/80 text-lg font-medium">
+                No restaurants found
+              </p>
+            </div>
+          )}
+        </div>
+
+        <RestaurantPopup
+          restaurant={businessData}
+          isOpen={isPopupOpen}
+          onClose={() => setIsPopupOpen(false)}
+        />
+      </div>
     </div>
   );
 }

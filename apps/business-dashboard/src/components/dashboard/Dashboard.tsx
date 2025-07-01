@@ -3,23 +3,28 @@
 import React from "react";
 
 const Dashboard = ({ user }: any) => {
-  console.log(user)
+  console.log(user);
   return (
-    <>
-      <main className="p-6 sm:p-10 space-y-6">
-        <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
-          <div className="mr-6">
-            <h1 className="text-4xl font-semibold mb-2">Dashboard</h1>
-            <h2 className="text-gray-600 ml-0.5">Mobile UX/UI Design course</h2>
+    <main className="p-4 sm:p-6 lg:p-8 bg-gradient-to-b from-green-50/50 to-white min-h-screen">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header Section */}
+        <div className="flex flex-col space-y-6 md:flex-row md:space-y-0 md:justify-between md:items-center">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-green-900 tracking-tight">
+              Dashboard
+            </h1>
+            <h2 className="text-green-700/80 text-sm sm:text-base mt-1">
+              FoodBridge Management Overview
+            </h2>
           </div>
-          <div className="flex flex-wrap items-start justify-end -mb-3">
-            <button className="inline-flex px-5 py-3 text-purple-600 hover:text-purple-700 focus:text-purple-700 hover:bg-purple-100 focus:bg-purple-100 border border-purple-600 rounded-md mb-3">
+          <div className="flex flex-wrap items-center justify-end gap-4">
+            <button className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-3 text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 border border-green-600 rounded-lg text-sm font-semibold transition-colors duration-300">
               <svg
                 aria-hidden="true"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                className="flex-shrink-0 h-5 w-5 -ml-1 mt-0.5 mr-2"
+                className="flex-shrink-0 h-5 w-5 -ml-1 mr-2"
               >
                 <path
                   strokeLinecap="round"
@@ -28,15 +33,15 @@ const Dashboard = ({ user }: any) => {
                   d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                 />
               </svg>
-              Manage dashboard
+              Manage Dashboard
             </button>
-            <button className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3">
+            <button className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-3 text-white bg-green-600 hover:bg-green-700 rounded-lg text-sm font-semibold transition-colors duration-300">
               <svg
                 aria-hidden="true"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                className="flex-shrink-0 h-6 w-6 text-white -ml-1 mr-2"
+                className="flex-shrink-0 h-5 w-5 -ml-1 mr-2"
               >
                 <path
                   strokeLinecap="round"
@@ -45,13 +50,15 @@ const Dashboard = ({ user }: any) => {
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
-              Create new dashboard
+              Create New Dashboard
             </button>
           </div>
         </div>
-        <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
-            <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-purple-600 bg-purple-100 rounded-full mr-6">
+
+        {/* Stats Section */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+          <div className="flex items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="inline-flex flex-shrink-0 items-center justify-center h-12 w-12 sm:h-14 sm:w-14 text-green-600 bg-green-100 rounded-full mr-4">
               <svg
                 aria-hidden="true"
                 fill="none"
@@ -68,12 +75,14 @@ const Dashboard = ({ user }: any) => {
               </svg>
             </div>
             <div>
-              <span className="block text-2xl font-bold">62</span>
-              <span className="block text-gray-500">Students</span>
+              <span className="block text-xl sm:text-2xl font-bold text-green-900">
+                62
+              </span>
+              <span className="block text-green-700/80 text-sm">Partners</span>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
-            <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
+          <div className="flex items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="inline-flex flex-shrink-0 items-center justify-center h-12 w-12 sm:h-14 sm:w-14 text-green-600 bg-green-100 rounded-full mr-4">
               <svg
                 aria-hidden="true"
                 fill="none"
@@ -90,12 +99,16 @@ const Dashboard = ({ user }: any) => {
               </svg>
             </div>
             <div>
-              <span className="block text-2xl font-bold">6.8</span>
-              <span className="block text-gray-500">Average mark</span>
+              <span className="block text-xl sm:text-2xl font-bold text-green-900">
+                6.8
+              </span>
+              <span className="block text-green-700/80 text-sm">
+                Average Rating
+              </span>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
-            <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
+          <div className="flex items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="inline-flex flex-shrink-0 items-center justify-center h-12 w-12 sm:h-14 sm:w-14 text-red-600 bg-red-100 rounded-full mr-4">
               <svg
                 aria-hidden="true"
                 fill="none"
@@ -112,17 +125,19 @@ const Dashboard = ({ user }: any) => {
               </svg>
             </div>
             <div>
-              <span className="inline-block text-2xl font-bold">9</span>
-              <span className="inline-block text-xl text-gray-500 font-semibold">
+              <span className="inline-block text-xl sm:text-2xl font-bold text-green-900">
+                9
+              </span>
+              <span className="inline-block text-lg text-green-700/80 font-semibold ml-2">
                 (14%)
               </span>
-              <span className="block text-gray-500">
-                Underperforming students
+              <span className="block text-green-700/80 text-sm">
+                Pending Deliveries
               </span>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
-            <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
+          <div className="flex items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="inline-flex flex-shrink-0 items-center justify-center h-12 w-12 sm:h-14 sm:w-14 text-green-600 bg-green-100 rounded-full mr-4">
               <svg
                 aria-hidden="true"
                 fill="none"
@@ -139,24 +154,30 @@ const Dashboard = ({ user }: any) => {
               </svg>
             </div>
             <div>
-              <span className="block text-2xl font-bold">83%</span>
-              <span className="block text-gray-500">Finished homeworks</span>
+              <span className="block text-xl sm:text-2xl font-bold text-green-900">
+                83%
+              </span>
+              <span className="block text-green-700/80 text-sm">
+                Completed Orders
+              </span>
             </div>
           </div>
         </section>
-        <section className="grid md:grid-cols-2 xl:grid-cols-4 xl:grid-rows-3 xl:grid-flow-col gap-6">
-          <div className="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow rounded-lg">
-            <div className="px-6 py-5 font-semibold border-b border-gray-100">
-              The number of applied and left students per month
+
+        {/* Charts and Lists Section */}
+        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:grid-rows-3 xl:grid-flow-col gap-4 sm:gap-6">
+          <div className="flex flex-col md:col-span-2 md:row-span-2 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="px-6 py-5 font-semibold text-green-900 border-b border-green-100">
+              Monthly Partner Activity
             </div>
             <div className="p-4 flex-grow">
-              <div className="flex items-center justify-center h-full px-4 py-16 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">
-                Chart
+              <div className="flex items-center justify-center h-full px-4 py-12 sm:py-16 text-green-600 text-xl sm:text-2xl font-semibold bg-green-50 border-2 border-green-100 border-dashed rounded-lg">
+                Activity Chart
               </div>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
-            <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-yellow-600 bg-yellow-100 rounded-full mr-6">
+          <div className="flex items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="inline-flex flex-shrink-0 items-center justify-center h-12 w-12 sm:h-14 sm:w-14 text-green-600 bg-green-100 rounded-full mr-4">
               <svg
                 aria-hidden="true"
                 fill="none"
@@ -178,12 +199,16 @@ const Dashboard = ({ user }: any) => {
               </svg>
             </div>
             <div>
-              <span className="block text-2xl font-bold">25</span>
-              <span className="block text-gray-500">Lections left</span>
+              <span className="block text-xl sm:text-2xl font-bold text-green-900">
+                25
+              </span>
+              <span className="block text-green-700/80 text-sm">
+                Pending Tasks
+              </span>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
-            <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-teal-600 bg-teal-100 rounded-full mr-6">
+          <div className="flex items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="inline-flex flex-shrink-0 items-center justify-center h-12 w-12 sm:h-14 sm:w-14 text-green-600 bg-green-100 rounded-full mr-4">
               <svg
                 aria-hidden="true"
                 fill="none"
@@ -195,24 +220,26 @@ const Dashboard = ({ user }: any) => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M12 8 decembrie 4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
             </div>
             <div>
-              <span className="block text-2xl font-bold">139</span>
-              <span className="block text-gray-500">
-                Hours spent on lections
+              <span className="block text-xl sm:text-2xl font-bold text-green-900">
+                139
+              </span>
+              <span className="block text-green-700/80 text-sm">
+                Hours on Operations
               </span>
             </div>
           </div>
 
-          <div className="row-span-3 bg-white shadow rounded-lg">
-            <div className="flex items-center justify-between px-6 py-5 font-semibold border-b border-gray-100">
-              <span>Students by average mark</span>
+          <div className="row-span-3 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="flex items-center justify-between px-6 py-5 font-semibold text-green-900 border-b border-green-100">
+              <span>Top Partners by Performance</span>
               <button
                 type="button"
-                className="inline-flex justify-center rounded-md px-1 -mr-1 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-600"
+                className="inline-flex items-center justify-center rounded-md px-2 py-1 bg-green-50 text-sm font-medium text-green-600 hover:text-green-700 hover:bg-green-100 transition-colors duration-300"
                 id="options-menu"
                 aria-haspopup="true"
                 aria-expanded="true"
@@ -231,106 +258,82 @@ const Dashboard = ({ user }: any) => {
                   />
                 </svg>
               </button>
-              {/* Refer here for full dropdown menu code: https://tailwindui.com/components/application-ui/elements/dropdowns */}
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: "24rem" }}>
-              <ul className="p-6 space-y-6">
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/women/82.jpg"
-                      alt="Annette Watson profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Annette Watson</span>
-                  <span className="ml-auto font-semibold">9.3</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/men/81.jpg"
-                      alt="Calvin Steward profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Calvin Steward</span>
-                  <span className="ml-auto font-semibold">8.9</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/men/80.jpg"
-                      alt="Ralph Richards profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Ralph Richards</span>
-                  <span className="ml-auto font-semibold">8.7</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/men/79.jpg"
-                      alt="Bernard Murphy profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Bernard Murphy</span>
-                  <span className="ml-auto font-semibold">8.2</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/women/78.jpg"
-                      alt="Arlene Robertson profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Arlene Robertson</span>
-                  <span className="ml-auto font-semibold">8.2</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/women/77.jpg"
-                      alt="Jane Lane profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Jane Lane</span>
-                  <span className="ml-auto font-semibold">8.1</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/men/76.jpg"
-                      alt="Pat Mckinney profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Pat Mckinney</span>
-                  <span className="ml-auto font-semibold">7.9</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/men/75.jpg"
-                      alt="Norman Walters profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Norman Walters</span>
-                  <span className="ml-auto font-semibold">7.7</span>
-                </li>
+              <ul className="p-6 space-y-4">
+                {[
+                  {
+                    name: "Annette Watson",
+                    score: 9.3,
+                    img: "https://randomuser.me/api/portraits/women/82.jpg",
+                  },
+                  {
+                    name: "Calvin Steward",
+                    score: 8.9,
+                    img: "https://randomuser.me/api/portraits/men/81.jpg",
+                  },
+                  {
+                    name: "Ralph Richards",
+                    score: 8.7,
+                    img: "https://randomuser.me/api/portraits/men/80.jpg",
+                  },
+                  {
+                    name: "Bernard Murphy",
+                    score: 8.2,
+                    img: "https://randomuser.me/api/portraits/men/79.jpg",
+                  },
+                  {
+                    name: "Arlene Robertson",
+                    score: 8.2,
+                    img: "https://randomuser.me/api/portraits/women/78.jpg",
+                  },
+                  {
+                    name: "Jane Lane",
+                    score: 8.1,
+                    img: "https://randomuser.me/api/portraits/women/77.jpg",
+                  },
+                  {
+                    name: "Pat Mckinney",
+                    score: 7.9,
+                    img: "https://randomuser.me/api/portraits/men/76.jpg",
+                  },
+                  {
+                    name: "Norman Walters",
+                    score: 7.7,
+                    img: "https://randomuser.me/api/portraits/men/75.jpg",
+                  },
+                ].map((partner, index) => (
+                  <li key={index} className="flex items-center">
+                    <div className="h-10 w-10 mr-3 bg-green-50 rounded-full overflow-hidden">
+                      <img
+                        src={partner.img}
+                        alt={`${partner.name} profile picture`}
+                      />
+                    </div>
+                    <span className="text-green-900 font-medium">
+                      {partner.name}
+                    </span>
+                    <span className="ml-auto font-semibold text-green-600">
+                      {partner.score}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
-          <div className="flex flex-col row-span-3 bg-white shadow rounded-lg">
-            <div className="px-6 py-5 font-semibold border-b border-gray-100">
-              Students by type of studying
+          <div className="flex flex-col row-span-3 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="px-6 py-5 font-semibold text-green-900 border-b border-green-100">
+              Partners by Activity Type
             </div>
             <div className="p-4 flex-grow">
-              <div className="flex items-center justify-center h-full px-4 py-24 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">
-                Chart
+              <div className="flex items-center justify-center h-full px-4 py-12 sm:py-24 text-green-600 text-xl sm:text-2xl font-semibold bg-green-50 border-2 border-green-100 border-dashed rounded-lg">
+                Activity Type Chart
               </div>
             </div>
           </div>
         </section>
-      </main>
-    </>
+      </div>
+    </main>
   );
 };
 

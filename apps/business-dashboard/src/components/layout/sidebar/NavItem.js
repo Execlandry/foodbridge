@@ -6,14 +6,17 @@ import React, { useEffect, useState } from "react";
 const NavItem = ({
   sidebarStatus,
   menuTitle,
-  subMenu,
-  subMenuArray,
-  hrefLink,
+  subMenu = false,
+  subMenuArray = [],
+  hrefLink = "#",
   children,
 }) => {
   const [subMenuToggleStatus, setSubMenuToggleStatus] = useState(false);
+
   const subMenuToggle = () => {
-    setSubMenuToggleStatus(!subMenuToggleStatus);
+    if (subMenu) {
+      setSubMenuToggleStatus((prev) => !prev);
+    }
   };
 
   useEffect(() => {
@@ -21,48 +24,49 @@ const NavItem = ({
       setSubMenuToggleStatus(false);
     }
   }, [sidebarStatus]);
-  //console.log('submenu', sidebarStatus)
+
   return (
-    <>
-      <Link href={hrefLink}>
-        <span
-          className="inline-flex items-center justify-between py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-3 cursor-pointer relative group"
+    <div>
+      <Link href={hrefLink} passHref>
+        <div
+          className={`flex items-center gap-3 py-3 px-4 rounded-lg cursor-pointer transition-colors duration-200 
+          ${sidebarStatus ? "justify-start" : "justify-center"} 
+          hover:bg-green-100 hover:text-green-800`}
           onClick={subMenuToggle}
         >
-          {children}
-          <span className={`${sidebarStatus ? "text-base ml-2" : "sr-only"}`}>
-            {menuTitle}
-          </span>
-          <span
-            className={`${
-              sidebarStatus ? "hidden" : "hidden group-hover:block"
-            } absolute left-0 -bottom-5 bg-yellow-500 text-white p-1 text-xs`}
-          >
-            {menuTitle}
-          </span>
-        </span>
+          {/* Icon */}
+          <span className="text-green-700">{children}</span>
+
+          {/* Menu Title */}
+          {sidebarStatus && (
+            <span className="text-sm font-medium">{menuTitle}</span>
+          )}
+
+          {/* Tooltip when sidebar collapsed */}
+          {!sidebarStatus && (
+            <span className="absolute left-full ml-2 bg-green-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 whitespace-nowrap">
+              {menuTitle}
+            </span>
+          )}
+        </div>
       </Link>
 
-      {/* Chile Menu */}
-      {subMenu && (
-        <ul
-          className={`${
-            subMenuToggleStatus ? "" : "hidden"
-          } text-white space-y-2 ml-7`}
-        >
-          {subMenuArray.map((subMenu, index) => (
-            <Link href={subMenu.linkHref} key={index}>
-              <li
-                className="cursor-pointer active:text-orange-400 hover:text-purple-500"
-                key={index}
+      {/* Submenu items */}
+      {subMenu && subMenuToggleStatus && (
+        <ul className="ml-6 mt-2 space-y-1 text-sm text-green-700">
+          {subMenuArray.map((item, idx) => (
+            <li key={idx}>
+              <Link
+                href={item.linkHref}
+                className="block px-3 py-1 rounded hover:text-white hover:bg-green-600 transition"
               >
-                {subMenu.subMenuTitle}
-              </li>
-            </Link>
+                {item.subMenuTitle}
+              </Link>
+            </li>
           ))}
         </ul>
       )}
-    </>
+    </div>
   );
 };
 

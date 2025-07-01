@@ -11,7 +11,9 @@ export const DEFAULT_CONFIG: ConfigData = {
     access_token_secret: "",
     refresh_token_secret: "",
   },
-  userServiceUrl: "",
+  userServiceUrl:
+    process.env.USER_SERVICE_URL ||
+    "http://localhost:3001/api/v1/user-service/",
   redis: {
     host: "localhost",
     port: 6379,

@@ -2,6 +2,7 @@
 /* eslint-disable no-useless-escape */
 
 // Package.
+import { Request, Response } from "express";
 import {
   Body,
   Controller,
@@ -12,7 +13,9 @@ import {
   Param,
   Patch,
   Post,
+  BadRequestException,
   Put,
+  RawBodyRequest,
   Query,
   Req,
   Res,
@@ -20,8 +23,11 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
+import Stripe from "stripe";
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiConsumes,
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -31,34 +37,25 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
 import { AccessTokenGuard } from "../auth/guards/access_token.guard";
-import { RoleAllowed } from "../auth/guards/role-decorator";
-import { RolesGuard } from "../auth/guards/role-guard";
 import {
-  FindUserDto,
-  GetPartnerAvailabulity,
-  GetPartnerbyId,
-  UpdateUserByIdDto,
-  UpdateUserPermissionBodyDto,
-  UserSignupDto,
-  fieldsToUpdateDto,
+  DeliveryPartnerSignupDto,
+  FullPartnerDetailsDto,
+  GetDeliveryPartnerAvailability,
+  GetDeliveryPartnerbyId,
+  PartnerResponseDto,
 } from "./dto/user-request.dto";
-import { UserSignupResponseDto } from "./dto/user-response.dto";
 import { UserService } from "./user.service";
-import { User } from "../auth/guards/user";
-import { UserEntity } from "./entity/user.entity";
-import {
-  NO_ENTITY_FOUND,
-  UNAUTHORIZED_REQUEST,
-  BAD_REQUEST,
-  INTERNAL_SERVER_ERROR,
-} from "src/app/app.constants";
+import { RolesGuard } from "../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
-
+import { RoleAllowed } from "../auth/guards/role-decorator";
+import { User, UserMetaData } from "../auth/guards/user";
+@ApiBearerAuth("authorization")
 @Controller("partners")
 @UsePipes(
   new ValidationPipe({
@@ -73,29 +70,105 @@ export class DeliveryPartnerController {
     private readonly logger: Logger
   ) {}
 
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: UserSignupResponseDto, description: "" })
-  @ApiOperation({ description: "return available delivery partner" })
-  @ApiConsumes("application/json")
-  @Get("")
-  public async fetchAvailablePartner() {
-    return this.service.fetchAvailablePartner();
-  }
-
-  @UseGuards(AccessTokenGuard)
+  @Post("register")
+  @ApiOperation({
+    summary: "Register delivery partners",
+    description: "Register a new delivery partner",
+  })
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
-    type: UserSignupResponseDto,
-    description: "partner profile updated successfully",
+    description: "Delivery partner registered successfully",
+    type: PartnerResponseDto,
   })
-  @ApiOkResponse({ type: UserSignupResponseDto, description: "" })
-  @ApiOperation({ description: "partner update api " })
+  @ApiBadRequestResponse({ description: "Invalid partner data" })
+  @ApiConflictResponse({ description: "Partner already exists" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
+  public async registerDeliveryPartner(@Body() body: DeliveryPartnerSignupDto) {
+    return this.service.registerDeliveryPartner(body);
+  }
+
+
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
+  @Post('refresh-onboarding-url')
+  @ApiBearerAuth()
+  public async refreshOnboardingUrl(
+    @User() user: UserMetaData) {
+    this.logger.log(`Incoming User Metadata: ${JSON.stringify(user, null, 2)}`);
+  return this.service.refreshOnboardingUrl(user.id);
+  }
+
+  // @UseGuards(AccessTokenGuard, RolesGuard)
+  // @RoleAllowed(UserRoles["delivery-partner"])
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: FullPartnerDetailsDto, description: "" })
+  @ApiOperation({
+    summary: "Get current available partner",
+    description: "return available delivery partner",
+  })
   @ApiConsumes("application/json")
-  @Put("/:id")
-  public async updatePartnerAvailabulity(
-    @Param() param: GetPartnerbyId,
-    @Body() body: GetPartnerAvailabulity
+  @Get(":id")
+  public async fetchRequestedPartnerDetails(
+    @Param() param: GetDeliveryPartnerbyId
   ) {
-    return this.service.updatePartnerAvailabulity(param, body);
+    return this.service.fetchRequestedPartnerDetails(param);
+  }
+
+  @Put(":id/availability")
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: PartnerResponseDto,
+    description: "Partner availability updated to true successfully",
+  })
+  public async updatePartnerAvailability(
+    @Param() param: GetDeliveryPartnerbyId,
+    @Body() body: GetDeliveryPartnerAvailability
+  ) {
+    return this.service.updatePartnerAvailability(param, body);
+  }
+
+  @Put(":id/release")
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: PartnerResponseDto,
+    description: "Partner availability updated to false successfully",
+  })
+  async updateReleasePartnerAvailability(
+    @Param() param: GetDeliveryPartnerbyId,
+    @Body() body: GetDeliveryPartnerAvailability
+  ) {
+    return this.service.updateReleasePartnerAvailability(param, body);
+  }
+
+  @Post("webhook")
+  @HttpCode(HttpStatus.OK)
+  async handleWebhook(@Req() req: Request, @Res() res: Response) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2023-08-16",
+    });
+    const signature = req.headers["stripe-signature"] as string;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const rawBody = (req as any).rawBody;
+
+    if (!rawBody) {
+      return res.status(400).send("Raw body missing");
+    }
+
+    try {
+      const event = stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        webhookSecret
+      );
+      // ... call your service
+      console.log(`from  webhook 1${event}`)
+
+      await this.service.handleStripeWebhook(event);
+      res.send({ received: true });
+    } catch (err) {
+      console.log(`from  webhook 2${err}`)
+      this.logger.error(`Webhook Error: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
   }
 }

@@ -6,97 +6,98 @@ import {
   CollectionIcon,
   DuplicateIcon,
   FilmIcon,
+  LocationMarkerIcon,
+  ClockIcon,
+  CogIcon,
 } from "@heroicons/react/solid";
 import React, { useEffect, useState } from "react";
 import NavItem from "./NavItem";
 
 const Nav = ({ sidebarOutsideClick }) => {
-  const [sidebarStatus, setSidebarStatus] = useState(false);
-  const [subMenuToggleStatus, setSubMenuToggleStatus] = useState(false);
-
-  const sidebarClose = () => {
-    setSidebarStatus(false);
-  };
-
-  const sidebarOpen = () => {
-    setSidebarStatus(true);
-  };
-
-  const subMenuToggle = () => {
-    setSubMenuToggleStatus(!subMenuToggleStatus);
-  };
-
-  //if menu has chile menu then  use seperate array
-  const childMenu = [
-    {
-      subMenuTitle: "child One",
-      linkHref: "/",
-    },
-    {
-      subMenuTitle: "child Two",
-      linkHref: "/",
-    },
-    {
-      subMenuTitle: "child Three",
-      linkHref: "/",
-    },
-  ];
+  const [sidebarStatus, setSidebarStatus] = useState(true);
 
   useEffect(() => {
     if (sidebarOutsideClick) {
       setSidebarStatus(false);
     }
   }, [sidebarOutsideClick]);
-  //console.log("sidebar Nav", sidebarOutsideClick)
+
   return (
-    <>
-      <nav className="flex flex-col mx-4 my-6 space-y-4">
-        <div className="inline-flex items-center justify-center ">
+    <nav
+      className={`h-full bg-green-50/50 transition-all duration-300 ${
+        sidebarStatus ? "w-64" : "w-16"
+      }`}
+    >
+      <div className="flex flex-col h-full px-3 py-6 space-y-2">
+        {/* Toggle button */}
+        <div className="flex justify-end">
           {sidebarStatus ? (
-            <ArrowNarrowLeftIcon
-              className="inline-block h-12 cursor-pointer"
-              onClick={sidebarClose}
-            />
+            <button
+              className="p-1 rounded-full hover:bg-green-100 transition-colors duration-300"
+              onClick={() => setSidebarStatus(false)}
+            >
+              <ArrowNarrowLeftIcon className="h-5 w-5 text-green-600 hover:text-green-700 transition-transform duration-300" />
+            </button>
           ) : (
-            <ArrowNarrowRightIcon
-              className="inline-block h-12 cursor-pointer"
-              onClick={sidebarOpen}
-            />
+            <button
+              className="p-1 rounded-full hover:bg-green-100 transition-colors duration-300"
+              onClick={() => setSidebarStatus(true)}
+            >
+              <ArrowNarrowRightIcon className="h-5 w-5 text-green-600 hover:text-green-700 transition-transform duration-300" />
+            </button>
           )}
         </div>
 
+        {/* Navigation items */}
         <NavItem
           hrefLink="/dashboard/businesses"
           sidebarStatus={sidebarStatus}
-          menuTitle="Business"
-          subMenu={false}
-          subMenuArray={null}
+          menuTitle="Businesses"
         >
-          <CollectionIcon className="h-10" />
+          <CollectionIcon className="h-5 w-5 text-green-600 group-hover:text-green-700 transition-colors duration-300" />
         </NavItem>
 
         <NavItem
           hrefLink="/dashboard/orders"
           sidebarStatus={sidebarStatus}
           menuTitle="Orders"
-          subMenu={false}
-          subMenuArray={null}
         >
-          <DuplicateIcon className="h-10" />
+          <DuplicateIcon className="h-5 w-5 text-green-600 group-hover:text-green-700 transition-colors duration-300" />
         </NavItem>
 
-        {/* this menu has child Menu     */}
         <NavItem
           hrefLink="/dashboard/payments"
           sidebarStatus={sidebarStatus}
           menuTitle="Payments"
-          subMenu={true}
-          subMenuArray={childMenu}
         >
-          <FilmIcon className="h-10" />
+          <FilmIcon className="h-5 w-5 text-green-600 group-hover:text-green-700 transition-colors duration-300" />
         </NavItem>
-      </nav>
-    </>
+
+        <NavItem
+          hrefLink="/dashboard/livetracking"
+          sidebarStatus={sidebarStatus}
+          menuTitle="Live Tracking"
+        >
+          <LocationMarkerIcon className="h-5 w-5 text-green-600 group-hover:text-green-700 transition-colors duration-300" />
+        </NavItem>
+
+        <NavItem
+          hrefLink="/dashboard/pasthistory"
+          sidebarStatus={sidebarStatus}
+          menuTitle="Past History"
+        >
+          <ClockIcon className="h-5 w-5 text-green-600 group-hover:text-green-700 transition-colors duration-300" />
+        </NavItem>
+
+        <NavItem
+          hrefLink="/dashboard/usersettings"
+          sidebarStatus={sidebarStatus}
+          menuTitle="User Settings"
+        >
+          <CogIcon className="h-5 w-5 text-green-600 group-hover:text-green-700 transition-colors duration-300" />
+        </NavItem>
+      </div>
+    </nav>
   );
 };
 

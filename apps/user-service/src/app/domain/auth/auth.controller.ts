@@ -34,7 +34,7 @@ import {
 } from "@nestjs/swagger";
 import { Logger } from "@fbe/logger";
 import { AuthService } from "./auth.service";
-import { UserSigInDto } from "./dto/auth-request.dto";
+import { UserSignInDto } from "./dto/auth-request.dto";
 import { UserSignInResponseDto } from "./dto/auth-response.dto";
 import { RefreshTokenGuard } from "./guards/refresh_token.guard";
 import { AccessTokenGuard } from "./guards/access_token.guard";
@@ -70,7 +70,7 @@ export class AuthController {
   @ApiConsumes("application/json")
   @Post("/login")
   public async CreateUser(
-    @Body() body: UserSigInDto,
+    @Body() body: UserSignInDto,
     @Request() req,
     @Response() res
   ) {

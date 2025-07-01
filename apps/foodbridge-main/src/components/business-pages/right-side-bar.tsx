@@ -1,237 +1,208 @@
-import { BellIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline'
-import React, { useContext, useEffect, useState } from 'react'
-import dummyData from '../utils/dummyData';
-import { useDispatch, useSelector } from 'react-redux';
-import { CartItemsSelector, addCartItems, fetchCartItems, removeCartItems } from '../../redux/cart/cart.slice';
-import useAuth from '../../hooks/use-auth';
-import { UserContext, UserContextType } from '../../hooks/user-context';
-import {  useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  BellIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/outline";
+import { CartItemsSelector, fetchCartItems } from "../../redux/cart/cart.slice";
+import useAuth from "../../hooks/use-auth";
+import { UserContext, UserContextType } from "../../hooks/user-context";
 
-export const cartData = [
-  {
-    food_id: 2,
-    name: "Crispy Baked French Fries",
-    description: "Crispy Baked French Fries",
-    price: 8,
-    food_image: "https://images.pexels.com/photos/4393021/pexels-photo-4393021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    quantity: 1,
-  },
-  {
-    food_id: 3,
-    name: "Chicken Burger with Honey Mustard",
-    description: "Crispy Chicken Burger with Honey Mustard Coleslaw",
-    price: 25,
-    food_image: "https://images.pexels.com/photos/4393021/pexels-photo-4393021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    quantity: 2,
-  },
-  {
-    food_id: 3,
-    name: "Chicken Burger with Honey Mustard",
-    description: "Crispy Chicken Burger with Honey Mustard Coleslaw",
-    price: 25,
-    food_image: "https://images.pexels.com/photos/4393021/pexels-photo-4393021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    quantity: 2,
-  },
-];
-
-function RightSideBar() {
-  const dispatch = useDispatch()
-  const { logoutUser } = useAuth();
-  const { data } = useSelector(CartItemsSelector)
-  const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext) as UserContextType;
-  
-  const goTo = () => {
-    navigate('/fbe/checkout');
-  }
-  useEffect(() => {
-     dispatch(fetchCartItems())
-  }, [])
-  /*Order menu UI*/
-  function OrderMenu() {
-    // const { cart } = data;
-
-    function CartCard({ ...props }) {
-      const { cart_item } = props;
-      return (
-
-        <div className="shadow-2xl flex flex-row rounded-2xl bg-white mt-3">
-
-          <div className="flex flex-row justify-between items-center mb-3 ml-3">
-
-            {/* left side */}
-            <div className="flex flex-row mt-3">
-
-              <div className="h-16 w-16 bg-cyan-100 rounded-xl flex items-center justify-center">
-                <img src={cart_item?.thumbnails} alt={cart_item?.thumbnails} className="w-12 h-12 rounded-full" />
-
-              </div>
-
-              <div className="flex flex-col w-44 ml-3">
-                <label className="font-bold text-sm truncate">{cart_item?.name}</label>
-
-                <div>
-                  <label className="text-sm ml-1">{cart_item?.count}</label>
-                  <label className=" text-orange-500 text-xs">x</label>
-                  <label className="text-sm ml-1">{cart_item?.price}</label>
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* right side */}
-            <div>
-              <label className=" text-orange-500 font-bold text-xs">$</label>
-              <label className="font-bold text-md ml-1">{(Number(cart_item?.price) *  Number(cart_item?.count))}</label>
-            </div>
-          </div>
-
-        </div>
-      )
-    }
-
-    return (
-      <div className="mt-20 ml-2 mr-2">
-
-        <div className="justify-between flex-row flex">
-
-          <p className="text-lg font-bold">Order Menu</p>
-
-          <button className="h-10 items-center justify-center flex align-baseline">
-
-            <p className="text-xs text-orange-400">View All</p>
-
-            <div className="bg-orange-400 h-4 w-4 justify-center items-center rounded-md ml-3 flex">
-              <ChevronRightIcon className="h-2 w-2 text-white" />
-            </div>
-
-          </button>
-
-
-        </div>
-
-        {/* list cart items */}
-        <div className="mt-2">
-          {data && data.menu_items?.map((cart_item: any, index: number) => {
-            return (
-              <CartCard key={index} cart_item={cart_item} />
-            )
-          })}
-        </div>
-
-        {/* checkout button */}
-
-        <div className="flex flex-row justify-center mt-10 mb-10">
-          <button onClick={() => goTo()} className="text-white flex  mt-3
-           bg-gradient-to-r bg-transparent from-orange-300 to-orange-500
-           rounded-3xl items-center justify-center text-center">
-
-            <label className="ml-20 mr-20 mt-3 mb-3">Checkout</label>
-
-          </button>
-        </div>
-
-
-      </div>
-    )
-  }
-    /**mini navbar UI*/
-    function MiniNavBar() {
-  
-      return (
-        <>
-          {/* Notification icon and user profile */}
-          <div className="mt-10 flex flex-row justify-end">
-  
-            {/* notification icon */}
-            <div className="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center">
-              <BellIcon className="h-5 w-5 text-gray-400" />
-  
-              <div
-                className="bg-orange-400 4-3 w-4 justify-center items-center rounded-full flex -ml-3 -mt-3">
-                <label className=" text-white text-xs">4</label>
-  
-              </div>
-            </div>
-  
-            {/* user profile */}
-            {user && <div className="ml-6 mr-5 flex items-center">
-              <div className="ml-3 flex-col flex">
-                <label className="text-md font-semibold">{user?.email}</label>
-                <label className="text-sm text-gray-400">{user?.name}</label>
-              </div>
-              <ChevronDownIcon className="h-4 w-4 ml-3" />
-  
-            </div>
-             } 
-  
-          </div>
-        </>
-      )
-    }
-
-    function Message () {
-      return (
-        <div className='width-[10%]  flex flex-row justify-end'>
-        <div className=' border  bg-white p-8'>
-          <input
-            className='font-extralight w-full  bg-gray-100 h-8 p-2'
-            type='text'
-            name=''
-            id=''
-            placeholder='“Any suggestions? We will pass it on...'
-          />
-          <br />
-          <br />
-    
-          <br />
-          <button className='h-10 p-2 w-full border-dashed border-2 border-gray-300 hover:bg-gray-200'>
-            Apply Coupon
-          </button>
-          <br />
-          <br />
-
-          <div className='col font-medium mb-2'>
-            <h2>Bill Details</h2>
-          </div>
-
-          <div className='col text-xs font-medium p-1'>Item Total</div>
-
-          <div className='col  text-xs font-medium pb-2'>Delivery Fee 🛈</div>
-          <hr className='border border-gray-300' />
-
-          <div className=' text-sm font-extralight pb-3 pt-3 '>
-            Govt Taxes & Business Charges 🛈
-          </div>
-          <hr style={{ border: "1px solid black" }} />
-          <div className='flex justify-between p-2'>
-            <div className='  font-semibold '>TO PAY</div>
-            ₹{" "}
-            {(data.menu_items?.length > 0 &&
-              data.menu_items?.reduce(
-                (acc: any, val: any) => acc + (val.price * val.count),
-                0
-              )) ||
-              0}
-          </div>
-        </div>
-      </div>
-      )
-    }
-  
-
-  return (
-    <div className="bg-white font-mono flex-col  inset-y-0 right-0 fixed overflow-auto shadow-md">
-
-      {MiniNavBar()}
-      {/* render Order Menu */}
-      {OrderMenu()}
-
-      {Message()}
-
-    </div>
-  )
+interface RightSideBarProps {
+  isOpen: boolean;
+  toggleSidebar: () => void;
 }
 
-export default RightSideBar
+function RightSideBar({ isOpen, toggleSidebar }: RightSideBarProps) {
+  const dispatch = useDispatch();
+  const { logoutUser } = useAuth();
+  const { data } = useSelector(CartItemsSelector);
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext) as UserContextType;
+
+  useEffect(() => {
+    dispatch(fetchCartItems());
+  }, [dispatch]);
+
+  const goToCheckout = () => navigate("/fbe/checkout");
+
+  // Mini Navbar UI
+  function MiniNavBar() {
+    return (
+      <div className="p-4 bg-white border-b border-gray-100 sticky top-0 z-10">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={toggleSidebar}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+            aria-label="Toggle sidebar"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className={`w-5 h-5 text-gray-600 transition-transform duration-300 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d={isOpen ? "M6 18L18 6M6 6l12 12" : "M3 12h18M3 6h18M3 18h18"}
+              />
+            </svg>
+          </button>
+          <div className="flex items-center space-x-4">
+            {/* <div className="relative group">
+              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 relative">
+                <BellIcon className="h-5 w-5 text-gray-600" />
+                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-medium rounded-full h-4 w-4 flex items-center justify-center ring-2 ring-white transition-transform group-hover:scale-110">
+                  4
+                </span>
+              </button>
+            </div> */}
+            {user && (
+              <div className="flex items-center space-x-2 group cursor-pointer">
+                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-medium">
+                  
+                </div>
+                {/* <img src={user.picture_url} alt="" /> */}
+                <div className="hidden md:flex flex-col">
+                  <span className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
+                    {user.email}
+                  </span>
+                  <span className="text-xs text-gray-500">{user.name}</span>
+                </div>
+                <ChevronDownIcon className="h-4 w-4 text-gray-500 group-hover:text-green-600 transition-colors duration-200" />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Order Menu UI
+  function OrderMenu() {
+    // console.log("data",data)
+    const CartCard = ({ cart_item }: { cart_item: any }) => (
+      <div className="bg-white rounded-xl p-4 flex items-center justify-between border border-gray-100 hover:border-green-100 transition-all duration-300 group">
+        <div className="flex items-center space-x-4 flex-1">
+          <div className="w-12 h-12 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
+            <img
+              src={cart_item?.thumbnails}
+              alt={cart_item?.name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 truncate">
+              {cart_item?.name}
+            </p>
+            {/* <p className="text-xs text-gray-500 mt-1">
+              {cart_item?.count} <span className="text-green-600">×</span> ${Number(cart_item?.price).toFixed(2)}
+            </p> */}
+          </div>
+        </div>
+        {/* <p className="text-sm font-semibold text-green-600 pl-4">
+          ${(Number(cart_item?.price) * Number(cart_item?.count)).toFixed(2)}
+        </p> */}
+      </div>
+    );
+
+    return (
+      <div className="p-4 flex-1 overflow-y-auto">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">Your Order</h2>
+          {/* <button className="flex items-center text-sm text-green-600 hover:text-green-700 transition-colors duration-200">
+            View All
+            <ChevronRightIcon className="h-4 w-4 ml-1" />
+          </button> */}
+        </div>
+        <div className="space-y-3">
+          {data?.length > 0 ? (
+            data.map((item: any, idx: number) =>
+              item.menu_items?.map((cart_item: any, index: number) => (
+                <CartCard key={`${idx}-${index}`} cart_item={cart_item} />
+              ))
+            )
+          ) : (
+            <div className="text-center py-8 text-gray-500 text-sm">
+              Your cart is empty
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Message/Bill Details UI
+  function Message() {
+
+    return (
+      <div className="p-4 bg-gray-50 border-t border-gray-100 sticky bottom-0">
+        <div className="space-y-4">
+          {/* <input
+            type="text"
+            placeholder="Any suggestions? We’ll pass it on..."
+            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200"
+          /> */}
+          {/* <button className="w-full py-2 border-2 border-dashed border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/20">
+            Apply Coupon
+          </button>
+          <div className="bg-white rounded-xl p-4 border border-gray-100">
+            <h3 className="text-base font-semibold text-gray-900 mb-3">Bill Summary</h3>
+            <div className="space-y-2 text-sm text-gray-600">
+              <div className="flex justify-between">
+                <span>Item Total</span>
+                <span className="font-medium">${total.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Delivery Fee</span>
+                <span className="font-medium text-green-600">Free</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Taxes & Charges</span>
+                <span className="font-medium">$0.00</span>
+              </div>
+              <hr className="my-2 border-gray-100" />
+              <div className="flex justify-between text-base">
+                <span className="font-semibold text-gray-900">Total</span>
+                <span className="font-semibold text-green-600">${total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div> */}
+          <button
+            onClick={goToCheckout}
+            className="w-full py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 focus:outline-none transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={!data}
+          >
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-white shadow-lg flex flex-col z-50 transition-transform duration-300 ease-in-out ${
+        isOpen ? "translate-x-0" : "translate-x-full"
+      }`}
+    >
+      <MiniNavBar />
+      {isOpen && (
+        <>
+          <OrderMenu />
+          <Message />
+        </>
+      )}
+    </div>
+  );
+}
+
+export default RightSideBar;

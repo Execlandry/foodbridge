@@ -8,6 +8,56 @@ export default function useAuth() {
   const { setUser } = useContext(UserContext) as UserContextType;
   const [error, setError] = useState(null);
 
+  const signupUser = async (data: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    name: string;
+    password: string;
+    picture_url: string;
+    mobno: string;
+  }) => {
+    const { email, name, first_name, last_name, password, picture_url, mobno } =
+      data;
+    console.log(data);
+    try {
+      const response = await axios.post(
+        "/api/v1/auth-service/users",
+        {
+          name,
+          email,
+          first_name,
+          last_name,
+          password,
+          picture_url,
+          mobno,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      // setUser({
+      //   id: response.data.id,
+      //   email: response.data.email,
+      //   first_name: response.data.first_name,
+      //   last_name: response.data.last_name,
+      //   created_at: response.data.created_at,
+      //   updated_at: response.data.updated_at,
+      // });
+      // navigate("/fbe/business");
+      return response.data;
+    } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.message || err.message || "Signup failed";
+      setError(errorMessage);
+      console.error("Signup failed:", err.response?.data || err);
+      throw new Error(errorMessage);
+    }
+  };
+
   const registerUser = async (data: any) => {
     const { username, email, password, passwordConfirm } = data;
     return axios
@@ -24,17 +74,19 @@ export default function useAuth() {
         setError(err.response.data);
       });
   };
+
   const setUserContext = async () => {
     return await axios
       .get("/api/v1/auth-service/users/profile")
       .then((res: any) => {
         setUser(res.data);
-        navigate("/");
+        navigate("/fbe/business");
       })
       .catch((err: any) => {
         setError(err.response.data);
       });
   };
+
   const loginUser = async (data: { email: string; password: string }) => {
     const { email, password } = data;
     return axios
@@ -46,6 +98,7 @@ export default function useAuth() {
         setError(err.response.data);
       });
   };
+
   const logoutUser = async () => {
     setUser(null);
     return axios
@@ -57,7 +110,9 @@ export default function useAuth() {
         setError(err.response.data);
       });
   };
+
   return {
+    signupUser,
     loginUser,
     registerUser,
     logoutUser,

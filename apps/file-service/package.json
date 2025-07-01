@@ -20,7 +20,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@fbe/aws-s3": "workspace:^",
     "@fbe/aws-s3-dynamic": "workspace:^",
     "@fbe/config": "^1.0.3",
     "@fbe/logger": "^1.0.0",

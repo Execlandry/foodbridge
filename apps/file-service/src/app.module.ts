@@ -5,7 +5,6 @@ import { FileModule } from './domain/files/file.module';
 import { PrismaModule } from './domain/prisma/prisma.module';
 import { AuthModule } from './domain/auth/auth.module';
 import { DomainModule } from './domain/domain.module';
-import { AWSS3Module } from '@fbe/aws-s3';
 import { ConfigModule, ConfigService } from '@fbe/config';
 import { AwsS3ClientModule } from '@fbe/aws-s3-dynamic';
 
