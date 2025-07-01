@@ -157,12 +157,12 @@ export class CreatePaymentBodyDto {
   public delivery_partner_id!: string;
 
   @ApiProperty({
-    description: "delivery_acc_id",
+    description: "stripe_payment_intent_id",
     example: "acct_1RNz2p4DDu1hL5FF",
     required: true,
   })
   @IsString()
-  public delivery_acc_id!: string;
+  public stripe_payment_intent_id!: string;
 
   @ApiProperty({
     description: "menu_item object",

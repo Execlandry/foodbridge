@@ -1,4 +1,4 @@
-import { IsNumber } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class LocationDto {
@@ -9,4 +9,10 @@ export class LocationDto {
   @ApiProperty({ example: 74.124 })
   @IsNumber()
   lng: number;
+}
+
+export class VerifyOtpDto {
+  @ApiProperty({ example: 122333 })
+  @IsString()
+  otp: string;
 }

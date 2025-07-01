@@ -97,9 +97,10 @@ function Home() {
   const [filterAvailable, setFilterAvailable] = useState<string[]>([]);
   const [groupedDishes, setGroupedDishes] = useState<GroupedDishes>({});
   const [expiredDishes, setExpiredDishes] = useState<Set<string>>(new Set());
+  const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
   useEffect(() => {
-    if (user?.permissions === "business-admin") {
+    if (user?.permissions == "business-admin") {
       navigate("/signin");
       return;
     }
@@ -114,13 +115,10 @@ function Home() {
 
   useEffect(() => {
     const checkForAvailability = () => {
-      console.log("cartData", cartData);
-      console.log("filterAvailable", filterAvailable);
       if (cartData && Array.isArray(cartData)) {
         cartData.forEach((cart: CartItem) => {
           if (cart.menu_items && Array.isArray(cart.menu_items)) {
             cart.menu_items.forEach((item: MenuItem) => {
-              // Remove item if it's not in the available list OR its status is not "available"
               if (!filterAvailable.includes(item.id?.toString()) || item.status !== "available") {
                 dispatch(
                   removeCartItems({
@@ -143,9 +141,7 @@ function Home() {
       }
     };
 
-    // if (filterAvailable.length > 0) {
-      checkForAvailability();
-    // }
+    checkForAvailability();
   }, [cartData, filterAvailable, dispatch]);
 
   useEffect(() => {
@@ -156,39 +152,31 @@ function Home() {
       const expiredIds = new Set<string>();
 
       dishesData.foodHolder.forEach((dish: Dish) => {
-        // Skip if dish is undefined or doesn't have required properties
         if (!dish || typeof dish !== 'object') return;
         
-        // Skip dishes that are expired
         if (dish.expires_at && new Date() > new Date(dish.expires_at)) {
           if (dish.id) expiredIds.add(dish.id.toString());
           return;
         }
         
-        // Skip dishes that don't have an available status
         if (dish.status !== "available") {
           return;
         }
 
-        // Skip if business_id is missing
         const businessId = dish.business_id?.toString();
         if (!businessId || !dish.business) return;
         
-        // Initialize business group if it doesn't exist
         if (!grouped[businessId]) {
           grouped[businessId] = { business: dish.business, dishes: [] };
         }
         
-        // Add dish to the group
         grouped[businessId].dishes.push(dish);
         if (dish.id) filterAvailableIds.push(dish.id.toString());
       });
 
       setFilterAvailable(filterAvailableIds);
       setExpiredDishes(expiredIds);
-      
 
-      // Sort businesses by distance if address is available
       if (addresses?.[0]?.lat && addresses?.[0]?.long) {
         const reference = addresses[0];
         const sortedKeys = Object.keys(grouped).sort((a, b) => {
@@ -230,7 +218,6 @@ function Home() {
     setGroupedDishes(groupDishesByBusiness());
   }, [dishesData, addresses]);
 
-  // Handle expired dishes separately
   useEffect(() => {
     if (expiredDishes.size > 0 && dishesData?.foodHolder) {
       expiredDishes.forEach(dishId => {
@@ -248,9 +235,6 @@ function Home() {
     }
     return Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lon2 - lon1, 2));
   };
-
-
-  // let groupedDishes = groupDishesByBusiness();
 
   useEffect(() => {
     const cartDishIds: string[] = [];
@@ -305,7 +289,10 @@ function Home() {
     );
   };
 
-  // Top Section UI
+  const handleDishClick = (dish: Dish) => {
+    setSelectedDish(dish);
+  };
+
   function TopSection() {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -349,16 +336,13 @@ function Home() {
     );
   }
 
-  // Business and Dishes UI
   function BusinessesAndDishes() {
-    // Filter businesses by search term AND ensure they have available dishes to display
+    
     const filteredBusinesses = businessesData?.filter((business: Business) => {
       if (!business) return false;
       
-      // First filter by search term
       const matchesSearch = business.name?.toUpperCase().includes(searchTerm.toUpperCase());
       
-      // Then check if this business has any available dishes in our grouped data
       const hasDishes = groupedDishes[business.id]?.dishes?.length > 0;
       
       return matchesSearch && hasDishes;
@@ -367,7 +351,6 @@ function Home() {
     const BusinessCard = ({ business }: { business: Business }) => {
       const businessDishes = groupedDishes[business.id]?.dishes || [];
 
-      // If no dishes available after filtering, don't show this business card
       if (businessDishes.length === 0) return null;
 
       return (
@@ -388,7 +371,8 @@ function Home() {
             {businessDishes.map((dish: Dish) => (
               <div
                 key={dish.id}
-                className={`bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200 ${
+                onClick={() => handleDishClick(dish)}
+                className={`bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200 cursor-pointer ${
                   cartItems.includes(dish.id?.toString()) ? "bg-green-200" : ""
                 }`}
               >
@@ -407,16 +391,22 @@ function Home() {
                     </div>
                     <div className="flex space-x-1">
                       <button
-                        onClick={() => removeFromCart(dish)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeFromCart(dish);
+                        }}
                         className="w-7 h-7 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                         disabled={!cartItems.includes(dish.id?.toString())}
                       >
                         <MinusCircleIcon className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => addToCart(dish)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(dish);
+                        }}
                         className={`w-7 h-7 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-200 focus:ring-2 focus:ring-green-500/20 
-                          ${cartItems.includes(dish.id?.toString()) ? "bg-green-800" : "bg-green-500"}`}
+                          ${cartItems.includes(dish.id?.toString()) ? "bg-green-800" : "bg-green-600"}`}
                         disabled={cartItems.includes(dish.id?.toString())}
                       >
                         <PlusIcon className="h-4 w-4" />
@@ -451,6 +441,49 @@ function Home() {
     <div className="bg-gray-50 min-h-screen">
       <TopSection />
       <BusinessesAndDishes />
+      {selectedDish && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 relative">
+            <button
+              onClick={() => setSelectedDish(null)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{selectedDish.name}</h3>
+            <img
+              src={selectedDish.thumbnails || "https://via.placeholder.com/300"}
+              alt={selectedDish.name}
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+            <p className="text-gray-600 mb-2">{selectedDish.description}</p>
+            <p className="text-gray-500 text-sm mb-2"><span className="font-medium">Ingredients:</span> {selectedDish.ingredients}</p>
+            <p className="text-gray-500 text-sm mb-2"><span className="font-medium">Quantity:</span> {selectedDish.quantity} Kg</p>
+            <p className="text-gray-500 text-sm mb-2"><span className="font-medium">Food Type:</span> {selectedDish.food_type}</p>
+            <p className="text-gray-500 text-sm mb-4"><span className="font-medium">Expires At:</span> {new Date(selectedDish.expires_at).toLocaleString()}</p>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => removeFromCart(selectedDish)}
+                className="px-4 py-2 bg-green-100 text-green-600 rounded-md hover:bg-green-200 disabled:opacity-50"
+                disabled={!cartItems.includes(selectedDish.id?.toString())}
+              >
+                Remove
+              </button>
+              <button
+                onClick={() => addToCart(selectedDish)}
+                className={`px-4 py-2 text-white rounded-md ${
+                  cartItems.includes(selectedDish.id?.toString()) ? "bg-green-800" : "bg-green-600"
+                } hover:bg-green-700 disabled:opacity-50`}
+                disabled={cartItems.includes(selectedDish.id?.toString())}
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

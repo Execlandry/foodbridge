@@ -34,7 +34,7 @@ export class DeliveryEntity extends BaseEntity {
   @Column({
     type: "varchar",
     default: "pending",
-    enum: ["accepted","in_transit", "delivered"],
+    enum: ["in_transit", "delivered"],
   })
   public order_status!: string;
 

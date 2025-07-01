@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
@@ -12,6 +13,7 @@ import { UserProxyService } from "./user.http.service";
 import { LocationDto } from "../dto/update-current-location.dto";
 import { PayoutEntity } from "../../payout/entity/payout.entity";
 import { UserMetaData } from "../../auth/guards/user";
+import { get } from "http";
 
 @Injectable()
 export class DeliveryService {
@@ -24,6 +26,48 @@ export class DeliveryService {
     private readonly userProxyService: UserProxyService,
     private readonly connection: Connection
   ) {}
+
+  async setOtpVerified(partnerId:string,otp:string){
+    const deliveryPartner= await this.deliveryRepo.findOne({
+      //get the partner row that has been currently assigned to a order
+      //TODO::get the order id for assurance from the frontend(optional)
+      where:{delivery_partner_id:partnerId,partner_assigned:true,order_status:"pending"},
+    })
+
+    
+    if (!deliveryPartner) throw new NotFoundException("Delivery partner not found");
+    if(deliveryPartner.order.otp!==otp){
+      throw new ForbiddenException('Invalid OTP');
+    }
+    if (deliveryPartner.order.is_otp_verified) {
+    throw new ConflictException('OTP already verified');
+  }
+    //get deliveryPartner.order otp for currently assigned delivery partner
+    deliveryPartner.order.is_otp_verified=true
+    //patch the order status
+    deliveryPartner.order_status="in_transit"
+    await this.deliveryRepo.save(deliveryPartner);
+    //change this
+    return {success:"OTP Verified successfully"};
+  }
+  async getOrderOtpStatus(partnerId: string) {
+  const deliveryPartner = await this.deliveryRepo.findOne({
+    where: {
+      delivery_partner_id: partnerId,
+      partner_assigned: true,
+      order_status: Not("delivered"),
+    },
+  });
+
+  if (!deliveryPartner || !deliveryPartner.order) {
+    throw new NotFoundException("No current assigned order found");
+  }
+
+  return {
+    is_otp_verified: deliveryPartner.order.is_otp_verified,
+  };
+}
+
 
   async updateCurrentLocation(partnerId: string, location: LocationDto) {
     const delivery = await this.deliveryRepo.findOneBy({
@@ -124,7 +168,7 @@ export class DeliveryService {
         "delivery.order_id = payout.order_id"
       )
     .where(`delivery.order->>'user_id' = :userId`, { userId })
-         .select([
+        .select([
         "delivery.order AS order",
         "delivery.order_status AS order_status",
         "payout.payment_status AS payment_status",

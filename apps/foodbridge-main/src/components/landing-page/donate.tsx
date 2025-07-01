@@ -52,7 +52,7 @@ export default function Home() {
             } p-2 rounded-md bg-green-50 focus-within:border-green-500 transition-all`}
             animate={inputControls}
           >
-            <FiDollarSign className="text-lg text-green-600" />
+            {/* <FiDollarSign className="text-lg text-green-600" /> */}
             <input
               type="number"
               value={amount === 0 ? "" : amount}

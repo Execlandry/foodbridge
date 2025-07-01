@@ -100,14 +100,14 @@ export class PayoutService implements OnModuleInit {
   }
 
   async updatePayoutStatus(status: string, paymentIntent:Stripe.PaymentIntent) {
-  await this.payRepo.update(
-    {stripe_payment_intent_id:paymentIntent.id},
-    {payment_status:status,updated_at:new Date()}
-  );
-  await this.deliveryRepo.update(
-    { order_id: paymentIntent.metadata.order_id },
-    { order_status: status === 'success' ? 'delivered' : 'in_transit' }
-  );
+    await this.payRepo.update(
+      {stripe_payment_intent_id:paymentIntent.id},
+      {payment_status:status,updated_at:new Date()}
+    );
+    await this.deliveryRepo.update(
+      { order_id: paymentIntent.metadata.order_id },
+      { order_status: status === 'success' ? 'delivered' : 'in_transit' }
+    );
 
   await this.userProxyService.markDeliveryPartnerUnassigned({
     orderId:paymentIntent.metadata.order_id,

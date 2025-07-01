@@ -30,7 +30,7 @@ import {
   ApiOperation,
 } from "@nestjs/swagger";
 import { User, UserMetaData } from "../../auth/guards/user";
-import { LocationDto } from "../dto/update-current-location.dto";
+import { LocationDto, VerifyOtpDto } from "../dto/update-current-location.dto";
 
 @ApiBearerAuth("authorization")
 @Controller("delivery")
@@ -66,6 +66,41 @@ export class DeliveryController {
   ) {
     return await this.service.updateCurrentLocation(user.userId, dto);
   }
+
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @RoleAllowed(UserRoles["delivery-partner"])
+  @Patch("/verify-otp")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: "Update otp verified field during pickup",
+  })
+  @ApiOkResponse({
+    description: "OTP verified successfully",
+  })
+  // @ApiBody({ type: LocationDto })
+  public async setOtpVerified(
+    @User() user: UserMetaData,
+    @Body() body: VerifyOtpDto,
+  ) {
+    return await this.service.setOtpVerified(user.userId,body.otp);
+  }
+
+  @UseGuards(AccessTokenGuard, RolesGuard)
+@RoleAllowed(UserRoles["delivery-partner"])
+@HttpCode(HttpStatus.OK)
+@Get('/order-otp-status')
+@ApiOperation({ summary: "Check if OTP is already verified for the assigned order" })
+@ApiOkResponse({
+  description: "Returns the OTP verification status for the delivery partner",
+  schema: {
+    example: {
+      is_otp_verified: true
+    }
+  }
+})
+public async getOrderOtpStatus(@User() user: UserMetaData) {
+  return await this.service.getOrderOtpStatus(user.userId);
+}
 
   @UseGuards(AccessTokenGuard, RolesGuard)
   @RoleAllowed(UserRoles["delivery-partner"])
