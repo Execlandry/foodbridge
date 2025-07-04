@@ -177,9 +177,7 @@ export class BusinessController {
   @RoleAllowed(UserRoles["business-admin"])
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Get("/my-business")
-  public async fetchAll(
-    @User() user: UserMetaData
-  ) {
+  public async fetchAll(@User() user: UserMetaData) {
     return await this.service.fetchAllMyBusiness1(user);
   }
 }

@@ -40,7 +40,7 @@ export class PayoutEntity extends BaseEntity {
   @Column({
     type: "varchar",
     default: "pending",
-    enum: ["pending", "success", "failed"], 
+    enum: ["pending", "success", "failed"],
   })
   public payment_status!: string;
 

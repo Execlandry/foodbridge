@@ -45,7 +45,7 @@ async function Coordinates(addressObj: Address) {
     });
 
     clearTimeout(timeout);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -184,7 +184,13 @@ export default function AddRestaurant() {
     try {
       // Step 1: Get coordinates
       const coords = await Coordinates(formData.address);
-
+      if (!coords) {
+        window.alert(
+          "Coordinates could not be found for the given address. Please check the address and try again."
+        );
+        setIsSubmitting(false);
+        return;
+      }
       // Step 2: Upload image if a file is selected
       let bannerUrl = "";
       if (formData.banner instanceof File) {

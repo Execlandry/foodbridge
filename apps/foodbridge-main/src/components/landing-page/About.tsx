@@ -9,10 +9,10 @@ function About() {
         </h2>
         <p className="text-gray-600 text-lg leading-relaxed max-w-3xl mx-auto">
           FoodBridge is a non-profit initiative aimed at solving the global
-          issue of food waste. We partner with restaurants, hotels, and
-          grocery stores to redirect surplus food to shelters, NGOs, and
-          communities who need it the most. Our goal is simple: ensure that
-          no good food goes to waste while someone goes hungry.
+          issue of food waste. We partner with restaurants, hotels, and grocery
+          stores to redirect surplus food to shelters, NGOs, and communities who
+          need it the most. Our goal is simple: ensure that no good food goes to
+          waste while someone goes hungry.
         </p>
       </div>
     </section>

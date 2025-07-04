@@ -14,11 +14,7 @@ import { Like, Repository, Connection, QueryRunner } from "typeorm";
 import { NotFoundException } from "@nestjs/common";
 import { OrderEntity } from "../entity/order.entity";
 
-import {
-  CreatePaymentBodyDto,
-
-  UpdateByIdDto,
-} from "../dto/order.dto";
+import { CreatePaymentBodyDto, UpdateByIdDto } from "../dto/order.dto";
 import { UserMetaData } from "../../auth/guards/user";
 import { ClientProxy } from "@nestjs/microservices";
 @Injectable()
@@ -110,16 +106,16 @@ export class OrderService implements OnModuleInit {
       },
     });
   }
-async getBusinessOrder(user: UserMetaData) {
-  const userId = user.userId;
+  async getBusinessOrder(user: UserMetaData) {
+    const userId = user.userId;
 
-  const deliveries = await this.orderRepo
-    .createQueryBuilder("order")
-    .where(`order.business->>'owner_id' = :userId`, { userId })
-    .getMany();
+    const deliveries = await this.orderRepo
+      .createQueryBuilder("order")
+      .where("order.business ->> 'owner_id' = :userId", { userId })
+      .getMany();
 
-  return deliveries;
-}
+    return deliveries;
+  }
 
   //  async getAllBusinessOrders(user: UserMetaData) {
   //   return this.orderRepo.find({

@@ -35,7 +35,7 @@ export default function Signup() {
       redirect: false,
       email: signupState.email,
       password: signupState.password,
-      callbackUrl: `${window.location.origin}/dashboard`,
+      callbackUrl: `${window.location.origin}/dashboard/businesses`,
     });
   };
 

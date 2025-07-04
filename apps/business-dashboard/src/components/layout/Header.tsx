@@ -4,25 +4,36 @@ import { MenuIcon } from "@heroicons/react/solid";
 import React from "react";
 import LogOutButton from "./header/LogOutButton";
 import Notifications from "./header/Notifications";
-import SearchBox from "./header/SearchBox";
 import UserMenu from "./header/UserMenu";
+import Logo from "./sidebar/Logo";
 
-const Header = ({ mobileNavsidebar, setMobileNavsidebar, user }: any) => {
+const Header = ({
+  mobileNavsidebar,
+  setMobileNavsidebar,
+  user,
+}: {
+  mobileNavsidebar: boolean;
+  setMobileNavsidebar: (state: boolean) => void;
+  user: any;
+}) => {
   return (
-    <header className="flex items-center justify-between h-16 sm:h-20 px-4 sm:px-8 bg-white shadow-lg border-b border-green-100/50 sticky top-0 z-20">
-      {/* Left: Sidebar toggle + search */}
-      <div className="flex items-center gap-3 sm:gap-4">
-        <MenuIcon
-          className="h-7 w-7 sm:h-8 sm:w-8 text-green-600 hover:text-green-700 cursor-pointer hover:scale-110 transition-transform duration-300 sm:hidden"
+    <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-green-100/50 shadow-sm px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
+      {/* Left: Sidebar toggle + Logo */}
+      <div className="flex items-center gap-4">
+        <button
           onClick={() => setMobileNavsidebar(!mobileNavsidebar)}
-        />
-        <SearchBox />
+          className="sm:hidden p-1 rounded-md text-green-600 hover:text-green-700 transition-transform hover:scale-110 focus:outline-none"
+        >
+          <MenuIcon className="w-7 h-7" />
+        </button>
+        <Logo />
       </div>
 
-      {/* Right: User info + notifications + logout */}
+      {/* Right: User info + logout */}
       <div className="flex items-center gap-4 sm:gap-6">
         <UserMenu user={user} />
-        <div className="flex items-center gap-2 sm:gap-3 pl-3 sm:pl-4 border-l border-green-200">
+        <div className="flex items-center gap-2 sm:gap-4 pl-4 border-l border-green-200">
+          {/* Uncomment when ready */}
           {/* <Notifications /> */}
           <LogOutButton />
         </div>

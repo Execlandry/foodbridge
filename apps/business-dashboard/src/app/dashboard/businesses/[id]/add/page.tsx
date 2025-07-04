@@ -12,6 +12,7 @@ import {
   CalendarIcon,
   AnnotationIcon,
 } from "@heroicons/react/solid";
+import { useRouter } from "next/navigation";
 
 interface FoodItemForm {
   name: string;
@@ -45,6 +46,7 @@ function AddFoodItemForm({ params }: any) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const { id } = params;
 
@@ -155,6 +157,7 @@ function AddFoodItemForm({ params }: any) {
         status: "available",
         thumbnails: "",
       });
+      router.push("/dashboard/businesses/" + id);
     } catch (error: any) {
       setError(error.message || "Failed to submit form");
     } finally {

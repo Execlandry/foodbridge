@@ -162,8 +162,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               onClick={onClose}
               className="text-gray-700 hover:text-gray-900 duration-200"
             >
-               
-             ✖
+              ✖
             </button>
           </div>
 
@@ -192,7 +191,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                         : "text-yellow-600"
                     }`}
                   > */}
-                    {/* {order.order_status.replace("_", " ")} */}
+                  {/* {order.order_status.replace("_", " ")} */}
                   {/* </span> */}
                 </div>
                 <div className="flex justify-between">
@@ -215,13 +214,14 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                     {/* {order.payment_method.toUpperCase()} */}
                   </span>
                 </div>
-                {order?.request_for_driver&&
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Amount:</span>
-                  <span className="font-medium text-gray-800">
-                    ₹{order.amount}
-                  </span>
-                </div>}
+                {order?.request_for_driver && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Amount:</span>
+                    <span className="font-medium text-gray-800">
+                      ₹{order.amount}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -271,7 +271,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {order.menu_items.map((item:any) => (
+                  {order.menu_items.map((item: any) => (
                     <tr key={item.id}>
                       <td className="px-4 py-3 text-gray-800">{item.name}</td>
                       <td className="px-4 py-3 text-right text-gray-600">
@@ -286,21 +286,21 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                     </tr>
                   ))}
                 </tbody>
-                  {order?.request_for_driver&&
-                (<tfoot className="bg-gray-50">
-                  <tr>
-                    <td
-                      colSpan={3}
-                      className="px-4 py-3 text-right font-medium text-gray-700"
-                    >
-                      Total
-                    </td>
-                    <td className="px-4 py-3 text-right font-bold text-gray-900">
-                      ₹{order.amount}
-                    </td>
-                  </tr>
-                </tfoot>)
-}
+                {order?.request_for_driver && (
+                  <tfoot className="bg-gray-50">
+                    <tr>
+                      <td
+                        colSpan={3}
+                        className="px-4 py-3 text-right font-medium text-gray-700"
+                      >
+                        Total
+                      </td>
+                      <td className="px-4 py-3 text-right font-bold text-gray-900">
+                        ₹{order.amount}
+                      </td>
+                    </tr>
+                  </tfoot>
+                )}
               </table>
             </div>
           </div>

@@ -21,7 +21,6 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "jsonb", select: true })
   public business!: any;
 
-
   // @Column({ type: "uuid", select: true, default: null })
   // public address_id!: string;
 
@@ -31,7 +30,7 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "boolean", default: false })
   public request_for_driver!: boolean;
 
-  @Column({ type: "varchar", select: true})
+  @Column({ type: "varchar", select: true })
   public amount!: string;
 
   @Column({ type: "varchar", length: 6, nullable: true })
@@ -63,5 +62,5 @@ export class OrderEntity extends BaseEntity {
     default: () => "CURRENT_TIMESTAMP",
     select: true,
   })
-  public deleted_at!: Date;
+  public deleted_at!: Date;
 }

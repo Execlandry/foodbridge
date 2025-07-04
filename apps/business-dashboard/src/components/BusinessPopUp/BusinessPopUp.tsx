@@ -5,7 +5,7 @@ import {
   PhoneIcon,
   GlobeAltIcon,
   StarIcon,
-  CurrencyDollarIcon,
+  ClockIcon,
 } from "@heroicons/react/outline";
 import type { Restaurant } from "./business";
 
@@ -22,114 +22,171 @@ export function RestaurantPopup({
 }: RestaurantPopupProps) {
   if (!isOpen) return null;
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-2 sm:p-4 backdrop-blur-sm transition-all">
+      <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[75vh] overflow-y-auto shadow-xl transition-all">
+        {/* Banner + Close */}
         <div className="relative">
           <img
-            src={restaurant.banner}
+            src={restaurant?.banner}
             alt={restaurant.name}
-            className="w-full h-48 object-cover rounded-t-lg"
+            className="w-full h-56 object-cover rounded-t-2xl"
           />
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100"
+            className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur rounded-full shadow-md hover:bg-gray-100 transition"
           >
-            <XIcon className="w-5 h-5" />
+            <XIcon className="w-5 h-5 text-gray-700" />
           </button>
         </div>
 
-        <div className="p-6">
-          <div className="flex justify-between items-start mb-4">
+        {/* Content */}
+        <div className="p-6 sm:p-8 space-y-6">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800">
                 {restaurant.name}
               </h2>
-              <p className="text-gray-600">{restaurant.description}</p>
+              <p className="text-gray-500">{restaurant.description}</p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-3">
               {restaurant.average_rating && (
-                <div className="flex items-center bg-green-100 px-2 py-1 rounded">
-                  <StarIcon className="w-4 h-4 text-green-600 mr-1" />
-                  <span className="text-green-600 font-medium">
-                    {restaurant.average_rating}
-                  </span>
+                <div className="flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <StarIcon className="w-4 h-4" />
+                  {restaurant.average_rating}
                 </div>
               )}
-              <div className="flex items-center bg-blue-100 px-2 py-1 rounded">
-                <CurrencyDollarIcon className="w-4 h-4 text-blue-600 mr-1" />
-                <span className="text-blue-600 font-medium">
-                  ${restaurant.average_price}
+              {restaurant.is_available && (
+                <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded-full">
+                  Available
                 </span>
-              </div>
+              )}
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              {/* <div className="flex items-start space-x-2">
-                <MapIcon className="w-5 h-5 text-gray-500 mt-1" />
-                <div>
-                  <h3 className="font-medium text-gray-900">Address</h3>
-                  <p className="text-gray-600">
-                    {restaurant.address.street}, {restaurant.address.city}<br />
-                    {restaurant.address.state}, {restaurant.address.country}<br />
-                    {restaurant.address.pincode}
-                  </p>
-                </div>
-              </div> */}
+          {/* Grid: Info + Map */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Info Section */}
+            <div className="space-y-4 text-sm sm:text-base text-gray-700">
+              <InfoBlock icon={MapIcon} title="Address">
+                {restaurant.address?.street}, {restaurant.address?.city}
+                <br />
+                {restaurant.address?.state}, {restaurant.address?.country}
+                <br />
+                {restaurant.address?.pincode}
+              </InfoBlock>
 
-              <div className="flex items-center space-x-2">
-                <PhoneIcon className="w-5 h-5 text-gray-500" />
-                <div>
-                  <h3 className="font-medium text-gray-900">Contact</h3>
-                  <p className="text-gray-600">{restaurant.contact_no}</p>
-                </div>
-              </div>
+              <InfoBlock icon={PhoneIcon} title="Contact">
+                {restaurant.contact_no}
+              </InfoBlock>
 
               {restaurant.website_url && (
-                <div className="flex items-center space-x-2">
-                  <GlobeAltIcon className="w-5 h-5 text-gray-500" />
-                  <div>
-                    <h3 className="font-medium text-gray-900">Website</h3>
-                    <a
-                      href={restaurant.website_url}
-                      className="text-blue-600 hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Visit Website
-                    </a>
-                  </div>
-                </div>
+                <InfoBlock icon={GlobeAltIcon} title="Website">
+                  <a
+                    href={restaurant.website_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 underline hover:text-blue-800"
+                  >
+                    Visit Website
+                  </a>
+                </InfoBlock>
               )}
 
+              <InfoBlock icon={ClockIcon} title="Timings">
+                Opens: {formatDate(restaurant.opens_at)} <br />
+                Closes: {formatDate(restaurant.closes_at)}
+              </InfoBlock>
+
               <div>
-                <h3 className="font-medium text-gray-900 mb-2">Services</h3>
-                <div className="space-y-1">
-                  <p className="text-gray-600">
-                    Delivery: {restaurant.delivery_options}
-                  </p>
-                  <p className="text-gray-600">
-                    Pickup: {restaurant.pickup_options}
-                  </p>
-                </div>
+                <h4 className="text-sm font-medium text-gray-800 mb-1">
+                  Cuisine
+                </h4>
+                <p className="text-gray-600">
+                  {restaurant.cuisine || "Not specified"}
+                </p>
               </div>
             </div>
 
-            <div className="h-64 bg-gray-100 rounded-lg overflow-hidden">
+            {/* Map */}
+            <div className="h-64 sm:h-72 rounded-xl overflow-hidden shadow">
               <iframe
-                title="Restaurant Location"
-                width="100%"
-                height="100%"
-                frameBorder="0"
+                title="Location Map"
                 src={`https://www.openstreetmap.org/export/embed.html?bbox=${restaurant.longitude},${restaurant.latitude},${restaurant.longitude},${restaurant.latitude}&layer=mapnik&marker=${restaurant.latitude},${restaurant.longitude}`}
                 className="w-full h-full"
+                frameBorder="0"
               />
             </div>
           </div>
+
+          {/* Dishes */}
+          {restaurant.dishes?.length > 0 && (
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Dishes Offered
+              </h3>
+              <div className="space-y-6">
+                {restaurant.dishes.map((dish) => (
+                  <div
+                    key={dish.id}
+                    className="flex flex-col sm:flex-row gap-4 bg-gray-50 border rounded-xl p-4 hover:shadow-md transition"
+                  >
+                    <img
+                      src={dish.thumbnails}
+                      alt={dish.name}
+                      className="w-full sm:w-36 sm:h-36 object-cover rounded-lg"
+                    />
+                    <div className="flex-1 space-y-1 text-gray-700">
+                      <h4 className="text-lg font-semibold text-gray-800">
+                        {dish.name}
+                      </h4>
+                      <p className="text-sm">{dish.description}</p>
+                      <p className="text-sm text-gray-500">
+                        Type:{" "}
+                        <span className="capitalize">{dish.food_type}</span> |
+                        Quantity: {dish.quantity}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Expires At: {formatDate(dish.expires_at)}
+                      </p>
+                      {dish.notes && (
+                        <p className="text-sm text-gray-500">
+                          Notes: {dish.notes}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
+// ✅ Helper Component for Reusable Info Blocks
+const InfoBlock = ({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: any;
+  title: string;
+  children: React.ReactNode;
+}) => (
+  <div className="flex items-start gap-3">
+    <Icon className="w-5 h-5 mt-1 text-gray-500" />
+    <div>
+      <h4 className="font-medium text-gray-800 mb-0.5 text-sm">{title}</h4>
+      <div className="text-gray-600 text-sm">{children}</div>
+    </div>
+  </div>
+);

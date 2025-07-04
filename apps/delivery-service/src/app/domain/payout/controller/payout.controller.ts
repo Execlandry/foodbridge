@@ -54,50 +54,50 @@ export class PayoutController {
     private readonly logger: Logger
   ) {}
 
-  @Post('/create-payment-intent/:orderId')
+  @Post("/create-payment-intent/:orderId")
   @UseGuards(AccessTokenGuard, RolesGuard)
   @RoleAllowed(UserRoles["delivery-partner"])
   @ApiBearerAuth()
   async createPaymentIntent(
-  @User() user: UserMetaData,
-  @Param("orderId") orderId: string,
-) {
-  return this.service.createPaymentIntent(orderId,user.userId);
-}
+    @User() user: UserMetaData,
+    @Param("orderId") orderId: string
+  ) {
+    return this.service.createPaymentIntent(orderId, user.userId);
+  }
 
-// @Post("create-payment-intent")
-//   @ApiOperation({
-//     summary: "Create a payment intent",
-//     description: "Create a Stripe payment intent and return client secret.",
-//   })
-//   @ApiOkResponse({
-//     description: "Payment intent created successfully.",
-//     schema: {
-//       type: "object",
-//       properties: {
-//         clientSecret: { type: "string" },
-//         platformFee: { type: "number" },
-//       },
-//     },
-//   })
-//   @ApiBadRequestResponse({ description: "Invalid input data" })
-//   @HttpCode(HttpStatus.OK)
-//   async createPaymentIntentdonation(@Body() body: { amount: number }) {
-//     const { amount } = body;
+  // @Post("create-payment-intent")
+  //   @ApiOperation({
+  //     summary: "Create a payment intent",
+  //     description: "Create a Stripe payment intent and return client secret.",
+  //   })
+  //   @ApiOkResponse({
+  //     description: "Payment intent created successfully.",
+  //     schema: {
+  //       type: "object",
+  //       properties: {
+  //         clientSecret: { type: "string" },
+  //         platformFee: { type: "number" },
+  //       },
+  //     },
+  //   })
+  //   @ApiBadRequestResponse({ description: "Invalid input data" })
+  //   @HttpCode(HttpStatus.OK)
+  //   async createPaymentIntentdonation(@Body() body: { amount: number }) {
+  //     const { amount } = body;
 
-//     if (!amount || amount <= 0) {
-//       throw new BadRequestException("Amount must be a valid positive number.");
-//     }
+  //     if (!amount || amount <= 0) {
+  //       throw new BadRequestException("Amount must be a valid positive number.");
+  //     }
 
-//     try {
-//       const result = await this.service.createPaymentIntentdonation(amount);
-//       return result;
-//     } catch (error) {
-//       throw new BadRequestException(
-//         `Error creating payment intent: ${error.message}`
-//       );
-//     }
-//   }
+  //     try {
+  //       const result = await this.service.createPaymentIntentdonation(amount);
+  //       return result;
+  //     } catch (error) {
+  //       throw new BadRequestException(
+  //         `Error creating payment intent: ${error.message}`
+  //       );
+  //     }
+  //   }
 
   @Post("/stripe-webhook")
   @HttpCode(HttpStatus.OK)
@@ -126,18 +126,12 @@ export class PayoutController {
       // Handle only specific event types
       if (event.type === "payment_intent.succeeded") {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      
-        await this.service.updatePayoutStatus(
-          'success',
-          paymentIntent,
-        );
+
+        await this.service.updatePayoutStatus("success", paymentIntent);
       }
       if (event.type === "payment_intent.payment_failed") {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        await this.service.updatePayoutStatus(
-          'failed',
-          paymentIntent,
-        );
+        await this.service.updatePayoutStatus("failed", paymentIntent);
       }
 
       return res.send({ status: "success" });

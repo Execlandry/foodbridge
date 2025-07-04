@@ -11,13 +11,13 @@ export default function Restaurants() {
   const { data: session } = useSession();
   const user = session?.user;
   const [error, setError] = useState<string | null>(null);
-  const [selectedOrder, setSelectedOrder] = useState<Order|null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedTrackingOrder, setSelectedTrackingOrder] =
-    useState<Order|null>(null);
-  const [orderData, setorderData] = useState<Order[]|null>(null);
+    useState<Order | null>(null);
+  const [orderData, setorderData] = useState<Order[] | null>(null);
   // const [businessData, setBusinessData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
-    const [pendingOrders, setpendingOrders] = useState<Order[]|null>(null);
+  const [pendingOrders, setpendingOrders] = useState<Order[] | null>(null);
   // const [completedOrders, setCompletedOrders] = useState<Order[]|null>(null);
 
   const fetchAllOrders = async () => {
@@ -27,9 +27,9 @@ export default function Restaurants() {
       console.log(res);
       const data = await res.json();
       setorderData(data);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Failed to fetch Orders:", error);
-      setError(error)
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -39,11 +39,9 @@ export default function Restaurants() {
     fetchAllOrders();
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     if (orderData && Array.isArray(orderData)) {
-      setpendingOrders(
-        orderData.filter((order: Order) => order)
-      );
+      setpendingOrders(orderData.filter((order: Order) => order));
       // setCompletedOrders(
       //   orderData.filter((order: Order) => order.order_status === "delivered")
       // );
@@ -51,9 +49,8 @@ export default function Restaurants() {
     console.log(orderData);
   }, [orderData]);
 
-
   return (
-  <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center">
           {/* <ShoppingBag size={28} className="text-blue-600 mr-2" /> */}

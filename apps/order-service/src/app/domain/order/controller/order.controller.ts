@@ -105,7 +105,7 @@ export class OrderController {
     return await this.orderService.getAllOrders(user);
   }
 
-    @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")
   @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
   @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
@@ -119,7 +119,6 @@ export class OrderController {
   ) {
     return await this.orderService.getBusinessOrder(user);
   }
-
 
   // @HttpCode(HttpStatus.OK)
   // @ApiConsumes("application/json")

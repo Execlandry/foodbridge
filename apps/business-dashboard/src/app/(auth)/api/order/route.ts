@@ -28,4 +28,3 @@ export async function GET(request: NextApiRequest, res: NextApiResponse) {
     return new Response("Internal Server Error", { status: 500 });
   }
 }
-

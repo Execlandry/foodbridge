@@ -87,15 +87,13 @@ export class DeliveryPartnerController {
     return this.service.registerDeliveryPartner(body);
   }
 
-
   @UseGuards(AccessTokenGuard, RolesGuard)
   @RoleAllowed(UserRoles["delivery-partner"])
-  @Post('refresh-onboarding-url')
+  @Post("refresh-onboarding-url")
   @ApiBearerAuth()
-  public async refreshOnboardingUrl(
-    @User() user: UserMetaData) {
+  public async refreshOnboardingUrl(@User() user: UserMetaData) {
     this.logger.log(`Incoming User Metadata: ${JSON.stringify(user, null, 2)}`);
-  return this.service.refreshOnboardingUrl(user.id);
+    return this.service.refreshOnboardingUrl(user.id);
   }
 
   // @UseGuards(AccessTokenGuard, RolesGuard)
@@ -161,12 +159,12 @@ export class DeliveryPartnerController {
         webhookSecret
       );
       // ... call your service
-      console.log(`from  webhook 1${event}`)
+      console.log(`from  webhook 1${event}`);
 
       await this.service.handleStripeWebhook(event);
       res.send({ received: true });
     } catch (err) {
-      console.log(`from  webhook 2${err}`)
+      console.log(`from  webhook 2${err}`);
       this.logger.error(`Webhook Error: ${err.message}`);
       res.status(400).send(`Webhook Error: ${err.message}`);
     }

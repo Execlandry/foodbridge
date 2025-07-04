@@ -6,8 +6,7 @@ function HowItWorks() {
     {
       icon: <FaUtensils size={40} className="text-green-500" />,
       title: "Food Donated",
-      description:
-        "Businesses donate their excess food through our platform.",
+      description: "Businesses donate their excess food through our platform.",
     },
     {
       icon: <FaHandsHelping size={40} className="text-green-500" />,

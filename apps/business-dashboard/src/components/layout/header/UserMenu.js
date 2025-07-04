@@ -1,6 +1,10 @@
 "use client";
 
-import { ChevronDownIcon, ChevronUpIcon,UserCircleIcon } from "@heroicons/react/solid";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  UserCircleIcon,
+} from "@heroicons/react/solid";
 import React, { useEffect, useRef, useState } from "react";
 import OutsideClick from "../../../utils/outsideClick";
 

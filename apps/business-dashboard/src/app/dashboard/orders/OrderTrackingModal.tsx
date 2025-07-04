@@ -6,7 +6,7 @@ import "leaflet-routing-machine";
 import { XIcon } from "@heroicons/react/solid";
 import blueicon from "./images/marker-icon-2x-blue.png";
 import redicon from "./images/marker-icon-2x-red (1).png";
-import './Orders'
+import "./Orders";
 
 interface OrderTrackingModalProps {
   order_id: string;
@@ -33,15 +33,15 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
     geocodedCoords: { lat: 15.5439, lng: 73.755 },
   });
 
-const [orderData, setorderData] = useState<any>(null);
+  const [orderData, setorderData] = useState<any>(null);
 
-const blueIcon = new L.Icon({
-  iconUrl: blueicon,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
+  const blueIcon = new L.Icon({
+    iconUrl: blueicon,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
 
   useEffect(() => {
     FetchCurrentOrder();
@@ -52,10 +52,10 @@ const blueIcon = new L.Icon({
       const res = await fetch(`/api/order/${order_id}`);
       const data = await res.json();
       setorderData(data);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Failed to fetch businesses:", error);
       // setError(error)
-    } 
+    }
   };
 
   const redIcon = new L.Icon({
@@ -113,8 +113,7 @@ const blueIcon = new L.Icon({
             lng: Number(orderData.order.address.long),
           },
         });
-      }
-      else {
+      } else {
         setCoordinates({
           orderCoordinates: {
             lat: Number(orderData.order.business.latitude),
@@ -127,7 +126,7 @@ const blueIcon = new L.Icon({
         });
       }
     }
-    console.log(orderData)
+    console.log(orderData);
   }, [orderData]);
 
   const mapRef = useRef<HTMLDivElement | null>(null);

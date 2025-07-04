@@ -20,7 +20,8 @@ function Hero() {
               to Those in Need
             </h1>
             <p className="mt-1 sm:mt-4 text-base sm:text-lg md:text-xl text-gray-200 max-w-sm sm:max-w-md md:max-w-2xl mx-auto sm:mx-0 font-medium drop-shadow-md">
-              Connecting businesses with excess food to charities and communities in need
+              Connecting businesses with excess food to charities and
+              communities in need
             </p>
             <div className="flex justify-center sm:justify-start">
               <button className="mt-4 sm:mt-6 px-6 sm:px-8 py-2.5 bg-green-500 text-white rounded-md sm:rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-black/50 transition-all duration-300 transform hover:-translate-y-1">

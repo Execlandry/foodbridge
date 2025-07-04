@@ -205,13 +205,13 @@ function Navbar() {
               >
                 Sign In as Business
               </button>
-                          <button
-              onClick={() => navigate("/donate")}
-              className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none
+              <button
+                onClick={() => navigate("/donate")}
+                className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none
   "
-            >
-              Donate
-            </button>
+              >
+                Donate
+              </button>
             </div>
           )}
         </div>

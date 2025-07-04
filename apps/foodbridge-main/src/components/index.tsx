@@ -4,14 +4,14 @@ import HeadlineCards from "./landing-page/headline-cards";
 import Footer from "./landing-page/footer";
 import About from "./landing-page/About";
 import Works from "./landing-page/works";
-import CTA from "./landing-page/cta"
+import CTA from "./landing-page/cta";
 
 function App() {
   return (
     <>
       <div className="">
         <div className="App">
-          <Hero/>
+          <Hero />
           <HeadlineCards />
           <About />
           <Works />

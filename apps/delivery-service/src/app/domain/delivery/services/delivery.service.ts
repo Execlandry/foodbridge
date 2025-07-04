@@ -104,7 +104,6 @@ export class DeliveryService {
     return Order;
   }
 
-  
   async FetchAllOrders(orderId: string) {
     const Order = await this.deliveryRepo.findOne({
       where: {
@@ -115,7 +114,7 @@ export class DeliveryService {
   }
 
   async FetchOrdersByUserId(userId: UserMetaData) {
-  const deliveries = await this.deliveryRepo
+    const deliveries = await this.deliveryRepo
       .createQueryBuilder("delivery")
       .innerJoinAndMapOne(
         "delivery.payout",
@@ -123,20 +122,20 @@ export class DeliveryService {
         "payout",
         "delivery.order_id = payout.order_id"
       )
-    .where(`delivery.order->>'user_id' = :userId`, { userId })
-         .select([
+      .where(`delivery.order->>'user_id' = :userId`, { userId })
+      .select([
         "delivery.order AS order",
         "delivery.order_status AS order_status",
         "payout.payment_status AS payment_status",
       ])
       .getRawMany();
 
-  return deliveries.map((item)=>({
-    ...item.order,
-    order_status:item.order_status,
-    payment_status:item.payment_status,
-  }))
-}
+    return deliveries.map((item) => ({
+      ...item.order,
+      order_status: item.order_status,
+      payment_status: item.payment_status,
+    }));
+  }
 
   async getAvailableOrdersForDelivery() {
     const availableOrders = await this.deliveryRepo.find({

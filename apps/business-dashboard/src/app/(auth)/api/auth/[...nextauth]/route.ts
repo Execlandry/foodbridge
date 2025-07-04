@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
           return {
             id: data.userId,
             email: data.email,
-            name:data.name,
+            name: data.name,
             access_token: data.access_token,
             key: "Hey cool",
           };
