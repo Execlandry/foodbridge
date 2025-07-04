@@ -398,7 +398,7 @@ function Checkout() {
 
     try {
       let ordersPlaced = 0;
-      const dist=calculateDistance
+      const dist = calculateDistance;
 
       menuItem.forEach((value: any, index: number) => {
         if (
@@ -419,8 +419,8 @@ function Checkout() {
         const distance = dist[index] || 5; // Default to 5km if distance not calculated
         const amount = (distance * amount_per_km).toFixed(2);
 
-        const request=requestForDriver;
-        const item=value;
+        const request = requestForDriver;
+        const item = value;
         dispatch(
           PlaceOrder({
             user: user,
@@ -1171,26 +1171,28 @@ function Checkout() {
                   </div>
 
                   {/* Confirmation button */}
-                  {menuItem?.length>0 && (<div
-                    className={`
+                  {menuItem?.length > 0 && (
+                    <div
+                      className={`
       mt-8 flex justify-center
       sm:relative sm:mt-10
       fixed bottom-0 left-0 right-0 p-4 bg-white bg-opacity-90 backdrop-blur-sm shadow-md sm:shadow-none sm:bg-transparent
     `}
-                  >
-                    <button
-                      onClick={OrderPlace}
-                      className={`
+                    >
+                      <button
+                        onClick={OrderPlace}
+                        className={`
           flex items-center justify-center
           px-8 py-3 rounded-lg font-medium text-lg
           transition-all duration-300
           bg-green-600 text-white hover:bg-green-700 active:transform active:scale-95
           shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50
         `}
-                    >
-                      Confirm Order
-                    </button>
-                  </div>)}
+                      >
+                        Confirm Order
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

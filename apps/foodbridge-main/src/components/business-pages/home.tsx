@@ -12,8 +12,16 @@ import {
   listDishesForLandingPage,
   UpdateDishStatus,
 } from "../../redux/dishes/dishes.slice";
-import { addCartItems, removeCartItems, fetchCartItems, CartItemsSelector } from "../../redux/cart/cart.slice";
-import { fetchBusinesses, topBusinesses } from "../../redux/business/business.slice";
+import {
+  addCartItems,
+  removeCartItems,
+  fetchCartItems,
+  CartItemsSelector,
+} from "../../redux/cart/cart.slice";
+import {
+  fetchBusinesses,
+  topBusinesses,
+} from "../../redux/business/business.slice";
 import { UserAddressSelector, fetchAddress } from "../../redux/user/user.slice";
 import { UserContext, UserContextType } from "../../hooks/user-context";
 import useAuth from "../../hooks/use-auth";
@@ -98,8 +106,10 @@ function Home() {
   const [groupedDishes, setGroupedDishes] = useState<GroupedDishes>({});
   const [expiredDishes, setExpiredDishes] = useState<Set<string>>(new Set());
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
+  const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
   useEffect(() => {
+    if (user?.permissions == "business-admin") {
     if (user?.permissions == "business-admin") {
       navigate("/signin");
       return;
@@ -107,7 +117,7 @@ function Home() {
     dispatch(fetchDishesForLandingPage());
     dispatch(fetchBusinesses());
     dispatch(fetchCartItems());
-    
+
     if (user?.id) {
       dispatch(fetchAddress(user.id));
     }
@@ -141,6 +151,7 @@ function Home() {
       }
     };
 
+    checkForAvailability();
     checkForAvailability();
   }, [cartData, filterAvailable, dispatch]);
 
@@ -177,14 +188,19 @@ function Home() {
       setFilterAvailable(filterAvailableIds);
       setExpiredDishes(expiredIds);
 
+
       if (addresses?.[0]?.lat && addresses?.[0]?.long) {
         const reference = addresses[0];
         const sortedKeys = Object.keys(grouped).sort((a, b) => {
           const aBusiness = grouped[a].business;
           const bBusiness = grouped[b].business;
 
-          if (!aBusiness?.latitude || !aBusiness?.longitude || 
-              !bBusiness?.latitude || !bBusiness?.longitude) {
+          if (
+            !aBusiness?.latitude ||
+            !aBusiness?.longitude ||
+            !bBusiness?.latitude ||
+            !bBusiness?.longitude
+          ) {
             return 0;
           }
 
@@ -220,8 +236,10 @@ function Home() {
 
   useEffect(() => {
     if (expiredDishes.size > 0 && dishesData?.foodHolder) {
-      expiredDishes.forEach(dishId => {
-        const dish = dishesData.foodHolder.find((d: Dish) => d && d.id && d.id.toString() === dishId);
+      expiredDishes.forEach((dishId) => {
+        const dish = dishesData.foodHolder.find(
+          (d: Dish) => d && d.id && d.id.toString() === dishId
+        );
         if (dish && dish.business_id) {
           dispatch(UpdateDishStatus({ id: dish.business_id, dish }));
         }
@@ -229,7 +247,12 @@ function Home() {
     }
   }, [expiredDishes, dishesData, dispatch]);
 
-  const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+  const getDistance = (
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ): number => {
     if (isNaN(lat1) || isNaN(lon1) || isNaN(lat2) || isNaN(lon2)) {
       return Number.MAX_SAFE_INTEGER;
     }
@@ -293,6 +316,10 @@ function Home() {
     setSelectedDish(dish);
   };
 
+  const handleDishClick = (dish: Dish) => {
+    setSelectedDish(dish);
+  };
+
   function TopSection() {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -320,7 +347,9 @@ function Home() {
           <div className="text-center text-white z-10 flex-1 px-4">
             <p className="text-lg font-bold">Hey FoodBridge Partner!</p>
             <p className="mt-1 text-sm max-w-xs mx-auto">
-              Get <span className="font-bold text-yellow-200">free delivery</span> on orders over 10 meals
+              Get{" "}
+              <span className="font-bold text-yellow-200">free delivery</span>{" "}
+              on orders over 10 meals
             </p>
             <button className="mt-3 px-6 py-1.5 bg-white text-green-600 rounded-full text-sm font-medium hover:bg-gray-100 focus:ring-2 focus:ring-green-500/20 transition-all duration-200">
               Learn More
@@ -363,7 +392,9 @@ function Home() {
               loading="lazy"
             />
             <div className="text-center sm:text-left flex-1">
-              <h3 className="text-xl font-semibold text-gray-900 truncate">{business?.name}</h3>
+              <h3 className="text-xl font-semibold text-gray-900 truncate">
+                {business?.name}
+              </h3>
             </div>
           </div>
 
@@ -371,6 +402,8 @@ function Home() {
             {businessDishes.map((dish: Dish) => (
               <div
                 key={dish.id}
+                onClick={() => handleDishClick(dish)}
+                className={`bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200 cursor-pointer ${
                 onClick={() => handleDishClick(dish)}
                 className={`bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200 cursor-pointer ${
                   cartItems.includes(dish.id?.toString()) ? "bg-green-200" : ""
@@ -383,9 +416,13 @@ function Home() {
                   loading="lazy"
                 />
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-medium text-gray-900 truncate">{dish?.name}</h4>
+                  <h4 className="text-sm font-medium text-gray-900 truncate">
+                    {dish?.name}
+                  </h4>
                   <div className="flex items-center justify-between mt-1">
-                    <span className="text-green-600 font-medium text-sm">{dish?.quantity} Kg</span>
+                    <span className="text-green-600 font-medium text-sm">
+                      {dish?.quantity} Kg
+                    </span>
                     <div className="mt-1 text-sm text-gray-500">
                       Expires At: {new Date(dish.expires_at).toLocaleString()}
                     </div>
@@ -401,6 +438,10 @@ function Home() {
                         <MinusCircleIcon className="h-4 w-4" />
                       </button>
                       <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(dish);
+                        }}
                         onClick={(e) => {
                           e.stopPropagation();
                           addToCart(dish);
@@ -423,14 +464,18 @@ function Home() {
 
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-12">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">Featured Businesses</h2>
+        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+          Featured Businesses
+        </h2>
         <div className="space-y-8">
           {filteredBusinesses.length > 0 ? (
             filteredBusinesses.map((business: Business) => (
               <BusinessCard key={business.id} business={business} />
             ))
           ) : (
-            <p className="text-center text-gray-500 text-sm py-8">No businesses found</p>
+            <p className="text-center text-gray-500 text-sm py-8">
+              No businesses found
+            </p>
           )}
         </div>
       </div>
@@ -448,21 +493,45 @@ function Home() {
               onClick={() => setSelectedDish(null)}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{selectedDish.name}</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              {selectedDish.name}
+            </h3>
             <img
               src={selectedDish.thumbnails || "https://via.placeholder.com/300"}
               alt={selectedDish.name}
               className="w-full h-48 object-cover rounded-md mb-4"
             />
             <p className="text-gray-600 mb-2">{selectedDish.description}</p>
-            <p className="text-gray-500 text-sm mb-2"><span className="font-medium">Ingredients:</span> {selectedDish.ingredients}</p>
-            <p className="text-gray-500 text-sm mb-2"><span className="font-medium">Quantity:</span> {selectedDish.quantity} Kg</p>
-            <p className="text-gray-500 text-sm mb-2"><span className="font-medium">Food Type:</span> {selectedDish.food_type}</p>
-            <p className="text-gray-500 text-sm mb-4"><span className="font-medium">Expires At:</span> {new Date(selectedDish.expires_at).toLocaleString()}</p>
+            <p className="text-gray-500 text-sm mb-2">
+              <span className="font-medium">Ingredients:</span>{" "}
+              {selectedDish.ingredients}
+            </p>
+            <p className="text-gray-500 text-sm mb-2">
+              <span className="font-medium">Quantity:</span>{" "}
+              {selectedDish.quantity} Kg
+            </p>
+            <p className="text-gray-500 text-sm mb-2">
+              <span className="font-medium">Food Type:</span>{" "}
+              {selectedDish.food_type}
+            </p>
+            <p className="text-gray-500 text-sm mb-4">
+              <span className="font-medium">Expires At:</span>{" "}
+              {new Date(selectedDish.expires_at).toLocaleString()}
+            </p>
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => removeFromCart(selectedDish)}
@@ -474,7 +543,9 @@ function Home() {
               <button
                 onClick={() => addToCart(selectedDish)}
                 className={`px-4 py-2 text-white rounded-md ${
-                  cartItems.includes(selectedDish.id?.toString()) ? "bg-green-800" : "bg-green-600"
+                  cartItems.includes(selectedDish.id?.toString())
+                    ? "bg-green-800"
+                    : "bg-green-600"
                 } hover:bg-green-700 disabled:opacity-50`}
                 disabled={cartItems.includes(selectedDish.id?.toString())}
               >

@@ -162,8 +162,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               onClick={onClose}
               className="text-gray-700 hover:text-gray-900 duration-200"
             >
-               
-             ✖
+              ✖
             </button>
           </div>
 
@@ -215,16 +214,17 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                     {order.payment_method.toUpperCase()}
                   </span> */}
                 </div>
-                {order?.request_for_driver&&
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Amount:</span>
-                  <span className="font-medium text-gray-800">
-                    ₹{order.amount}
-                  </span>
-                </div>}
+                {order?.request_for_driver && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Amount:</span>
+                    <span className="font-medium text-gray-800">
+                      ₹{order.amount}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
-{/* 
+            {/* 
             {order?.driver && (
               <div>
                 <h3 className="font-semibold text-gray-700 mb-2">Driver</h3>
@@ -286,21 +286,21 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                     </tr>
                   ))}
                 </tbody>
-                  {order?.request_for_driver&&
-                (<tfoot className="bg-gray-50">
-                  <tr>
-                    <td
-                      colSpan={3}
-                      className="px-4 py-3 text-right font-medium text-gray-700"
-                    >
-                      Total
-                    </td>
-                    <td className="px-4 py-3 text-right font-bold text-gray-900">
-                      ₹{order.amount}
-                    </td>
-                  </tr>
-                </tfoot>)
-}
+                {order?.request_for_driver && (
+                  <tfoot className="bg-gray-50">
+                    <tr>
+                      <td
+                        colSpan={3}
+                        className="px-4 py-3 text-right font-medium text-gray-700"
+                      >
+                        Total
+                      </td>
+                      <td className="px-4 py-3 text-right font-bold text-gray-900">
+                        ₹{order.amount}
+                      </td>
+                    </tr>
+                  </tfoot>
+                )}
               </table>
             </div>
           </div>

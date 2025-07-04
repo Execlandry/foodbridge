@@ -113,8 +113,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
             lng: Number(orderData.order.address.long),
           },
         });
-      }
-      else {
+      } else {
         setCoordinates({
           orderCoordinates: {
             lat: Number(orderData.order.business.latitude),
@@ -127,7 +126,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
         });
       }
     }
-    console.log(orderData)
+    console.log(orderData);
   }, [orderData]);
 
   const mapRef = useRef<HTMLDivElement | null>(null);

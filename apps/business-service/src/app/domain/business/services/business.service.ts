@@ -49,6 +49,13 @@ export class BusinessService {
     });
   }
 
+  public async fetchAllMyBusiness1(user: UserMetaData) {
+    return await this.businessRepo.find({
+      where: { owner_id: user.userId },
+      relations: ["dishes", "address"],
+    });
+  }
+
   public async fetchBusinessById(param: fetchBusinessByIdDto) {
     const { id } = param;
     const response = await this.businessRepo.findOne({

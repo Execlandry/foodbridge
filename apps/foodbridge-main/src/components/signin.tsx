@@ -12,7 +12,7 @@ export default function Login() {
   const { user } = useContext(UserContext) as UserContextType;
 
   useEffect(() => {
-    if (user) {
+    if (user && user?.permissions != "business-admin") {
       navigate("/fbe/business");
     }
   }, [user, navigate]);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -12,29 +12,32 @@ export default function RootLayout({
   const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 mb-8 border border-gray-200">
-          <div className="flex flex-col space-y-6 lg:flex-row lg:space-y-0 lg:items-center lg:justify-between">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+    <div className="min-h-screen py-10 px-4 sm:px-8 lg:px-16">
+      <div className="max-w-screen-xl mx-auto space-y-10">
+        {/* Header */}
+        <section className="bg-white border border-gray-200 rounded-3xl shadow-lg p-8 sm:p-10 transition-all duration-300">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            {/* Title + Subheading */}
+            <div>
+              <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
                 Business Dashboard
               </h1>
-              <h2 className="text-gray-600 text-lg">
-                Manage your business operations
-              </h2>
+              <p className="mt-2 text-lg text-gray-500 font-medium">
+                Monitor and manage your business operations seamlessly
+              </p>
             </div>
-            <div className="flex flex-wrap items-center gap-4">
+
+            {/* Actions */}
+            <div className="flex flex-wrap gap-4">
               <Link
                 href="/dashboard/businesses/add"
-                className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-green-700 border border-green-600 rounded-lg hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                className="inline-flex items-center px-6 py-3 text-sm font-semibold text-green-700 border border-green-600 rounded-full bg-gradient-to-r from-green-50 to-white hover:from-white hover:to-green-50 transition-shadow shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-400"
               >
                 <svg
-                  aria-hidden="true"
+                  className="h-5 w-5 mr-2 text-green-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  className="flex-shrink-0 h-5 w-5 mr-2"
                 >
                   <path
                     strokeLinecap="round"
@@ -45,16 +48,16 @@ export default function RootLayout({
                 </svg>
                 Add Business
               </Link>
+
               <Link
                 href="/dashboard/businesses"
-                className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                className="inline-flex items-center px-6 py-3 text-sm font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 focus:ring-2 focus:ring-green-400 transition-shadow shadow-md"
               >
                 <svg
-                  aria-hidden="true"
+                  className="h-5 w-5 mr-2 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  className="flex-shrink-0 h-5 w-5 mr-2"
                 >
                   <path
                     strokeLinecap="round"
@@ -67,10 +70,12 @@ export default function RootLayout({
               </Link>
             </div>
           </div>
-        </div>
-        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-200">
+        </section>
+
+        {/* Main Content */}
+        <section className="bg-white border border-gray-200 rounded-3xl shadow-lg p-8 sm:p-10 transition-all duration-300">
           {children}
-        </div>
+        </section>
       </div>
     </div>
   );

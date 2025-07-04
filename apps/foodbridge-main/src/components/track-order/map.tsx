@@ -1,11 +1,11 @@
 // components/MapWithRoute.tsx
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import 'leaflet-routing-machine';
+import { useEffect, useRef } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import "leaflet-routing-machine";
 
 interface CoOrdinates {
   orderCoordinates: {
@@ -18,7 +18,10 @@ interface CoOrdinates {
   };
 }
 
-export default function MapWithRoute({ orderCoordinates, geocodedCoords }: CoOrdinates) {
+export default function MapWithRoute({
+  orderCoordinates,
+  geocodedCoords,
+}: CoOrdinates) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMap = useRef<L.Map | null>(null);
 
@@ -36,8 +39,8 @@ export default function MapWithRoute({ orderCoordinates, geocodedCoords }: CoOrd
     );
 
     // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
     }).addTo(leafletMap.current);
 
     // Add routing control
@@ -47,13 +50,13 @@ export default function MapWithRoute({ orderCoordinates, geocodedCoords }: CoOrd
         L.latLng(geocodedCoords.lat, geocodedCoords.lng),
       ],
       lineOptions: {
-        styles: [{ color: 'blue', weight: 4 }],
+        styles: [{ color: "blue", weight: 4 }],
         extendToWaypoints: true,
         missingRouteTolerance: 10,
       },
-      createMarker: (i:any, waypoint:any) => {
+      createMarker: (i: any, waypoint: any) => {
         return L.marker(waypoint.latLng).bindPopup(
-          i === 0 ? 'Driver' : 'Delivery Location'
+          i === 0 ? "Driver" : "Delivery Location"
         );
       },
       addWaypoints: false,
@@ -73,7 +76,12 @@ export default function MapWithRoute({ orderCoordinates, geocodedCoords }: CoOrd
   return (
     <div
       ref={mapRef}
-      style={{ height: '500px', width: '100%', borderRadius: '8px', overflow: 'hidden' }}
+      style={{
+        height: "500px",
+        width: "100%",
+        borderRadius: "8px",
+        overflow: "hidden",
+      }}
     />
   );
 }

@@ -24,31 +24,26 @@ const Nav = ({ sidebarOutsideClick }) => {
 
   return (
     <nav
-      className={`h-full bg-green-50/50 transition-all duration-300 ${
+      className={`h-full transition-all duration-500 ease-in-out ${
         sidebarStatus ? "w-64" : "w-16"
-      }`}
+      } overflow-hidden`}
     >
-      <div className="flex flex-col h-full px-3 py-6 space-y-2">
-        {/* Toggle button */}
-        <div className="flex justify-end">
-          {sidebarStatus ? (
-            <button
-              className="p-1 rounded-full hover:bg-green-100 transition-colors duration-300"
-              onClick={() => setSidebarStatus(false)}
-            >
+      <div className="flex flex-col h-full px-3 py-6 space-y-3">
+        {/* Toggle Button */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarStatus(!sidebarStatus)}
+            className="p-2 rounded-full hover:bg-green-100 transition-colors duration-300"
+          >
+            {sidebarStatus ? (
               <ArrowNarrowLeftIcon className="h-5 w-5 text-green-600 hover:text-green-700 transition-transform duration-300" />
-            </button>
-          ) : (
-            <button
-              className="p-1 rounded-full hover:bg-green-100 transition-colors duration-300"
-              onClick={() => setSidebarStatus(true)}
-            >
+            ) : (
               <ArrowNarrowRightIcon className="h-5 w-5 text-green-600 hover:text-green-700 transition-transform duration-300" />
-            </button>
-          )}
+            )}
+          </button>
         </div>
 
-        {/* Navigation items */}
+        {/* Navigation Items */}
         <NavItem
           hrefLink="/dashboard/businesses"
           sidebarStatus={sidebarStatus}

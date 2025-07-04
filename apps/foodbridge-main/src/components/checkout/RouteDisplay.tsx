@@ -5,9 +5,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
-import redicon from "./images/marker-icon-2x-red (1).png"
-import blueicon from "./images/marker-icon-2x-blue.png"
-
+import redicon from "./images/marker-icon-2x-red (1).png";
+import blueicon from "./images/marker-icon-2x-blue.png";
 
 interface CoOrdinates {
   orderCoordinates: {

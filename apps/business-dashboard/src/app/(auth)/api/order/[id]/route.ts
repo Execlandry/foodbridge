@@ -8,7 +8,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-   const session: any = await getServerSession(authOptions);
+  const session: any = await getServerSession(authOptions);
 
   try {
     // fetch data from business apis from proxy
