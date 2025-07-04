@@ -106,10 +106,8 @@ function Home() {
   const [groupedDishes, setGroupedDishes] = useState<GroupedDishes>({});
   const [expiredDishes, setExpiredDishes] = useState<Set<string>>(new Set());
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
-  const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
   useEffect(() => {
-    if (user?.permissions == "business-admin") {
     if (user?.permissions == "business-admin") {
       navigate("/signin");
       return;
@@ -129,7 +127,10 @@ function Home() {
         cartData.forEach((cart: CartItem) => {
           if (cart.menu_items && Array.isArray(cart.menu_items)) {
             cart.menu_items.forEach((item: MenuItem) => {
-              if (!filterAvailable.includes(item.id?.toString()) || item.status !== "available") {
+              if (
+                !filterAvailable.includes(item.id?.toString()) ||
+                item.status !== "available"
+              ) {
                 dispatch(
                   removeCartItems({
                     business: cart.business,
@@ -152,7 +153,6 @@ function Home() {
     };
 
     checkForAvailability();
-    checkForAvailability();
   }, [cartData, filterAvailable, dispatch]);
 
   useEffect(() => {
@@ -163,31 +163,30 @@ function Home() {
       const expiredIds = new Set<string>();
 
       dishesData.foodHolder.forEach((dish: Dish) => {
-        if (!dish || typeof dish !== 'object') return;
-        
+        if (!dish || typeof dish !== "object") return;
+
         if (dish.expires_at && new Date() > new Date(dish.expires_at)) {
           if (dish.id) expiredIds.add(dish.id.toString());
           return;
         }
-        
+
         if (dish.status !== "available") {
           return;
         }
 
         const businessId = dish.business_id?.toString();
         if (!businessId || !dish.business) return;
-        
+
         if (!grouped[businessId]) {
           grouped[businessId] = { business: dish.business, dishes: [] };
         }
-        
+
         grouped[businessId].dishes.push(dish);
         if (dish.id) filterAvailableIds.push(dish.id.toString());
       });
 
       setFilterAvailable(filterAvailableIds);
       setExpiredDishes(expiredIds);
-
 
       if (addresses?.[0]?.lat && addresses?.[0]?.long) {
         const reference = addresses[0];
@@ -316,10 +315,6 @@ function Home() {
     setSelectedDish(dish);
   };
 
-  const handleDishClick = (dish: Dish) => {
-    setSelectedDish(dish);
-  };
-
   function TopSection() {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -366,16 +361,18 @@ function Home() {
   }
 
   function BusinessesAndDishes() {
-    
-    const filteredBusinesses = businessesData?.filter((business: Business) => {
-      if (!business) return false;
-      
-      const matchesSearch = business.name?.toUpperCase().includes(searchTerm.toUpperCase());
-      
-      const hasDishes = groupedDishes[business.id]?.dishes?.length > 0;
-      
-      return matchesSearch && hasDishes;
-    }) || [];
+    const filteredBusinesses =
+      businessesData?.filter((business: Business) => {
+        if (!business) return false;
+
+        const matchesSearch = business.name
+          ?.toUpperCase()
+          .includes(searchTerm.toUpperCase());
+
+        const hasDishes = groupedDishes[business.id]?.dishes?.length > 0;
+
+        return matchesSearch && hasDishes;
+      }) || [];
 
     const BusinessCard = ({ business }: { business: Business }) => {
       const businessDishes = groupedDishes[business.id]?.dishes || [];
@@ -402,8 +399,6 @@ function Home() {
             {businessDishes.map((dish: Dish) => (
               <div
                 key={dish.id}
-                onClick={() => handleDishClick(dish)}
-                className={`bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200 cursor-pointer ${
                 onClick={() => handleDishClick(dish)}
                 className={`bg-gray-50 rounded-lg p-3 flex items-center gap-3 group hover:bg-green-50 transition-all duration-200 cursor-pointer ${
                   cartItems.includes(dish.id?.toString()) ? "bg-green-200" : ""
@@ -442,12 +437,12 @@ function Home() {
                           e.stopPropagation();
                           addToCart(dish);
                         }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addToCart(dish);
-                        }}
                         className={`w-7 h-7 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-200 focus:ring-2 focus:ring-green-500/20 
-                          ${cartItems.includes(dish.id?.toString()) ? "bg-green-800" : "bg-green-600"}`}
+                          ${
+                            cartItems.includes(dish.id?.toString())
+                              ? "bg-green-800"
+                              : "bg-green-600"
+                          }`}
                         disabled={cartItems.includes(dish.id?.toString())}
                       >
                         <PlusIcon className="h-4 w-4" />
