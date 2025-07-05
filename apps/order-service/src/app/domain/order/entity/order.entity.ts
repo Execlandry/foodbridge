@@ -27,7 +27,7 @@ export class OrderEntity extends BaseEntity {
   @Column({ type: "boolean", default: false })
   public request_for_driver!: boolean;
 
-  @Column({ type: "varchar", select: true})
+  @Column({ type: "varchar", select: true })
   public amount!: string;
 
   @Column({ type: "varchar", length: 6, nullable: true })

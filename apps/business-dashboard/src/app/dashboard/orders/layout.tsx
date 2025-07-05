@@ -13,9 +13,9 @@ export default function RootLayout({
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-200">
-          {children}
-        </div>
+      <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-200">
+        {children}
+      </div>
     </div>
   );
 }

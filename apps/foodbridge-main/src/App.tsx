@@ -13,7 +13,7 @@ import SuccessPage from "./routes/success";
 import TrackOrderPage from "./routes/track-order";
 import LeftSideBar from "./components/business-pages/left-side-bar";
 import RightSideBar from "./components/business-pages/right-side-bar";
-import PaymentPage from "./routes/payments"
+import PaymentPage from "./routes/payments";
 import "./styles/index.css";
 import "./styles/tailwind.css";
 import { UserContext } from "./hooks/user-context";

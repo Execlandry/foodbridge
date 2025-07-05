@@ -150,16 +150,15 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
-    description: "return all admin business",
+    description:
+      "Return all businesses if no user, or only user's businesses if user present",
   })
   @ApiOkResponse({
-    description: "return search business successfully",
+    description: "Successfully returned businesses",
   })
-  // @RoleAllowed(UserRoles["business-admin"])
-  // @UseGuards(AccessTokenGuard, RolesGuard)
   @Get("/")
-  public async fetchAllMyBusiness() {
-    return await this.service.fetchAllMyBusiness();
+  public async fetchAllMyBusiness(@User() user?: UserMetaData) {
+    return await this.service.fetchAllMyBusiness(user);
   }
 
   @HttpCode(HttpStatus.OK)

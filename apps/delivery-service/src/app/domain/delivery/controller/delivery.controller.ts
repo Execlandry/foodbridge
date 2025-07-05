@@ -80,27 +80,29 @@ export class DeliveryController {
   // @ApiBody({ type: LocationDto })
   public async setOtpVerified(
     @User() user: UserMetaData,
-    @Body() body: VerifyOtpDto,
+    @Body() body: VerifyOtpDto
   ) {
-    return await this.service.setOtpVerified(user.userId,body.otp);
+    return await this.service.setOtpVerified(user.userId, body.otp);
   }
 
   @UseGuards(AccessTokenGuard, RolesGuard)
-@RoleAllowed(UserRoles["delivery-partner"])
-@HttpCode(HttpStatus.OK)
-@Get('/order-otp-status')
-@ApiOperation({ summary: "Check if OTP is already verified for the assigned order" })
-@ApiOkResponse({
-  description: "Returns the OTP verification status for the delivery partner",
-  schema: {
-    example: {
-      is_otp_verified: true
-    }
+  @RoleAllowed(UserRoles["delivery-partner"])
+  @HttpCode(HttpStatus.OK)
+  @Get("/order-otp-status")
+  @ApiOperation({
+    summary: "Check if OTP is already verified for the assigned order",
+  })
+  @ApiOkResponse({
+    description: "Returns the OTP verification status for the delivery partner",
+    schema: {
+      example: {
+        is_otp_verified: true,
+      },
+    },
+  })
+  public async getOrderOtpStatus(@User() user: UserMetaData) {
+    return await this.service.getOrderOtpStatus(user.userId);
   }
-})
-public async getOrderOtpStatus(@User() user: UserMetaData) {
-  return await this.service.getOrderOtpStatus(user.userId);
-}
 
   @UseGuards(AccessTokenGuard, RolesGuard)
   @RoleAllowed(UserRoles["delivery-partner"])

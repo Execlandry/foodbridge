@@ -11,7 +11,7 @@ export async function GET(request: NextApiRequest, res: NextApiResponse) {
     // fetch data from business apis from proxy
     // GET SERVER SIDE SESSION AND PASS TOKEN TO NESTJS APIS
     const response = await axios.get(
-      `http://localhost:3001/api/v1/business-service/businesses/`,
+      `http://localhost:3001/api/v1/business-service/businesses`,
       {
         headers: {
           Authorization: `Bearer ${session?.user?.access_token}`,
