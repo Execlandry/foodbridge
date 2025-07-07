@@ -39,8 +39,8 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className="w-full bg-white shadow-lg shadow-gray-100/50">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="mx-auto max-w-[1640px] bg-white shadow-lg shadow-gray-100/50">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16" ref={ref}>
           {/* Left Section - Logo */}
           <div className="flex-shrink-0">

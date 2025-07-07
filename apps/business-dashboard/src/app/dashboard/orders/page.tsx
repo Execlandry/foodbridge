@@ -7,7 +7,7 @@ import OrderTrackingModal from "./OrderTrackingModal";
 import { useEffect, useState } from "react";
 import { Order } from "./Orders";
 import { Business } from "@fbe/types";
-// import { RefreshCw } from "lucide-react"; // Optional: icon package like lucide
+// import { RefreshCw } from "lucide-react";
 
 export default function Restaurants() {
   const { data: session } = useSession();
@@ -66,32 +66,32 @@ export default function Restaurants() {
   }, [orderData]);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
+    <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-between items-center mb-10">
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
           My Orders
         </h1>
+
         <button
-          className="group flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition duration-200"
           onClick={fetchAllOrders}
-          aria-label="Refresh orders"
+          className="group flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition-all"
         >
           {/* <RefreshCw className="w-4 h-4 text-gray-500 group-hover:rotate-180 transition-transform" /> */}
-          <span className="text-sm text-gray-700">Refresh</span>
+          <span className="text-gray-700">Refresh</span>
         </button>
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-transparent border-green-500 mb-4"></div>
-          <p className="text-gray-600 text-sm">Loading your orders...</p>
+        <div className="flex flex-col items-center justify-center py-24">
+          <div className="h-12 w-12 rounded-full border-4 border-t-transparent border-green-500 animate-spin mb-4"></div>
+          <p className="text-sm text-gray-500">Loading your orders...</p>
         </div>
       ) : error ? (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <p className="text-red-700 font-medium">{error}</p>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center shadow-md">
+          <p className="text-red-700 font-semibold">{error}</p>
           <button
             onClick={fetchAllOrders}
-            className="mt-4 inline-block px-5 py-2.5 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition duration-200"
+            className="mt-4 px-5 py-2 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 transition"
           >
             Try Again
           </button>
@@ -100,7 +100,7 @@ export default function Restaurants() {
         <OrderList
           orders={pendingOrders}
           title="Active Orders"
-          emptyMessage="You don't have any active orders."
+          emptyMessage="You don't have any active orders at the moment."
           onViewDetails={setSelectedOrder}
           onTrackOrder={setSelectedTrackingOrder}
         />
@@ -113,7 +113,6 @@ export default function Restaurants() {
           onClose={() => setSelectedOrder(null)}
         />
       )}
-
       {selectedTrackingOrder && (
         <OrderTrackingModal
           order_id={selectedTrackingOrder.id}

@@ -45,6 +45,7 @@ interface Business {
   id: string | number;
   name: string;
   thumbnails?: string;
+  banner?: string;
   is_available: boolean;
   latitude: string | number;
   longitude: string | number;
@@ -165,10 +166,10 @@ function Home() {
       dishesData.foodHolder.forEach((dish: Dish) => {
         if (!dish || typeof dish !== "object") return;
 
-        if (dish.expires_at && new Date() > new Date(dish.expires_at)) {
-          if (dish.id) expiredIds.add(dish.id.toString());
-          return;
-        }
+        // if (dish.expires_at && new Date() > new Date(dish.expires_at)) {
+        //   if (dish.id) expiredIds.add(dish.id.toString());
+        //   return;
+        // }
 
         if (dish.status !== "available") {
           return;
@@ -383,7 +384,7 @@ function Home() {
         <div className="bg-white rounded-2xl shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6">
             <img
-              src={business?.thumbnails || "https://via.placeholder.com/150"}
+              src={business?.banner || "https://via.placeholder.com/150"}
               alt={business?.name}
               className="w-24 h-24 object-cover rounded-lg shadow-sm"
               loading="lazy"

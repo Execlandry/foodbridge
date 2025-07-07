@@ -1,7 +1,7 @@
 import React from "react";
 import { Order } from "./Orders";
 import OrderCard from "./OrderCard";
-// import { PackageX } from 'lucide-react'; // Optional icon (install `lucide-react`)
+import { InboxIcon } from "@heroicons/react/outline";
 
 interface OrderListProps {
   orders: Order[] | null;
@@ -21,20 +21,16 @@ const OrderList: React.FC<OrderListProps> = ({
   const isEmpty = !orders || orders.length === 0;
 
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-6 tracking-tight">
-        {title}
-      </h2>
-
+    <div className="mt-10 px-4 sm:px-6 lg:px-8">
       {isEmpty ? (
-        <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl py-12 px-6 text-center shadow-inner transition">
+        <div className="bg-white/60 backdrop-blur-sm border border-dashed border-gray-300 rounded-2xl py-16 px-8 text-center shadow-xl transition-all duration-300">
           <div className="flex justify-center mb-4">
-            {/* <PackageX className="w-10 h-10 text-gray-400" /> */}
+            <InboxIcon className="w-12 h-12 text-gray-400" />
           </div>
-          <p className="text-gray-600 text-base font-medium">{emptyMessage}</p>
+          <p className="text-gray-600 text-lg font-medium">{emptyMessage}</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {orders.map((order) => (
             <OrderCard
               key={order.id}

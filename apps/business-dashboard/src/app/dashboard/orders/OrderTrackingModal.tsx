@@ -33,7 +33,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   const intervalRef = useRef<number | null>(null);
 
   const blueIcon = new L.Icon({
-    iconUrl: blueicon,
+    iconUrl: blueicon.src, // ✅ Use .src
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -41,7 +41,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   });
 
   const redIcon = new L.Icon({
-    iconUrl: redicon,
+    iconUrl: redicon.src, // ✅ Use .src
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -51,6 +51,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   useEffect(() => {
     fetchCurrentOrder();
   }, []);
+  const routingControl = useRef<L.Routing.Control | null>(null);
 
   useEffect(() => {
     intervalRef.current = window.setInterval(fetchCurrentOrder, 10000);
@@ -72,13 +73,18 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Fix: fully clean up existing map instance
+    // Clean up existing map
     if (leafletMap.current) {
-      leafletMap.current.off(); // remove listeners
-      leafletMap.current.remove(); // destroy map
-      leafletMap.current = null; // clear ref
+      if (routingControl.current) {
+        leafletMap.current.removeControl(routingControl.current);
+        routingControl.current = null;
+      }
+      leafletMap.current.off();
+      leafletMap.current.remove();
+      leafletMap.current = null;
     }
 
+    // Create new map
     leafletMap.current = L.map(mapRef.current).setView(
       [coordinates.orderCoordinates.lat, coordinates.orderCoordinates.lng],
       13
@@ -89,8 +95,8 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(leafletMap.current);
 
-    // Add routing control
-    L.Routing.control({
+    // Create and add routing control
+    routingControl.current = L.Routing.control({
       waypoints: [
         L.latLng(
           coordinates.orderCoordinates.lat,
@@ -104,7 +110,7 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
       lineOptions: {
         styles: [{ color: "#22c55e", weight: 4 }],
       },
-      createMarker: (i, wp) =>
+      createMarker: (i: any, wp: any) =>
         L.marker(wp.latLng, {
           icon: i === 0 ? blueIcon : redIcon,
         }).bindPopup(i === 0 ? "Driver Location" : "Destination"),
@@ -112,9 +118,21 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
       draggableWaypoints: false,
       fitSelectedRoutes: true,
       show: false,
-    } as any).addTo(leafletMap.current);
+    }).addTo(leafletMap.current);
 
     return () => {
+      // Step 1: remove routing control first
+      if (routingControl.current) {
+        try {
+          routingControl.current.getPlan().setWaypoints([]); // cancel ongoing routing
+          leafletMap.current?.removeControl(routingControl.current);
+        } catch (err) {
+          console.warn("Routing control cleanup failed:", err);
+        }
+        routingControl.current = null;
+      }
+
+      // Step 2: safely remove map
       if (leafletMap.current) {
         leafletMap.current.off();
         leafletMap.current.remove();
@@ -134,10 +152,10 @@ const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
       role="dialog"
       aria-modal="true"
     >
-      <div className="relative bg-white rounded-xl shadow-2xl border border-green-100 w-[92vw] h-[88vh] flex items-center justify-center transition-transform duration-300">
+      <div className="relative bg-white rounded-xl shadow-2xl border border-green-100 w-[92vw] h-[70vh] flex items-center justify-center transition-transform duration-300">
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="absolute top-1 right-1 z-10 p-2 bg-white rounded-full shadow hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-400"
           aria-label="Close map"
         >
           <XIcon className="w-5 h-5 text-gray-700" />
