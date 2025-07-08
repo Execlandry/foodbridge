@@ -48,6 +48,7 @@ import { User, UserMetaData } from "../../auth/guards/user";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
 import { RoleAllowed } from "../../auth/guards/role-decorator";
+import { OptionalAccessTokenGuard } from "../../auth/guards/optional-auth.guard";
 
 @ApiBearerAuth("authorization")
 @Controller("businesses")
@@ -156,6 +157,7 @@ export class BusinessController {
   @ApiOkResponse({
     description: "Successfully returned businesses",
   })
+  @UseGuards(OptionalAccessTokenGuard)
   @Get("/")
   public async fetchAllMyBusiness(@User() user?: UserMetaData) {
     return await this.service.fetchAllMyBusiness(user);

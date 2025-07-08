@@ -55,7 +55,7 @@ function AddFoodItemForm({ params }: any) {
     if (!expiryDate) return true; // Allow empty expiry date if not required
     const expiry = new Date(expiryDate);
     const currentTime = new Date();
-    const minExpiryTime = new Date(currentTime.getTime() + 3 * 60 * 60 * 1000); // Current time + 3 hours
+    const minExpiryTime = new Date(currentTime.getTime() + 3 * 60 * 60 * 1000); // 3 hours from now
     return expiry >= minExpiryTime;
   };
 

@@ -166,10 +166,10 @@ function Home() {
       dishesData.foodHolder.forEach((dish: Dish) => {
         if (!dish || typeof dish !== "object") return;
 
-        // if (dish.expires_at && new Date() > new Date(dish.expires_at)) {
-        //   if (dish.id) expiredIds.add(dish.id.toString());
-        //   return;
-        // }
+        if (dish.expires_at && new Date() > new Date(dish.expires_at)) {
+          if (dish.id) expiredIds.add(dish.id.toString());
+          return;
+        }
 
         if (dish.status !== "available") {
           return;
