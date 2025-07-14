@@ -22,7 +22,7 @@ export default function Signup() {
 
   useEffect(() => {
     if (user) {
-      router.push("/dashboard");
+      router.push("/dashboard/businesses");
     }
   }, [user, router]);
 
@@ -35,7 +35,7 @@ export default function Signup() {
       redirect: false,
       email: signupState.email,
       password: signupState.password,
-      callbackUrl: `${window.location.origin}/dashboard`,
+      callbackUrl: `${window.location.origin}/dashboard/businesses`,
     });
   };
 

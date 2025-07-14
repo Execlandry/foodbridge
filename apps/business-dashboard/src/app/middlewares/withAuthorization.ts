@@ -28,7 +28,7 @@ export default function withAuthorization(
     }
     if (pathname === "/") {
       if (token) {
-        const url = new URL(`/dashboard`, request.url);
+        const url = new URL(`/dashboard/businesses`, request.url);
         return NextResponse.redirect(url);
       } else {
         const url = new URL(`/signin`, request.url);

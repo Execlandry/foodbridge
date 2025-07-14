@@ -44,7 +44,7 @@ const NavItem = ({
 
           {/* Tooltip when sidebar collapsed */}
           {!sidebarStatus && (
-            <span className="absolute left-full ml-2 bg-green-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 whitespace-nowrap">
+            <span className="absolute hidden left-full ml-2 bg-green-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 whitespace-nowrap">
               {menuTitle}
             </span>
           )}

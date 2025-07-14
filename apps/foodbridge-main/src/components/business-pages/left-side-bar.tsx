@@ -80,7 +80,7 @@ export default function LeftSideBar() {
   return (
     <div className="fixed left-0 top-0 h-screen w-20 bg-white shadow-lg border-r border-gray-100 flex flex-col items-center py-6 z-50">
       {/* Logo/Branding */}
-      <div className="mb-8">
+      <div className="mb-8" onClick={() => navigation("/")}>
         <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
           F
         </div>

@@ -92,6 +92,7 @@ export async function POST(
         food_type: formData.food_type,
         quantity: formData.quantity,
         status: "available",
+        quantity_unit: formData.quantity_unit,
         // price: Number(formData.price),
         thumbnails: formData.thumbnails,
       },

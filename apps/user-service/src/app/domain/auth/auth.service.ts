@@ -78,6 +78,7 @@ export class AuthService {
   public async createToken(user: UserEntity) {
     const data: JwtPayload = {
       userId: user.id,
+      name: user.first_name,
       email: user.email,
       permissions: user.permissions,
     };

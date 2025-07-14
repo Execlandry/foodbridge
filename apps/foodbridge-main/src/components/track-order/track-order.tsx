@@ -55,9 +55,7 @@ const TrackOrderPage = () => {
             </>
           )}
         </div>
-        <div className=" w-[80%] bg-white p-8">
-       
-        </div>
+        <div className=" w-[80%] bg-white p-8"></div>
       </div>
     </>
   );

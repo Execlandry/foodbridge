@@ -105,21 +105,26 @@ export class OrderController {
     return await this.orderService.getAllOrders(user);
   }
 
-    @HttpCode(HttpStatus.OK)
+  // Controller method inside OrderController
+
+  @HttpCode(HttpStatus.OK)
   @ApiConsumes("application/json")
   @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
   @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
-  @UseGuards(AccessTokenGuard)
-  @Get("/business/all")
-  public async getBusinessOrder(
-    @User() user: UserMetaData
-    // @Query() query: UpdateByIdQueryDto
-  ) {
-    return await this.orderService.getBusinessOrder(user);
+  @ApiOperation({
+    description: "Return all business orders by owner ID",
+  })
+  @ApiOkResponse({
+    description: "Successfully returned business orders",
+  })
+  @Get("/business/all/:id")
+  // @RoleAllowed(UserRoles["business-admin"])
+  // @UseGuards(AccessTokenGuard, RolesGuard)
+  public async getBusinessOrder(@Param("id") id: string) {
+    return await this.orderService.getBusinessOrder(id);
   }
-
 
   // @HttpCode(HttpStatus.OK)
   // @ApiConsumes("application/json")

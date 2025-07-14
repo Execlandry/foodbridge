@@ -70,8 +70,7 @@ export class ExternalApis {
     return response.data;
   }
 
-  static async createAddress(id: any, payload: any) 
-  {
+  static async createAddress(id: any, payload: any) {
     const url = `/api/v1/auth-service/users/address/${id}`;
     const response = await axios.post(url, payload);
     return response.data;

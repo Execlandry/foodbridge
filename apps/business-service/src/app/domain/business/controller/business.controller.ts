@@ -48,6 +48,7 @@ import { User, UserMetaData } from "../../auth/guards/user";
 import { RolesGuard } from "../../auth/guards/role-guard";
 import { UserRoles } from "@fbe/types";
 import { RoleAllowed } from "../../auth/guards/role-decorator";
+import { OptionalAccessTokenGuard } from "../../auth/guards/optional-auth.guard";
 
 @ApiBearerAuth("authorization")
 @Controller("businesses")
@@ -150,15 +151,34 @@ export class BusinessController {
   @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
   @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
   @ApiOperation({
+    description:
+      "Return all businesses if no user, or only user's businesses if user present",
+  })
+  @ApiOkResponse({
+    description: "Successfully returned businesses",
+  })
+  @UseGuards(OptionalAccessTokenGuard)
+  @Get("/")
+  public async fetchAllMyBusiness(@User() user?: UserMetaData) {
+    return await this.service.fetchAllMyBusiness(user);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiConsumes("application/json")
+  @ApiNotFoundResponse({ description: NO_ENTITY_FOUND })
+  @ApiForbiddenResponse({ description: UNAUTHORIZED_REQUEST })
+  @ApiUnprocessableEntityResponse({ description: BAD_REQUEST })
+  @ApiInternalServerErrorResponse({ description: INTERNAL_SERVER_ERROR })
+  @ApiOperation({
     description: "return all admin business",
   })
   @ApiOkResponse({
     description: "return search business successfully",
   })
-  // @RoleAllowed(UserRoles["business-admin"])
-  // @UseGuards(AccessTokenGuard, RolesGuard)
-  @Get("/")
-  public async fetchAllMyBusiness() {
-    return await this.service.fetchAllMyBusiness();
+  @RoleAllowed(UserRoles["business-admin"])
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Get("/my-business")
+  public async fetchAll(@User() user: UserMetaData) {
+    return await this.service.fetchAllMyBusiness1(user);
   }
 }

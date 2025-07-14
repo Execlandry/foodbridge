@@ -27,58 +27,61 @@ export class DeliveryService {
     private readonly connection: Connection
   ) {}
 
-  async setOtpVerified(partnerId:string,otp:string){
+  async setOtpVerified(partnerId:string, otp:string) {
     const deliveryPartner= await this.deliveryRepo.findOne({
       //get the partner row that has been currently assigned to a order
       //TODO::get the order id for assurance from the frontend(optional)
-      where:{delivery_partner_id:partnerId,partner_assigned:true,order_status:"pending"},
-    })
+      where:{
+          delivery_partner_id: partnerId,
+          partner_assigned: true,
+          order_status: "pending",
+        },
+      });
 
-    
-    if (!deliveryPartner) throw new NotFoundException("Delivery partner not found");
-    if(deliveryPartner.order.otp!==otp){
-      throw new ForbiddenException('Invalid OTP');
+      if (!deliveryPartner)
+        throw new NotFoundException("Delivery partner not found");
+      if (deliveryPartner.order.otp !== otp){
+        throw new ForbiddenException("Invalid OTP");
+      }
+      if (deliveryPartner.order.is_otp_verified) {
+        throw new ConflictException("OTP already verified");
+      }
+      //get deliveryPartner.order otp for currently assigned delivery partner
+      deliveryPartner.order.is_otp_verified = true;
+      //patch the order status
+      deliveryPartner.order_status = "in_transit";
+      await this.deliveryRepo.save(deliveryPartner);
+      //change this
+      return { success: "OTP Verified successfully" };
     }
-    if (deliveryPartner.order.is_otp_verified) {
-    throw new ConflictException('OTP already verified');
-  }
-    //get deliveryPartner.order otp for currently assigned delivery partner
-    deliveryPartner.order.is_otp_verified=true
-    //patch the order status
-    deliveryPartner.order_status="in_transit"
-    await this.deliveryRepo.save(deliveryPartner);
-    //change this
-    return {success:"OTP Verified successfully"};
-  }
   async getOrderOtpStatus(partnerId: string) {
-  const deliveryPartner = await this.deliveryRepo.findOne({
-    where: {
-      delivery_partner_id: partnerId,
-      partner_assigned: true,
-      order_status: Not("delivered"),
-    },
-  });
+    const deliveryPartner= await this.deliveryRepo.findOne({
+      where:{
+        delivery_partner_id:partnerId,
+        partner_assigned:true,
+        order_status:Not("delivered"),
+        },
+      });
 
-  if (!deliveryPartner || !deliveryPartner.order) {
-    throw new NotFoundException("No current assigned order found");
-  }
+      if (!deliveryPartner || !deliveryPartner.order) {
+        throw new NotFoundException("No current assigned order found");
+      }
 
-  return {
-    is_otp_verified: deliveryPartner.order.is_otp_verified,
-  };
-}
+      return {
+        is_otp_verified: deliveryPartner.order.is_otp_verified,
+      };
+    }
 
-
-  async updateCurrentLocation(partnerId: string, location: LocationDto) {
-    const delivery = await this.deliveryRepo.findOneBy({
-      delivery_partner_id: partnerId,
-      partner_assigned: true,
-    });
-    if (!delivery) throw new NotFoundException("Delivery partner not found");
-    delivery.current_location = location;
-    await this.deliveryRepo.save(delivery);
-    return { currentLocation: delivery.current_location };
-  }
+  async updateCurrentLocation(partnerId: string, location: LocationDto){
+      const delivery = await this.deliveryRepo.findOneBy({
+        delivery_partner_id: partnerId,
+        partner_assigned: true,
+      });
+      if (!delivery) throw new NotFoundException("Delivery partner not found");
+      delivery.current_location = location;
+      await this.deliveryRepo.save(delivery);
+      return { currentLocation: delivery.current_location };
+    }
 
   async getOrderWithSuccessfulPayout(deliveryPartnerId: string) {
     const result = await this.deliveryRepo
@@ -117,38 +120,36 @@ export class DeliveryService {
         commission: item.commission,
         net_amount: item.net_amount,
         payment_method: item.payment_method,
-        stripe_payment_intent_id: item.stripe_payment_intent_id,
-      },
+        stripe_payment_intent_id: item.stripe_payment_intent_id,},
     }));
   }
 
-  async getCurrentOrdersForDeliveryPartner(partnerId: string) {
-    const getCurrentOrders = await this.deliveryRepo.findOne({
-      where: {
-        delivery_partner_id: partnerId,
-        partner_assigned: true,
-        order_status: Not("delivered"),
-      },
+  async getCurrentOrdersForDeliveryPartner(partnerId: string){
+    const getCurrentOrders = await this.deliveryRepo.findOne ({
+        where: {
+          delivery_partner_id: partnerId,
+          partner_assigned: true,
+          order_status: Not("delivered"),
+        },
     });
     if (!getCurrentOrders) {
-      return { CurrentOrder: null, orderStatus: null };
-    }
-    return {
-      CurrentOrder: getCurrentOrders.order,
-      orderStatus: getCurrentOrders.order_status,
-    };
+      return {CurrentOrder: null, orderStatus: null};
+    } 
+    return{
+      CurrentOrder:getCurrentOrders.order,
+      orderStatus:getCurrentOrders.order_status,
+    }; 
   }
 
   async fetchOrderById(orderId: string) {
-    const Order = await this.deliveryRepo.findOne({
-      where: {
-        order_id: orderId,
-      },
-    });
-    return Order;
-  }
+    const Order= await this.deliveryRepo.findOne({
+      where:{
+          order_id: orderId,
+      }, 
+    }); 
+    return Order; 
+  } 
 
-  
   async FetchAllOrders(orderId: string) {
     const Order = await this.deliveryRepo.findOne({
       where: {
@@ -159,7 +160,7 @@ export class DeliveryService {
   }
 
   async FetchOrdersByUserId(userId: UserMetaData) {
-  const deliveries = await this.deliveryRepo
+    const deliveries = await this.deliveryRepo
       .createQueryBuilder("delivery")
       .innerJoinAndMapOne(
         "delivery.payout",
@@ -167,26 +168,26 @@ export class DeliveryService {
         "payout",
         "delivery.order_id = payout.order_id"
       )
-    .where(`delivery.order->>'user_id' = :userId`, { userId })
-        .select([
+      .where(`delivery.order->>'user_id' = :userId`, { userId })
+      .select([
         "delivery.order AS order",
         "delivery.order_status AS order_status",
         "payout.payment_status AS payment_status",
       ])
       .getRawMany();
 
-  return deliveries.map((item)=>({
-    ...item.order,
-    order_status:item.order_status,
-    payment_status:item.payment_status,
-  }))
-}
+    return deliveries.map((item) => ({
+      ...item.order,
+      order_status: item.order_status,
+      payment_status: item.payment_status,
+    }));
+  }
 
-  async getAvailableOrdersForDelivery() {
-    const availableOrders = await this.deliveryRepo.find({
-      where: { partner_assigned: false },
-      order: { created_at: "ASC" },
-    });
+  async getAvailableOrdersForDelivery(){
+      const availableOrders = await this.deliveryRepo.find({
+        where: { partner_assigned: false },
+        order: { created_at: "ASC" },
+      });
     return availableOrders;
   }
 

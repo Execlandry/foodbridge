@@ -1,18 +1,22 @@
 import React from "react";
 import Hero from "./landing-page/hero";
-import Foods from "./landing-page/foods";
 import HeadlineCards from "./landing-page/headline-cards";
-import Catogery from "./landing-page/category";
+import Footer from "./landing-page/footer";
+import About from "./landing-page/About";
+import Works from "./landing-page/works";
+import CTA from "./landing-page/cta";
 
 function App() {
   return (
     <>
-      <div className="mb-10">
-        <Hero />
-        <div className="App ml-10 mr-10 ">
+      <div className="">
+        <div className="App">
+          <Hero />
           <HeadlineCards />
-          <Foods />
-          <Catogery />
+          <About />
+          <Works />
+          <CTA />
+          <Footer />
         </div>
       </div>
     </>

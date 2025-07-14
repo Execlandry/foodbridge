@@ -54,7 +54,7 @@ import {
   UNAUTHORIZED_REQUEST,
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
-} from "src/app/app.constants";
+} from "../../app.constants";
 import { UserRoles } from "@fbe/types";
 
 @ApiBearerAuth("authorization")

@@ -6,7 +6,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import { FiDollarSign } from "react-icons/fi";
+import { FaRupeeSign } from "react-icons/fa";
 
 const stripePromise = loadStripe(
   "pk_test_51QivsQKPR8ckGMwqNue05fCy7quuwkAUGWzm3HirxDT3JJR9AQChu2otmRbpGlchO4c5OF0jolsbizTLRd3eYyRG006roNdD7F"
@@ -52,7 +52,7 @@ export default function Home() {
             } p-2 rounded-md bg-green-50 focus-within:border-green-500 transition-all`}
             animate={inputControls}
           >
-            {/* <FiDollarSign className="text-lg text-green-600" /> */}
+            <FaRupeeSign className="text-lg text-green-600" />
             <input
               type="number"
               value={amount === 0 ? "" : amount}

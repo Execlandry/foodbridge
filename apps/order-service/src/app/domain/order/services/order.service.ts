@@ -14,11 +14,7 @@ import { Like, Repository, Connection, QueryRunner } from "typeorm";
 import { NotFoundException } from "@nestjs/common";
 import { OrderEntity } from "../entity/order.entity";
 
-import {
-  CreatePaymentBodyDto,
-
-  UpdateByIdDto,
-} from "../dto/order.dto";
+import { CreatePaymentBodyDto, UpdateByIdDto } from "../dto/order.dto";
 import { UserMetaData } from "../../auth/guards/user";
 import { ClientProxy } from "@nestjs/microservices";
 @Injectable()
@@ -110,16 +106,18 @@ export class OrderService implements OnModuleInit {
       },
     });
   }
-async getBusinessOrder(user: UserMetaData) {
-  const userId = user.userId;
+  async getBusinessOrder(ownerId: string) {
+    this.logger.log(`Fetching orders for business owner ID: ${ownerId}`);
+    const deliveries = await this.orderRepo.find();
 
-  const deliveries = await this.orderRepo
-    .createQueryBuilder("order")
-    .where(`order.business->>'owner_id' = :userId`, { userId })
-    .getMany();
+    // Log all deliveries (optional, remove in production)
+    console.log("All deliveries:", deliveries);
 
-  return deliveries;
-}
+    // Filter by matching business owner_id
+    return deliveries.filter(
+      (delivery) => delivery.business?.owner_id === ownerId
+    );
+  }
 
   //  async getAllBusinessOrders(user: UserMetaData) {
   //   return this.orderRepo.find({

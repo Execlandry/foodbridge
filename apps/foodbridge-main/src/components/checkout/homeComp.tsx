@@ -68,50 +68,57 @@ interface Cart {
 
 export function TopSection() {
   return (
-    <div className="max-w-[1400px]">
-      <div className="flex flex-row justify-between mr-10">
-        <p className="text-2xl mt-4 font-bold">Food is on the way...</p>
+    <div className="max-w-[1400px] mx-auto px-6 py-6">
+      {/* Header Row */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-3xl font-bold text-gray-800 font-serif">
+          Bridging Surplus to Hunger
+        </p>
 
-        <div className="bg-white h-10 items-center justify-center flex shadow-2xl rounded-3xl">
+        <div className="flex items-center bg-white shadow-md rounded-full px-4 py-2 w-full md:w-[400px]">
           <input
-            className="w-full ml-5 mr-8 bg-transparent h-full text-gray-700 outline-none"
-            id="username"
+            className="flex-1 text-gray-700 bg-transparent outline-none placeholder-gray-400 text-sm"
+            id="search-food"
             type="text"
-            placeholder="Search food by name"
+            placeholder="Search surplus food..."
           />
-          <SearchIcon className="h-8 w-8 text-gray-500 px-1 mr-5" />
+          <SearchIcon className="h-6 w-6 text-gray-500" />
         </div>
       </div>
 
-      <div className="bg-gray-100 rounded-2xl mt-5 mr-10 shadow-xl">
-        <div className="flex flex-row justify-between mt-3">
-          <img
-            src={delivery_bike_icon}
-            alt="Delivery Bike"
-            className="w-48 h-44 rounded-l-2xl"
-          />
-          <div className="flex flex-col items-center justify-center">
-            <p className="text-md font-bold">Hello User</p>
-            <p className="text-center mt-2">
-              <span className="text-gray-500">
-                purchase Surplus food items{" "}
-              </span>
-              <span className="text-orange-400 font-bold pl-1">
-                {" "}
-                available for donations{" "}
-              </span>
-              <span className="text-gray-500"> with delivery service</span>
-            </p>
-            <button className="text-white h-10 mt-3 bg-gradient-to-r from-orange-500 to-orange-500 rounded-3xl px-10">
-              Learn More
-            </button>
-          </div>
-          <img
-            src={banner_image_spags}
-            alt="Spaghetti"
-            className="w-36 h-44 rounded-r-2xl"
-          />
+      {/* Banner Card */}
+      <div className="bg-white rounded-2xl shadow-xl mt-8 overflow-hidden flex flex-col md:flex-row items-center">
+        {/* Left Image */}
+        <img
+          src={delivery_bike_icon}
+          alt="FoodBridge Delivery"
+          className="w-full md:w-56 h-44 object-cover md:rounded-l-2xl"
+        />
+
+        {/* Center Content */}
+        <div className="flex-1 text-center px-6 py-4">
+          <p className="text-lg font-semibold text-gray-800">
+            Welcome to FoodBridge 👋
+          </p>
+          <p className="text-sm mt-2 text-gray-600">
+            Connecting{" "}
+            <span className="text-orange-500 font-semibold">
+              restaurants & stores
+            </span>{" "}
+            with charities and individuals to reduce food waste and fight hunger
+            — all with doorstep delivery.
+          </p>
+          <button className="mt-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-full px-6 py-2 hover:shadow-lg transition-all duration-200">
+            Explore Donations
+          </button>
         </div>
+
+        {/* Right Image */}
+        <img
+          src={banner_image_spags}
+          alt="Surplus Meal"
+          className="w-full md:w-36 h-44 object-cover md:rounded-r-2xl"
+        />
       </div>
     </div>
   );
@@ -398,7 +405,7 @@ function Checkout() {
 
     try {
       let ordersPlaced = 0;
-      const dist=calculateDistance
+      const dist = calculateDistance;
 
       menuItem.forEach((value: any, index: number) => {
         if (
@@ -419,8 +426,8 @@ function Checkout() {
         const distance = dist[index] || 5; // Default to 5km if distance not calculated
         const amount = (distance * amount_per_km).toFixed(2);
 
-        const request=requestForDriver;
-        const item=value;
+        const request = requestForDriver;
+        const item = value;
         dispatch(
           PlaceOrder({
             user: user,
@@ -846,8 +853,8 @@ function Checkout() {
 
   return (
     <>
-      <TopSection />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+        <TopSection />
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Main Content */}
@@ -1171,26 +1178,28 @@ function Checkout() {
                   </div>
 
                   {/* Confirmation button */}
-                  {menuItem?.length>0 && (<div
-                    className={`
+                  {menuItem?.length > 0 && (
+                    <div
+                      className={`
       mt-8 flex justify-center
       sm:relative sm:mt-10
       fixed bottom-0 left-0 right-0 p-4 bg-white bg-opacity-90 backdrop-blur-sm shadow-md sm:shadow-none sm:bg-transparent
     `}
-                  >
-                    <button
-                      onClick={OrderPlace}
-                      className={`
+                    >
+                      <button
+                        onClick={OrderPlace}
+                        className={`
           flex items-center justify-center
           px-8 py-3 rounded-lg font-medium text-lg
           transition-all duration-300
           bg-green-600 text-white hover:bg-green-700 active:transform active:scale-95
           shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50
         `}
-                    >
-                      Confirm Order
-                    </button>
-                  </div>)}
+                      >
+                        Confirm Order
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

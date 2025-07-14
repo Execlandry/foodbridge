@@ -35,9 +35,7 @@ const OrdersPage = () => {
 
   useEffect(() => {
     if (orderData && Array.isArray(orderData)) {
-      setpendingOrders(
-        orderData.filter((order: any) => order)
-      );
+      setpendingOrders(orderData.filter((order: any) => order));
     }
   }, [orderData]);
 

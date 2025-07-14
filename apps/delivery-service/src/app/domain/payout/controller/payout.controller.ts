@@ -59,11 +59,10 @@ export class PayoutController {
   @RoleAllowed(UserRoles["delivery-partner"])
   @ApiBearerAuth()
   async createPaymentIntent(
-  @User() user: UserMetaData,
-  @Param("orderId") orderId: string,
-) {
-  return this.service.createPaymentIntent(orderId,user.userId);
-}
+      @User() user: UserMetaData,
+      @Param("orderId") orderId: string) {
+      return this.service.createPaymentIntent(orderId, user.userId);
+  }
 
   @Post("/stripe-webhook")
   @HttpCode(HttpStatus.OK)
@@ -92,18 +91,11 @@ export class PayoutController {
       // Handle only specific event types
       if (event.type === "payment_intent.succeeded") {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      
-        await this.service.updatePayoutStatus(
-          'success',
-          paymentIntent,
-        );
+        await this.service.updatePayoutStatus('success', paymentIntent);
       }
       if (event.type === "payment_intent.payment_failed") {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        await this.service.updatePayoutStatus(
-          'failed',
-          paymentIntent,
-        );
+        await this.service.updatePayoutStatus('failed', paymentIntent);
       }
 
       return res.send({ status: "success" });

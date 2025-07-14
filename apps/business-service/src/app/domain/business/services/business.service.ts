@@ -43,8 +43,31 @@ export class BusinessService {
     return await this.searchService.search(searchParam);
   }
 
-  public async fetchAllMyBusiness() {
+  public async fetchAllMyBusiness(user?: UserMetaData) {
+    if (!user || user.permissions === null) {
+      // Public access or user has no permissions – return all businesses
+      return await this.businessRepo.find({
+        relations: ["dishes", "address"],
+      });
+    }
+
+    if (user.permissions === "business-admin") {
+      // Return only this user's businesses
+      return await this.businessRepo.find({
+        where: { owner_id: user.userId },
+        relations: ["dishes", "address"],
+      });
+    }
+
+    // Fallback: return all businesses (or restrict further based on other roles)
     return await this.businessRepo.find({
+      relations: ["dishes", "address"],
+    });
+  }
+
+  public async fetchAllMyBusiness1(user: UserMetaData) {
+    return await this.businessRepo.find({
+      where: { owner_id: user.userId },
       relations: ["dishes", "address"],
     });
   }

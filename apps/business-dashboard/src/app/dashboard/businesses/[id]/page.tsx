@@ -96,7 +96,8 @@ export default function BusinessDetails({ params }: any) {
                   </p>
                   <div className="mt-4 flex items-center justify-between">
                     <span className="text-green-600 font-semibold text-sm">
-                      {data.value.food_type} • {data.value.quantity} available
+                      {data.value.food_type} • {data.value.quantity}{" "}
+                      {data.value.quantity_unit} available
                     </span>
                     <button
                       onClick={() => openModal(data.value)}
@@ -135,7 +136,7 @@ export default function BusinessDetails({ params }: any) {
         {/* Modal for Dish Details */}
         {isModalOpen && selectedDish && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative">
+            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[70vh] overflow-y-auto p-6 sm:p-8 relative">
               <button
                 onClick={closeModal}
                 className="absolute top-4 right-4 text-green-900 hover:text-green-700"

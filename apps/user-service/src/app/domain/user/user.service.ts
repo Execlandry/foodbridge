@@ -172,8 +172,8 @@ export class UserService {
     };
   }
 
-  async refreshOnboardingUrl(partnerId: string): Promise<{ onboarding_url: string }> {
-
+  async refreshOnboardingUrl(partnerId: string):
+  Promise<{ onboarding_url: string }> {
     const deliveryPartner = await this.partnerRepo.findOne({
       where: {
         user: {
@@ -181,35 +181,32 @@ export class UserService {
           permissions: UserRoles["delivery-partner"],
         },
       },
-      relations: ["user"]
+      relations: ["user"],
     });
-    
-    this.logger.log(`Called refreshOnboardingUrl for partnerId:  ${JSON.stringify(partnerId, null, 2)}`);
+
+    this.logger.log(`Called refreshOnboardingUrl for partnerId:  ${JSON.stringify(partnerId,null,2)}`);
     this.logger.log(`Fetched Delivery Partner: ${JSON.stringify(deliveryPartner, null, 2)}`);
-
-
 
     if (!deliveryPartner || !deliveryPartner.stripe_id) {
       throw new BadRequestException("Delivery partner or Stripe ID not found.");
     }
 
-    // if (deliveryPartner.onboarded == false) {
-      const accountId = deliveryPartner.stripe_id;
-      
-      try {
-        const accountLink = await this.stripe.accountLinks.create({
-          account: accountId,
-          refresh_url: "https://localhost:3000/",
-          return_url: "https://localhost:3000/",
-          type: "account_onboarding",
-        });
-        return { onboarding_url: accountLink.url };
-      } catch (error) {
-        this.logger.error(`Failed to refresh Stripe URL: ${error.message}`);
-        throw new BadRequestException('Failed to refresh onboarding URL');
-      }
-    // }
+
+  const accountId = deliveryPartner.stripe_id;
+  try{
+    const accountLink = await this.stripe.accountLinks.create({
+      account: accountId,
+      refresh_url: "https://localhost:3000/",
+      return_url: "https://localhost:3000/",
+      type: "account_onboarding",
+    });
+    return { onboarding_url: accountLink.url };
+  } catch (error) {
+    this.logger.error(`Failed to refresh Stripe URL: ${error.message}`);
+    throw new BadRequestException("Failed to refresh onboarding URL");
   }
+    
+}
 
   async handleStripeWebhook(
     event: Stripe.Event
@@ -233,7 +230,7 @@ export class UserService {
     } catch (error) {
       this.logger.error(`Webhook error: ${error.message}`);
       throw new BadRequestException("Webhook processing failed");
-    }
+  }
   }
 
   async updatePartnerAvailability(
