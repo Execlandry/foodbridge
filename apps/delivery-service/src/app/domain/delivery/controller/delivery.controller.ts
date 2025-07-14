@@ -86,22 +86,22 @@ export class DeliveryController {
   }
 
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @RoleAllowed(UserRoles["delivery-partner"])
-  @HttpCode(HttpStatus.OK)
-  @Get("/order-otp-status")
-  @ApiOperation({
-    summary: "Check if OTP is already verified for the assigned order",
-  })
-  @ApiOkResponse({
-    description: "Returns the OTP verification status for the delivery partner",
-    schema: {
-      example: {
-        is_otp_verified: true,
-      },
-    },
-  })
-  public async getOrderOtpStatus(@User() user: UserMetaData) {
-    return await this.service.getOrderOtpStatus(user.userId);
+  @RoleAllowed(UserRoles["delivery-partner"]) 
+  @HttpCode(HttpStatus.OK) 
+  @Get("/order-otp-status") 
+  @ApiOperation({ 
+    summary: "Check if OTP is already verified for the assigned order", 
+  }) 
+    @ApiOkResponse({  
+      description:"Returns the OTP verification status for the delivery partner",
+      schema: {
+        example: {
+          is_otp_verified: true,
+        },
+      }, 
+    })
+    public async getOrderOtpStatus(@User() user: UserMetaData){
+      return await this.service.getOrderOtpStatus(user.userId);
   }
 
   @UseGuards(AccessTokenGuard, RolesGuard)

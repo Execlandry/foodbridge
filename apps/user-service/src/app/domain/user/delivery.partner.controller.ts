@@ -89,11 +89,11 @@ export class DeliveryPartnerController {
 
   @UseGuards(AccessTokenGuard, RolesGuard)
   @RoleAllowed(UserRoles["delivery-partner"])
-  @Post("refresh-onboarding-url")
+  @Post('refresh-onboarding-url')
   @ApiBearerAuth()
-  public async refreshOnboardingUrl(@User() user: UserMetaData) {
+  public async refreshOnboardingUrl(@User() user:UserMetaData){
     this.logger.log(`Incoming User Metadata: ${JSON.stringify(user, null, 2)}`);
-    return this.service.refreshOnboardingUrl(user.id);
+     return this.service.refreshOnboardingUrl(user.id);
   }
 
   // @UseGuards(AccessTokenGuard, RolesGuard)

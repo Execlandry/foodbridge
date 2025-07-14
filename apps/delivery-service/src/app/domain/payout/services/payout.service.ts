@@ -16,7 +16,7 @@ export class PayoutService implements OnModuleInit {
     private payRepo: Repository<PayoutEntity>,
     @InjectRepository(DeliveryEntity)
     private readonly deliveryRepo: Repository<DeliveryEntity>,
-    private readonly userProxyService: UserProxyService
+    private readonly userProxyService: UserProxyService,
   ) {
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
       apiVersion: "2023-08-16",
@@ -30,57 +30,52 @@ export class PayoutService implements OnModuleInit {
   }
 
   async createPaymentIntent(orderId: string, deliveryPartnerId: string) {
-    this.logger.log(
-      `Called payout for deliverypartner: ${JSON.stringify(
-        deliveryPartnerId,
-        null,
-        2
-      )}`
-    );
-    const delivery = await this.deliveryRepo.findOne({
-      where: {
-        delivery_partner_id: deliveryPartnerId,
-        order_id: orderId,
-      },
-    });
-    const stripeId = delivery.delivery_partner.stripe_id;
-    const amount = Math.round(delivery.order.amount * 100);
-    const commission = Math.round(amount * 0.2);
-    const netAmount = amount - commission;
-
-    const paymentIntent = await this.stripe.paymentIntents.create({
-      amount: amount,
-      currency: "inr",
-      payment_method_types: ["card"],
-      transfer_data: {
-        destination: stripeId,
-      },
-      application_fee_amount: commission,
-      metadata: {
-        order_id: orderId,
-        delivery_partner_id: deliveryPartnerId,
-        user_id: delivery.order.user_id,
-        business_id: delivery.order.business.id,
-      },
-    });
-    // Save initial payout record
-    await this.payRepo.save({
-      order_id: orderId,
+    this.logger.log(`Called payout for deliverypartner: ${JSON.stringify(deliveryPartnerId,null,2)}`);
+    
+    const delivery= await this.deliveryRepo.findOne({
+    where: {
       delivery_partner_id: deliveryPartnerId,
-      business_id: delivery.order.business.id,
-      user_id: delivery.order.user_id,
-      amount: amount / 100,
-      payment_status: "pending",
-      stripe_payment_intent_id: paymentIntent.id,
-      commission: commission / 100,
-      net_amount: netAmount / 100,
-    });
+      order_id: orderId,
+    },
+  });
+  const stripeId = delivery.delivery_partner.stripe_id;
+  const amount = Math.round(delivery.order.amount * 100);
+  const commission = Math.round(amount * 0.2);
+  const netAmount = amount - commission;
 
-    return {
-      client_secret: paymentIntent.client_secret,
-      payment_intent_id: paymentIntent.id,
-    };
-  }
+  const paymentIntent = await this.stripe.paymentIntents.create({
+    amount: amount,
+    currency: "inr",
+    payment_method_types: ["card"],
+    transfer_data: {
+      destination: stripeId,
+    },
+    application_fee_amount: commission,
+    metadata: {
+        order_id:orderId,
+        delivery_partner_id:deliveryPartnerId,
+        user_id:delivery.order.user_id,
+        business_id:delivery.order.business.id,
+    },
+  });
+  // Save initial payout record
+  await this.payRepo.save({
+    order_id: orderId,
+    delivery_partner_id: deliveryPartnerId,
+    business_id: delivery.order.business.id,
+    user_id: delivery.order.user_id,
+    amount: amount / 100,
+    payment_status: "pending",
+    stripe_payment_intent_id: paymentIntent.id,
+    commission: commission / 100,
+    net_amount: netAmount / 100,
+  });
+
+  return {
+    client_secret: paymentIntent.client_secret,
+    payment_intent_id: paymentIntent.id,
+  };
+}
 
   async createPaymentIntentdonation(amount: number) {
     const platformFee = Math.round(amount * 0.1);
@@ -104,22 +99,23 @@ export class PayoutService implements OnModuleInit {
     }
   }
 
-  async updatePayoutStatus(
-    status: string,
-    paymentIntent: Stripe.PaymentIntent
-  ) {
+  async updatePayoutStatus (
+    status:string,
+    paymentIntent:Stripe.PaymentIntent){
     await this.payRepo.update(
-      { stripe_payment_intent_id: paymentIntent.id },
-      { payment_status: status, updated_at: new Date() }
+      {stripe_payment_intent_id: paymentIntent.id},
+      {payment_status: status, updated_at: new Date()}
     );
     await this.deliveryRepo.update(
-      { order_id: paymentIntent.metadata.order_id },
-      { order_status: status === "success" ? "delivered" : "in_transit" }
+      {order_id: paymentIntent.metadata.order_id},
+      {order_status: status === 'success' ? 'delivered' : 'in_transit'}
     );
 
-    await this.userProxyService.markDeliveryPartnerUnassigned({
-      orderId: paymentIntent.metadata.order_id,
-      partnerId: paymentIntent.metadata.delivery_partner_id,
-    });
+    await this.userProxyService.markDeliveryPartnerUnassigned(
+      {
+      orderId:paymentIntent.metadata.order_id,
+      partnerId:paymentIntent.metadata.delivery_partner_id,
+      }
+    );
   }
 }
